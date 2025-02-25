@@ -87,8 +87,8 @@ Building
 
 To compile the code, 
 
-    git clone https://github.com/5355-ROStig/GulliView.git
-    cd GulliView
+    git clone https://beichen1@bitbucket.org/automationarticulatedvehicles/gulliview_multithreading.git
+    cd gulliview_multithreading
     mkdir build
     cd build
     cmake .. -DCMAKE_BUILD_TYPE=Release
