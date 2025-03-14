@@ -20,6 +20,7 @@
 #include "apriltag/apriltag_pose.h" // added 2025;
 #include "apriltag/common/image_u8.h" // added 2025;
 #include <unordered_map> // added 2025;
+#include "opencv2/core/cvstd.hpp"
 #include "pthread.h"
 #include <optional>
 
@@ -77,7 +78,7 @@
 
 #define USE_MEMORY_SHARING      false // added 2025
 #define USE_EWMA                true // added 2025
-#define BINDING_CPU_CORES       false // added 2025
+#define BINDING_CPU_CORES       true // added 2025
 
 #define PRODUCE_FRAME_MODE      1 // added 2025
 
@@ -97,6 +98,11 @@
 #define FPS 60
 #define BUFFER_SIZE 128
 #define GLOBAL_SEARCH_MIN 16
+
+// ### ADDED MARS 2025
+#define NEW_PERFORMANCE_DEBUG_MODE true
+#define LIVE_FEED false
+#define RECORDING_FOLDER "recordings0.5"
 
 using namespace std;
 using boost::asio::ip::udp;
@@ -453,7 +459,7 @@ public:
     }
 
     void write_to_file_if_needed(uint32_t loop_time, const std::string& thread_name, const std::string& file_name) {
-        if (loop_time > 500000) {
+        if (loop_time > 100000) {
             std::ofstream file(file_name, std::ios::app);
             if (file.is_open()) {
                 file << "Thread: " << thread_name << ", Loop time exceeded: " << std::fixed << std::setprecision(2)<< loop_time / 1000.0 << "ms\n";
@@ -944,13 +950,13 @@ bool transform_frame(cv::Mat& frame,
     // cv::Mat undistorted_frame;
 
     if (frame.empty()) {
-        cout << "no frame captured, exiting" << endl;
+        cout << "no frame to transform, exiting" << endl;
         return false;
     }
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
+    // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
 
     auto end = std::chrono::high_resolution_clock::now();
 
@@ -984,7 +990,7 @@ bool transform_frame(cv::Mat& frame,
 			cv::Mat& map2) {
     // TODO save timestamp (maybe return the timestamp instead of bool)
 
-    cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
+    // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
 
 
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
@@ -1003,20 +1009,20 @@ bool transform_frame1(cv::Mat& frame,
     // cv::Mat undistorted_frame;
 
     if (frame.empty()) {
-        cout << "no frame captured, exiting" << endl;
+        cout << "no frame to transform1, exiting" << endl;
         return false;
     }
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
+    // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
 
     auto end = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
 
 #if PRINT_DEBUG_MSG
-    file_output << "Remap: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
+    file_output << "Remap: " << std::fixed << std::setprecision(2) << duration << " ms" <<std::endl;
 #endif
 
     // frame = undistorted_frame.clone();
@@ -1229,7 +1235,8 @@ void init_video_open(const int32_t device_number,
                         cv::Mat& frame){
 
     std::cout << "device number: " << device_number << std::endl;
-    string video_path = "../src/recordings0.5/video" + to_string(device_number*2) + ".mp4";
+    string folder = RECORDING_FOLDER;
+    string video_path = "../src/" + folder + "/video" + to_string(device_number*2) + ".mp4";
     // Open video file，instead of cameras
     video_capture = cv::VideoCapture(video_path, cv::CAP_FFMPEG); // Decoding with FFmpeg
 
@@ -1261,35 +1268,36 @@ void init_video_open(const int32_t device_number,
 
 
 void init_video_capture(const int32_t device_number,
-                        const int32_t frame_width,
-                        const int32_t frame_height,
-                        cv::VideoCapture& video_capture,
-                        cv::Mat& frame){
-    /* choose camera and buffer-size */
+    const int32_t frame_width,
+    const int32_t frame_height,
+    cv::VideoCapture& video_capture,
+    cv::Mat& frame){
+/* choose camera and buffer-size */
+cout << "Camera " << device_number << " init" << endl;
 
-    video_capture = cv::VideoCapture(2*device_number, cv::CAP_V4L2);
-    video_capture.set(cv::CAP_PROP_BUFFERSIZE, 1);
+video_capture = cv::VideoCapture(2*device_number, cv::CAP_V4L2);
+video_capture.set(cv::CAP_PROP_BUFFERSIZE, 1);
 
-    /* set output codec and FPS */
-    int32_t codec = cv::VideoWriter::fourcc('M','J','P','G');
-    video_capture.set(cv::CAP_PROP_FOURCC, codec);
-    video_capture.set(cv::CAP_PROP_FPS, FPS);
+/* set output codec and FPS */
+int32_t codec = cv::VideoWriter::fourcc('M','J','P','G');
+video_capture.set(cv::CAP_PROP_FOURCC, codec);
+video_capture.set(cv::CAP_PROP_FPS, FPS);
 
-    /* set video height and width */
-    if (frame_width && frame_height) {
-        // Use uvcdynctrl to figure this out dynamically at some point?
-        video_capture.set(cv::CAP_PROP_FRAME_WIDTH, frame_width);
-        video_capture.set(cv::CAP_PROP_FRAME_HEIGHT, frame_height);
-    }
+/* set video height and width */
+if (frame_width && frame_height) {
+// Use uvcdynctrl to figure this out dynamically at some point?
+video_capture.set(cv::CAP_PROP_FRAME_WIDTH, frame_width);
+video_capture.set(cv::CAP_PROP_FRAME_HEIGHT, frame_height);
+}
 
-    video_capture >> frame;
+video_capture >> frame;
 
-    cout << "enter here" << endl;
+cout << "enter here" << endl;
 
-    if (frame.empty()) {
-        cerr << "no frames!" << endl;
-        // exit(1);
-    }
+if (frame.empty()) {
+cerr << "no frames from camera " << device_number << endl;
+// exit(1);
+}
 }
 
 
@@ -1515,7 +1523,7 @@ void fast_search(const image_u8_t& im,
 
         ptime search_end = boost::posix_time::microsec_clock::universal_time();
         uint32_t search_time = (search_end - search_start).total_microseconds();
-
+        
         // {
         //     std::lock_guard<std::mutex> lock(log_mutex);
         //     int index = static_cast<int>(current_tag - tags_start);
@@ -1591,7 +1599,7 @@ void fast_search1(const image_u8_t& im,
 #if PRINT_DEBUG_MSG
 
         // modified 2025
-        std::cout <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
+        cout <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
             << tag->area.x_length << "x" << tag->area.y_length 
             << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
 #endif
@@ -1656,7 +1664,7 @@ void fast_search2(const image_u8_t& im,
                         min_travel, max_travel, alpha, *tag);
 
 #if PRINT_DEBUG_MSG
-        std::cout <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
+        file_output <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
             << tag->area.x_length << "x" << tag->area.y_length 
             << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
 #endif
@@ -1692,6 +1700,7 @@ void fast_search2(const image_u8_t& im,
         file_output <<"CAM#"<<CAM_NAME<<": " <<"tag#"<< index <<": "<< "FAST SEARCH: search_time:" << std::fixed << std::setprecision(2) << partial_duration << " microseconds\n";
 #endif
         uint32_t total_time = (search_end - total_start_time).total_microseconds();
+        // cout << "fast_search2 time: " << total_time << endl;
 
         if (total_time > DEFAULT_LIMIT_MAX) {
 
@@ -1904,10 +1913,10 @@ void add_detection_to_msg(const int id, uint64_t detectionTime_ms, const float r
     };
 
 #if PRINT_DEBUG_MSG
-    cout << "[*] Camera: " << CAM_NAME << " Tag: " << id 
-        << " X: " << x_coord << " Y: " << y_coord << " Theta: " 
-        << theta << " Speed: " << speed << " Time: " 
-        << detectionTime_ms << endl;
+    // cout << "[*] Camera: " << CAM_NAME << " Tag: " << id 
+    //     << " X: " << x_coord << " Y: " << y_coord << " Theta: " 
+    //     << theta << " Speed: " << speed << " Time: " 
+    //     << detectionTime_ms << endl;
 #endif
 }
 
@@ -2181,7 +2190,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         bool frame_captured = transform_frame1(frame, gray, map1, map2, file_output);
 
         if (!frame_captured) {
-            cout << "no frame captured, exiting" << endl;
+            cout << "no frame captured (nice), exiting. Camera " << camera_id << endl;
             return -1;
         }
 
@@ -2544,6 +2553,9 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     std::ofstream file_output(filename.str(), std::ios::out);
 
     // file_output << "CAM_NAME " << CAM_NAME << ": camera id: " << camera_id << endl;
+    // #if BINDING_CPU_CORES
+    //     file_output << "USING BINDING CPU CORES" << endl;
+    // #endif
 
     auto start = std::chrono::system_clock::now().time_since_epoch();
     auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
@@ -2637,6 +2649,11 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
     while (true) {
 
+        #if NEW_PERFORMANCE_DEBUG_MODE
+            auto new_start = std::chrono::system_clock::now().time_since_epoch();
+        #endif
+
+
     // Message buf;
 
     // // Setting max values for buf fields
@@ -2714,6 +2731,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         std::stringstream ss(shared_memory);
         std::string detection_str = ss.str();
         sem.post();
+            }
 
         std::regex tuple_regx("\\(([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*)\\)");
 
@@ -2721,7 +2739,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         std::sregex_iterator end;
         auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         try {
-            float bot_num = 0;
+            float bot_num = 0;remap
             float tim_gap = 0;
             for (; it != end; ++it) {
                 std::string first_element = (*it)[1].str();
@@ -2774,6 +2792,11 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         auto init_start = std::chrono::high_resolution_clock::now();
 
+        #if NEW_PERFORMANCE_DEBUG_MODE
+            auto new_end_1 = std::chrono::high_resolution_clock::now();
+            //cout << "# time elapsed after init: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_1 - new_start).count() << " us" << endl;
+        #endif
+
         // Start measurement
         auto consumer_start = std::chrono::high_resolution_clock::now();
 
@@ -2792,7 +2815,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 #if PRINT_DEBUG_MSG
         // printing time
-        std::cout << "Execution time for the consumer: " << std::fixed << std::setprecision(2) << consumer_duration / 1000.0 << " ms" << std::endl;
+        file_output << "Execution time for the consumer: " << std::fixed << std::setprecision(2) << consumer_duration / 1000.0 << " ms" << std::endl;
 #endif
 
         fast_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_duration, fast_consumer_counter[camera_id].load());
@@ -2804,7 +2827,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         bool frame_captured = transform_frame1(frame, gray, map1, map2, file_output);
 
         if (!frame_captured) {
-            cout << "no frame captured, exiting" << endl;
+            cout << "no frame captured (fast), exiting. Camera " << camera_id << endl;
             // exit(1);
             return -1;
         }
@@ -2858,7 +2881,10 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         fast_thread_logger.log_operation(DebugLogger::INITIALIZE_TIME, init_duration, fast_consumer_counter[camera_id].load());
 
-
+        #if NEW_PERFORMANCE_DEBUG_MODE
+            auto new_end_2 = std::chrono::high_resolution_clock::now();
+            // cout << "# time elapsed before fast search: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_2 - new_start).count() << " us" << endl;
+        #endif
 
         auto search_start = std::chrono::high_resolution_clock::now();
 
@@ -2875,7 +2901,10 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
                         min_search_dim, CAM_NAME, time_uncertainty, detector,
                         detections, tags, use_exhaustive_search, file_output);
 
-
+        #if NEW_PERFORMANCE_DEBUG_MODE
+            auto new_end_3 = std::chrono::high_resolution_clock::now();
+            // cout << "# time elapsed after fast search: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_3 - new_start).count() << " us" << endl;
+        #endif
 
         auto search_end = std::chrono::high_resolution_clock::now();   // End measurement
         double search_time = std::chrono::duration_cast<std::chrono::microseconds>(search_end - search_start).count();
@@ -2986,6 +3015,10 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #endif
 
                 }
+                #if NEW_PERFORMANCE_DEBUG_MODE
+                    auto new_end_4 = std::chrono::high_resolution_clock::now();
+                    // cout << "# time elapsed after velocity calculations: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_4 - new_start).count() << " us" << endl;
+                #endif
                     // max_temp_v = max(max_temp_v, tag->velocity); 
 
              // First create an apriltag_detection_info_t struct using your known parameters.
@@ -3112,10 +3145,10 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 #if PRINT_DEBUG_MSG           
                 // Print out the ratio and related information
-                std::cout << "Tag ID: " << dd->id
-                        << ", AprilTag Size: " << apriltag_size
-                        << ", Search Area Size: " << search_area_size
-                        << ", Ratio: " << ratio << std::endl;
+                // std::cout << "Tag ID: " << dd->id
+                //         << ", AprilTag Size: " << apriltag_size
+                //         << ", Search Area Size: " << search_area_size
+                //         << ", Ratio: " << ratio << std::endl;
 #endif
 
 
@@ -3154,13 +3187,18 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             sem_1.post();
 
 #if PRINT_DEBUG_MSG           
-            std::cout << "GTR = " << avg_time_gap << " ms" << std::endl;
+            // std::cout << "GTR = " << avg_time_gap << " ms" << std::endl;
 #endif
 
 
 
             // use_exhaustive_search = false;
         }
+
+        #if NEW_PERFORMANCE_DEBUG_MODE
+            auto new_end_4 = std::chrono::high_resolution_clock::now();
+            // cout << "# time elapsed after processing: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_4 - new_start).count() << " us" << endl;
+        #endif
 
 
          // Producer: writes its own detection results to the neighbouring camera's buffer
@@ -3348,7 +3386,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             sem_1.post();
 
 #if PRINT_DEBUG_MSG
-            std::cout << "GTR = " << avg_time_gap << " ms" << std::endl;
+            // std::cout << "GTR = " << avg_time_gap << " ms" << std::endl;
 #endif
 
             detection_data.clearMessage();
@@ -3387,6 +3425,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 	        avg_hz = 1 / (static_cast<float>(tot_hz)/(2*FPS*1000));
 
 #if PRINT_DEBUG_MSG
+            // file_output << "Hz: " << avg_hz << std::endl;
 	        file_output << "CAM " << CAM_NAME << ": " << avg_hz << "Hz"  << std::endl;
 #endif
 
@@ -3403,10 +3442,10 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 #if PRINT_DEBUG_MSG
     // printing time
-    std::cout << "Execution time for one loop: " << std::fixed << std::setprecision(2) << loop_duration / 1000.0 << " ms" << std::endl;
+    // std::cout << "Execution time for one loop: " << std::fixed << std::setprecision(2) << loop_duration / 1000.0 << " ms" << std::endl;
     // Log the performance
     // file_output << "Loop " << total_loop_count - 1 << ": epsilon=" << epsilon << ", Duration=" << loop_duration / 1000 << " ms\n";
-    file_output << "Loop " << total_loop_count - 1 << ": trial=" << trial << ", Duration=" << std::fixed << std::setprecision(2) << loop_duration << " ms\n";
+    file_output << "Loop " << total_loop_count - 1 << ": trial=" << trial << ", Duration=" << std::fixed << std::setprecision(2) << loop_duration << " us\n";
 
 #endif
 
@@ -3464,8 +3503,13 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     cv::VideoCapture video_capture;
     cv::Mat frame, gray;
 
-    // init_video_capture(camera_id, opts.frame_width, opts.frame_height, video_capture, frame);
-    init_video_open(camera_id, opts.frame_width, opts.frame_height, video_capture, frame); // added 2025    
+#if LIVE_FEED
+    // Live feed
+    init_video_capture(camera_id, opts.frame_width, opts.frame_height, video_capture, frame);
+#else
+    // Saved video
+    init_video_open(camera_id, opts.frame_width, opts.frame_height, video_capture, frame); // added 2025
+#endif
 
     cout << "enter resolution" << endl;
 
@@ -3515,7 +3559,7 @@ int process_camera(int camera_id, GulliViewOptions opts) {
         return 1;
     }
     struct stat sb;
-    if (fstat(fd, &sb) == -1) {
+    if (fstat(fd, &sb) == -1) {buffer
         std::cerr << "faied to get size" << std::endl;
         return 1;
     }
@@ -3623,11 +3667,65 @@ int process_camera(int camera_id, GulliViewOptions opts) {
 
 }
 
+// Add general settings to log
+void general_log(){
+
+    std::ostringstream filename;
+    filename << "output/general.log";
+    std::ofstream file_output(filename.str(), std::ios::out);
+
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+    file_output << "Human readable time: " << std::put_time(&tm, "%c") << endl;
+    file_output << "Dag: " << std::put_time(&tm, "%d") << endl;
+    file_output << "Månad: " << std::put_time(&tm, "%m") << endl;
+    file_output << "År: " << std::put_time(&tm, "%Y") << endl;
+    file_output << "Timme: " << std::put_time(&tm, "%H") << endl;
+    file_output << "Minut: " << std::put_time(&tm, "%M") << endl;
+    file_output << "Sekund: " << std::put_time(&tm, "%S") << endl;
+
+    file_output << "PRINT_DEBUG_MSG: " << PRINT_DEBUG_MSG << endl;
+    file_output << "FAST_SEARCH_ACC_TEST: " << FAST_SEARCH_ACC_TEST << endl;
+    file_output << "TIME_PROFILING: " << TIME_PROFILING << endl;
+
+    file_output << "USE_MEMORY_SHARING: " << USE_MEMORY_SHARING << endl;
+    file_output << "USE_EWMA: " << USE_EWMA << endl;
+    file_output << "BINDING_CPU_CORES: " << BINDING_CPU_CORES << endl;
+
+    file_output << "PRODUCE_FRAME_MODE: " << PRODUCE_FRAME_MODE << endl;
+
+    file_output << "DEFAULT_TAG_FAMILY: " << DEFAULT_TAG_FAMILY << endl;
+    file_output << "DEFAULT_IP: " << DEFAULT_IP << endl;
+    file_output << "DEFAULT_PORT: " << DEFAULT_PORT << endl;
+
+    file_output << "MAX_TAG_ID: " << MAX_TAG_ID << endl;
+    file_output << "FORCE_GLOBAL_SEARCH_LOOP_NUM: " << FORCE_GLOBAL_SEARCH_LOOP_NUM << endl;
+
+    file_output << "ROOM_WIDTH_METER: " << ROOM_WIDTH_METER << endl;
+
+    file_output << "DEFAULT_VELOCITY_MAX: " << DEFAULT_VELOCITY_MAX << endl;
+    file_output << "DEFAULT_ACCELERATION_MAX: " << DEFAULT_ACCELERATION_MAX << endl;
+    file_output << "DEFAULT_LIMIT_MAX: " << DEFAULT_LIMIT_MAX << endl;
+
+    file_output << "FPS: " << FPS << endl;
+    file_output << "BUFFER_SIZE: " << BUFFER_SIZE << endl;
+    file_output << "GLOBAL_SEARCH_MIN: " << GLOBAL_SEARCH_MIN << endl;
+
+    file_output << "NEW_PERFORMANCE_DEBUG_MODE: " << NEW_PERFORMANCE_DEBUG_MODE << endl;
+    file_output << "LIVE_FEED: " << LIVE_FEED << endl;
+#if !LIVE_FEED
+    file_output << "RECORDING_FOLDER: " << RECORDING_FOLDER << endl;
+#endif
+}
+
 // Main function
 int main(int argc, char **argv) {
 
     // Parsing command line arguments
     GulliViewOptions opts = parse_options(argc, argv);
+
+    // Output general settings to log
+    general_log();
 
     // Doing graceful shutdown, prevents Linux USB system from crashing
 
