@@ -100,6 +100,11 @@
 #define GLOBAL_SEARCH_MIN 16
 
 // ### ADDED MARS 2025
+#define TIME_PERIOD "VT25"
+// Version string, adds to time period ex VT25.2
+#define VERSION "1"
+// change this text to denote version, this is saved by log script to catagorize
+#define COMMENT ""
 #define NEW_PERFORMANCE_DEBUG_MODE true
 #define LIVE_FEED false
 #define RECORDING_FOLDER "recordings0.5"
@@ -1978,7 +1983,7 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
         // Find the core where the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
-                file_output << "Thread is running on core " << i << std::endl;
+                file_output << "Core number: " << i << std::endl;
                 break;
             }
         }
@@ -2138,7 +2143,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // Find the core on which the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
-                file_output << "Thread is running on core " << i << std::endl;
+                file_output << "Core number: " << i << std::endl;
                 break;
             }
         }
@@ -2705,7 +2710,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // Find the core where the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
-                file_output << "Thread is running on core " << i << std::endl;
+                file_output << "Core number: " << i << std::endl;
                 break;
             }
         }
@@ -3445,7 +3450,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     // std::cout << "Execution time for one loop: " << std::fixed << std::setprecision(2) << loop_duration / 1000.0 << " ms" << std::endl;
     // Log the performance
     // file_output << "Loop " << total_loop_count - 1 << ": epsilon=" << epsilon << ", Duration=" << loop_duration / 1000 << " ms\n";
-    file_output << "Loop " << total_loop_count - 1 << ": trial=" << trial << ", Duration=" << std::fixed << std::setprecision(2) << loop_duration << " us\n";
+    file_output << "Loop: count: " << total_loop_count - 1 << ": trial=" << trial << ", Duration=" << std::fixed << std::setprecision(2) << loop_duration << " us\n";
 
 #endif
 
@@ -3676,13 +3681,9 @@ void general_log(){
 
     auto t = std::time(nullptr);
     auto tm = *std::localtime(&t);
-    file_output << "Human readable time: " << std::put_time(&tm, "%c") << endl;
-    file_output << "Dag: " << std::put_time(&tm, "%d") << endl;
-    file_output << "Månad: " << std::put_time(&tm, "%m") << endl;
-    file_output << "År: " << std::put_time(&tm, "%Y") << endl;
-    file_output << "Timme: " << std::put_time(&tm, "%H") << endl;
-    file_output << "Minut: " << std::put_time(&tm, "%M") << endl;
-    file_output << "Sekund: " << std::put_time(&tm, "%S") << endl;
+    file_output << "TIME: " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << endl;
+    file_output << "VERSION: " << TIME_PERIOD << "." << VERSION << endl; 
+    file_output << "COMMENT: " << COMMENT << endl;
 
     file_output << "PRINT_DEBUG_MSG: " << PRINT_DEBUG_MSG << endl;
     file_output << "FAST_SEARCH_ACC_TEST: " << FAST_SEARCH_ACC_TEST << endl;
