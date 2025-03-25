@@ -106,7 +106,6 @@
 #define VERSION "1"
 // change this text to denote version, this is saved by log script to catagorize
 #define COMMENT ""
-#define NEW_PERFORMANCE_DEBUG_MODE true
 #define LIVE_FEED false
 #define RECORDING_FOLDER "recordings0.5"
 
@@ -2660,10 +2659,6 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
     while (true) {
 
-        #if NEW_PERFORMANCE_DEBUG_MODE
-            auto new_start = std::chrono::system_clock::now().time_since_epoch();
-        #endif
-
 
     // Message buf;
 
@@ -2803,11 +2798,6 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         auto init_start = std::chrono::high_resolution_clock::now();
 
-        #if NEW_PERFORMANCE_DEBUG_MODE
-            auto new_end_1 = std::chrono::high_resolution_clock::now();
-            //cout << "# time elapsed after init: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_1 - new_start).count() << " us" << endl;
-        #endif
-
         // Start measurement
         auto consumer_start = std::chrono::high_resolution_clock::now();
 
@@ -2892,11 +2882,6 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         fast_thread_logger.log_operation(DebugLogger::INITIALIZE_TIME, init_duration, fast_consumer_counter[camera_id].load());
 
-        #if NEW_PERFORMANCE_DEBUG_MODE
-            auto new_end_2 = std::chrono::high_resolution_clock::now();
-            // cout << "# time elapsed before fast search: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_2 - new_start).count() << " us" << endl;
-        #endif
-
         auto search_start = std::chrono::high_resolution_clock::now();
 
         // file_output << "Current angle: " << alpha << endl;
@@ -2911,11 +2896,6 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         fast_search2(im, latest_frame, v_max, a_max, alpha,
                         min_search_dim, CAM_NAME, time_uncertainty, detector,
                         detections, tags, use_exhaustive_search, file_output);
-
-        #if NEW_PERFORMANCE_DEBUG_MODE
-            auto new_end_3 = std::chrono::high_resolution_clock::now();
-            // cout << "# time elapsed after fast search: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_3 - new_start).count() << " us" << endl;
-        #endif
 
         auto search_end = std::chrono::high_resolution_clock::now();   // End measurement
         double search_time = std::chrono::duration_cast<std::chrono::microseconds>(search_end - search_start).count();
@@ -3032,10 +3012,6 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #endif
 
                 }
-                #if NEW_PERFORMANCE_DEBUG_MODE
-                    auto new_end_4 = std::chrono::high_resolution_clock::now();
-                    // cout << "# time elapsed after velocity calculations: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_4 - new_start).count() << " us" << endl;
-                #endif
                     // max_temp_v = max(max_temp_v, tag->velocity); 
 
              // First create an apriltag_detection_info_t struct using your known parameters.
@@ -3211,13 +3187,6 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
             // use_exhaustive_search = false;
         }
-
-        #if NEW_PERFORMANCE_DEBUG_MODE
-            auto new_end_4 = std::chrono::high_resolution_clock::now();
-            // cout << "# time elapsed after processing: " << std::chrono::duration_cast<std::chrono::microseconds>(new_end_4 - new_start).count() << " us" << endl;
-        #endif
-
-
          // Producer: writes its own detection results to the neighbouring camera's buffer
         for (int i = 0; i < 2 && produce_buffers[i]; ++i) {
             for (int id = 0; id < MAX_TAG_ID; ++id) {
@@ -3732,7 +3701,6 @@ void general_log(){
     file_output << "BUFFER_SIZE: " << BUFFER_SIZE << endl;
     file_output << "GLOBAL_SEARCH_MIN: " << GLOBAL_SEARCH_MIN << endl;
 
-    file_output << "NEW_PERFORMANCE_DEBUG_MODE: " << NEW_PERFORMANCE_DEBUG_MODE << endl;
     file_output << "LIVE_FEED: " << LIVE_FEED << endl;
 #if !LIVE_FEED
     file_output << "RECORDING_FOLDER: " << RECORDING_FOLDER << endl;
