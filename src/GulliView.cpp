@@ -103,9 +103,11 @@
 // ### ADDED MARS 2025
 #define TIME_PERIOD "VT25"
 // Version string, adds to time period ex VT25.2
-#define VERSION "1"
+#define VERSION "3"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT ""
+#define COMMENT "Moved if statements"
+
+#define ENABLE_LOGS true
 #define LIVE_FEED false
 #define RECORDING_FOLDER "recordings0.5"
 
@@ -562,15 +564,6 @@ public:
         return max_in_deque + adjustment;
     }
 
-    // Method to print all the last 10 numbers
-    void print_last_10_numbers(std::ofstream& file_output) {
-        // std::cout << "Last 10 numbers: ";
-        for (const auto& data : last_10_numbers) {
-            file_output << data.value << " ";
-        }
-        file_output << "Average: " << get_average() << std::endl;
-    }
-
 private:
     // Method to remove elements older than 5 seconds
     void remove_old_elements() {
@@ -642,15 +635,6 @@ public:
         float adjustment = float(epsilon) / 100 * (max_in_deque + 1);
 
         return max_in_deque + adjustment;
-    }
-
-    // Method to print all the last 10 numbers
-    void print_last_10_numbers(std::ofstream& file_output) {
-        std::cout << "Last 10 numbers: ";
-        for (const auto& data : last_10_numbers) {
-            file_output << data.value << " ";
-        }
-        file_output << "Average: " << get_average() << std::endl;
     }
 
 private:
@@ -945,6 +929,41 @@ float get_uncertainty() {
 //     return detector;
 // }
 
+class Log_Time {
+    public:
+        // constructor autmatically starts clock
+        Log_Time(const std::string& input_name, std::ofstream& input_file) 
+                : name(input_name), file(input_file) {
+            start_time = std::chrono::high_resolution_clock::now();
+        }
+
+        // Stop clock and print to log file only if logs are enabled
+        void stop_ms(){
+            end_time = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+            file << name << ": "  << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
+        }
+        void stop_us(){
+            end_time = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+            file << name << ": " << std::fixed << std::setprecision(2) << duration << " us" << std::endl;
+        }
+    private:
+        std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
+        std::chrono::time_point<std::chrono::high_resolution_clock> end_time;
+        string name;
+        std::ofstream& file;
+};
+
+std::ofstream log_file(const std::string& name){
+    #if ENABLE_LOGS
+    std::ostringstream filename;
+    filename << "output/" << name << ".log";
+    std::ofstream file_output(filename.str(), std::ios::out);
+    return file_output;
+    #endif
+}
+
 bool transform_frame(cv::Mat& frame,
 			cv::Mat& gray,
 			cv::Mat& map1,
@@ -958,32 +977,20 @@ bool transform_frame(cv::Mat& frame,
         cout << "no frame to transform, exiting" << endl;
         return false;
     }
-
-    auto start = std::chrono::high_resolution_clock::now();
-
+#if ENABLE_LOGS
+    Log_Time remap_timer("Remap", file_output);
+#endif
     // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
-
-    auto end = std::chrono::high_resolution_clock::now();
-
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-
-#if PRINT_DEBUG_MSG
-    file_output << "Remap: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
+#if ENABLE_LOGS
+    remap_timer.stop_us();
 #endif
 
-    // frame = undistorted_frame.clone();
-    // frame = undistorted_frame;
-
-    start = std::chrono::high_resolution_clock::now();
-
+#if ENABLE_LOGS
+    Log_Time color_timer("Transform color", file_output);
+#endif
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-
-    end = std::chrono::high_resolution_clock::now();
-
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-
-#if PRINT_DEBUG_MSG
-    file_output << "Transform color: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
+#if ENABLE_LOGS
+    color_timer.stop_us();
 #endif
 
     return !frame.empty();
@@ -994,56 +1001,10 @@ bool transform_frame(cv::Mat& frame,
 			cv::Mat& map1,
 			cv::Mat& map2) {
     // TODO save timestamp (maybe return the timestamp instead of bool)
-
     // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
 
 
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-
-    return !frame.empty();
-}
-
-
-bool transform_frame1(cv::Mat& frame,
-			cv::Mat& gray,
-			cv::Mat& map1,
-			cv::Mat& map2,
-            std::ofstream& file_output // added 2025
-            ) {
-    // TODO save timestamp (maybe return the timestamp instead of bool)
-    // cv::Mat undistorted_frame;
-
-    if (frame.empty()) {
-        cout << "no frame to transform1, exiting" << endl;
-        return false;
-    }
-
-    auto start = std::chrono::high_resolution_clock::now();
-
-    // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
-
-    auto end = std::chrono::high_resolution_clock::now();
-
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-
-#if PRINT_DEBUG_MSG
-    file_output << "Remap: " << std::fixed << std::setprecision(2) << duration << " ms" <<std::endl;
-#endif
-
-    // frame = undistorted_frame.clone();
-    // frame = undistorted_frame;
-
-    start = std::chrono::high_resolution_clock::now();
-
-    cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-
-    end = std::chrono::high_resolution_clock::now();
-
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-
-#if PRINT_DEBUG_MSG
-    file_output << "Transform color: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-#endif
 
     return !frame.empty();
 }
@@ -1517,9 +1478,6 @@ void fast_search(const image_u8_t& im,
         {
             std::lock_guard<std::mutex> lock(log_mutex);
 #if PRINT_DEBUG_MSG
-            // std::cout << "CAM#" << CAM_NAME << ": Using PART SEARCH "
-            //           << current_tag->area.x_length << "x" << current_tag->area.y_length
-            //           << "\n";
             std::cout << "CAM#" << CAM_NAME << " using PART SEARCH "
                       << current_tag->area.x_length << "x" << current_tag->area.y_length
                       << "\n";
@@ -1530,17 +1488,6 @@ void fast_search(const image_u8_t& im,
             std::lock_guard<std::mutex> lock(detections_mutex);
             partial_search(im, current_tag->area, detections, detector);
         }
-
-        ptime search_end = boost::posix_time::microsec_clock::universal_time();
-        uint32_t search_time = (search_end - search_start).total_microseconds();
-        
-        // {
-        //     std::lock_guard<std::mutex> lock(log_mutex);
-        //     int index = static_cast<int>(current_tag - tags_start);
-        //     std::cout <<"CAM#"<<CAM_NAME<<": " <<"tag#"<< index <<": "<< "FAST SEARCH: search_time:" << search_time << " microseconds\n";
-        // }
-
-        uint32_t total_time = (search_end - total_start_time).total_microseconds();
 
         if (total_time > DEFAULT_LIMIT_MAX) {
 
@@ -2205,7 +2152,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 
         ptime transform_start = boost::posix_time::microsec_clock::universal_time();
-        bool frame_captured = transform_frame1(frame, gray, map1, map2, file_output);
+        bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
 
         if (!frame_captured) {
             cout << "no frame captured (nice), exiting. Camera " << camera_id << endl;
@@ -2834,7 +2781,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         
         auto transform_start = std::chrono::high_resolution_clock::now();        
 
-        bool frame_captured = transform_frame1(frame, gray, map1, map2, file_output);
+        bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
 
         if (!frame_captured) {
             cout << "no frame captured (fast), exiting. Camera " << camera_id << endl;
@@ -3166,13 +3113,6 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             a_max = acceleration_tracker.get_max_value(5);
 
             acceleration_tracker.add_number(max_temp_a);
-
-            // angle_tracker.print_last_10_numbers(file_output);
-            // acceleration_tracker.print_last_10_numbers(file_output);
-
-            // v_max = speed_tracker.get_max_value();
-
-            // speed_tracker.add_number();
 #endif
 
 
@@ -3370,9 +3310,6 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             a_max = acceleration_tracker.get_max_value(5);
 
             acceleration_tracker.add_number(max_temp_a);
-
-            // angle_tracker.print_last_10_numbers(file_output);
-            // acceleration_tracker.print_last_10_numbers(file_output);
     }
 
         if (detection_data.buf) {    
@@ -3664,15 +3601,11 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     nice_consumer.join();
     fast_consumer.join();
     producer.join();
-
-
-
-
 }
 
 // Add general settings to log
 void general_log(){
-
+    #if ENABLE_LOGS
     std::ostringstream filename;
     filename << "output/general.log";
     std::ofstream file_output(filename.str(), std::ios::out);
@@ -3692,7 +3625,6 @@ void general_log(){
     file_output << "BINDING_CPU_CORES: " << BINDING_CPU_CORES << endl;
 
     file_output << "PRODUCE_FRAME_MODE: " << PRODUCE_FRAME_MODE << endl;
-
     file_output << "DEFAULT_TAG_FAMILY: " << DEFAULT_TAG_FAMILY << endl;
     file_output << "DEFAULT_IP: " << DEFAULT_IP << endl;
     file_output << "DEFAULT_PORT: " << DEFAULT_PORT << endl;
@@ -3710,10 +3642,14 @@ void general_log(){
     file_output << "BUFFER_SIZE: " << BUFFER_SIZE << endl;
     file_output << "GLOBAL_SEARCH_MIN: " << GLOBAL_SEARCH_MIN << endl;
 
+    file_output << "ENABLE_LOGS: " << ENABLE_LOGS << endl;
     file_output << "LIVE_FEED: " << LIVE_FEED << endl;
-#if !LIVE_FEED
+    
+    #if !LIVE_FEED
     file_output << "RECORDING_FOLDER: " << RECORDING_FOLDER << endl;
-#endif
+    #endif
+
+    #endif
 }
 
 // Main function
