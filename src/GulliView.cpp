@@ -145,6 +145,15 @@ std::atomic<uint32_t> shared_frame_count(0);
 /*if (shared_memory == MAP_FAILED) {
     std::cerr << "mmap failed" << std::endl;
     return 1;
+}*/
+
+void signal_handler(int signum) {
+    // Unlink the shared memory
+    if (shm_unlink("/my_shared_memory") == -1) {
+        std::cerr << "shm_unlink failed" << std::endl;
+    }
+
+    // Remove the semaphore
     boost::interprocess::named_semaphore::remove("/my_semaphore");
     sig_stop = 1;
     exit(signum);

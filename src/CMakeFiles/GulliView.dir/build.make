@@ -126,6 +126,7 @@ GulliView: src/CMakeFiles/GulliView.dir/TagFamily.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/build.make
 GulliView: /usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.74.0
 GulliView: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0
+GulliView: /usr/local/lib/libapriltag.so
 GulliView: src/CMakeFiles/GulliView.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable ../GulliView"
 	cd /home/gulliview/advanced_mobility_model/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/GulliView.dir/link.txt --verbose=$(VERBOSE)
