@@ -103,9 +103,9 @@
 // ### ADDED MARS 2025
 #define TIME_PERIOD "VT25"
 // Version string, adds to time period ex VT25.2
-#define VERSION "3"
+#define VERSION "4"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "Moved if statements"
+#define COMMENT "Added more new timers"
 
 #define ENABLE_LOGS true
 #define LIVE_FEED false
@@ -955,15 +955,6 @@ class Log_Time {
         std::ofstream& file;
 };
 
-std::ofstream log_file(const std::string& name){
-    #if ENABLE_LOGS
-    std::ostringstream filename;
-    filename << "output/" << name << ".log";
-    std::ofstream file_output(filename.str(), std::ios::out);
-    return file_output;
-    #endif
-}
-
 bool transform_frame(cv::Mat& frame,
 			cv::Mat& gray,
 			cv::Mat& map1,
@@ -1440,19 +1431,19 @@ void get_min_max_travel(const Tag* tag,
 }
 
 void fast_search(const image_u8_t& im,
-                 const ptime latest_frame,
-                 const float v_max,
-                 const float a_max,
-                 const float alpha,
-                 const int min_search_dim,
-                 const int CAM_NAME,
-                 const float time_uncertainty,
-                 apriltag_detector_t* detector,
-                 zarray_t* detections,
-                 Tag* tags_start,
-                 bool& use_exhaustive_search,
-                 std::ofstream& file_output
-                 ) {
+                const ptime latest_frame,
+                const float v_max,
+                const float a_max,
+                const float alpha,
+                const int min_search_dim,
+                const int CAM_NAME,
+                const float time_uncertainty,
+                apriltag_detector_t* detector,
+                zarray_t* detections,
+                Tag* tags_start,
+                bool& use_exhaustive_search,
+                std::ofstream& file_output
+                ) {
 
     std::mutex detections_mutex; // Protect shared resource
     std::mutex log_mutex;        // Protect log messages
@@ -1464,7 +1455,7 @@ void fast_search(const image_u8_t& im,
             return;
         }
 
-        ptime search_start = boost::posix_time::microsec_clock::universal_time();
+        // ptime search_start = boost::posix_time::microsec_clock::universal_time();
 
         auto elapsed = latest_frame - current_tag->latest_detection;
         float us = elapsed.total_microseconds();
@@ -1478,32 +1469,43 @@ void fast_search(const image_u8_t& im,
         {
             std::lock_guard<std::mutex> lock(log_mutex);
 #if PRINT_DEBUG_MSG
-            std::cout << "CAM#" << CAM_NAME << " using PART SEARCH "
-                      << current_tag->area.x_length << "x" << current_tag->area.y_length
-                      << "\n";
+            std::cout << "CAM#" << CAM_NAME << ": Using PART SEARCH "
+                    << current_tag->area.x_length << "x" << current_tag->area.y_length
+                    << "\n";
 #endif
-        }
+    }
 
-        {
-            std::lock_guard<std::mutex> lock(detections_mutex);
-            partial_search(im, current_tag->area, detections, detector);
-        }
+    {
+        std::lock_guard<std::mutex> lock(detections_mutex);
+        partial_search(im, current_tag->area, detections, detector);
+    }
 
-        if (total_time > DEFAULT_LIMIT_MAX) {
+    ptime search_end = boost::posix_time::microsec_clock::universal_time();
+    // uint32_t search_time = (search_end - search_start).total_microseconds();
+
+    // {
+    //     std::lock_guard<std::mutex> lock(log_mutex);
+    //     int index = static_cast<int>(current_tag - tags_start);
+    //     std::cout <<"CAM#"<<CAM_NAME<<": " <<"tag#"<< index <<": "<< "FAST SEARCH: search_time:" << search_time << " microseconds\n";
+    // }
+
+    uint32_t total_time = (search_end - total_start_time).total_microseconds();
+
+    if (total_time > DEFAULT_LIMIT_MAX) {
 
 #if PRINT_DEBUG_MSG
-            std::cout << "CAM#" << CAM_NAME
-                      << " exceeded " << DEFAULT_LIMIT_MAX / 1000 << "ms search time. Switching to exhaustive search.\n";
-            use_exhaustive_search = true;
+        std::cout << "CAM#" << CAM_NAME
+                << " exceeded " << DEFAULT_LIMIT_MAX / 1000 << "ms search time. Switching to exhaustive search.\n";
+        use_exhaustive_search = true;
 #endif
 
-            return; // Terminate fast search early
-        }
+        return; // Terminate fast search early
+    }
 
     };
 
     // Process tags with threads
-    const size_t num_threads = std::min<size_t>(static_cast<size_t>(MAX_TAG_ID), std::thread::hardware_concurrency());
+    // const size_t num_threads = std::min<size_t>(static_cast<size_t>(MAX_TAG_ID), std::thread::hardware_concurrency());
     std::vector<std::thread> threads;
     for (Tag* tag = tags_start; tag < tags_start + MAX_TAG_ID; tag++) {
         threads.emplace_back(thread_task, tag);
@@ -1512,10 +1514,11 @@ void fast_search(const image_u8_t& im,
     // Join threads
     for (auto& thread : threads) {
         if (thread.joinable()) {
-            thread.join();
+        thread.join();
         }
     }
 }
+
 
 
 void fast_search1(const image_u8_t& im,
@@ -1615,7 +1618,7 @@ void fast_search2(const image_u8_t& im,
 
         // file_output << "time s: " << time_s << endl;
 
-        auto initial_start = std::chrono::high_resolution_clock::now();
+        // auto initial_start = std::chrono::high_resolution_clock::now();
 
         float max_travel;
         float min_travel;
@@ -1632,20 +1635,20 @@ void fast_search2(const image_u8_t& im,
             << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
 #endif
 
-        auto initial_end = std::chrono::high_resolution_clock::now();
-        auto initial_duration = std::chrono::duration_cast<std::chrono::microseconds>(initial_end - initial_start).count() / 1000.0;
+        // auto initial_end = std::chrono::high_resolution_clock::now();
+        // auto initial_duration = std::chrono::duration_cast<std::chrono::microseconds>(initial_end - initial_start).count() / 1000.0;
 
         // file_output << "Execution time for the producer: " << std::fixed << std::setprecision(2) << initial_duration << " ms" << std::endl;
 
         auto partial_start = std::chrono::high_resolution_clock::now();
 
-        float scaling_f = 0.125; // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit 
+        // float scaling_f = 0.125; // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit 
 
         // Calculate the size of the search area
-        DetectionArea* area = &tag->area;
-        double search_area_width = scaling_f * (area->x_end - area->x_start);
-        double search_area_height = scaling_f * (area->y_end - area->y_start);
-        double search_area_size = search_area_width * search_area_height;
+        // DetectionArea* area = &tag->area;
+        // double search_area_width = scaling_f * (area->x_end - area->x_start);
+        // double search_area_height = scaling_f * (area->y_end - area->y_start);
+        // double search_area_size = search_area_width * search_area_height;
 
         // file_output << "Search Area Size: " << search_area_size << endl;
 
@@ -1794,7 +1797,7 @@ void update_exhaustive_gui(DetectionData detection_data, Tag* tags_start, cv::Ma
     {
         found = true;
 
-        Tag* tag = tags_start + i;
+        // Tag* tag = tags_start + i;
         DetectionArea* area = &detection_data.tag_data[i].area;
         // Draw green square around the search area
         cv::rectangle(frame,
@@ -2052,8 +2055,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
     // file_output << "After setting, Thread priority: " << sched_param.sched_priority << std::endl;
 
-    auto start = std::chrono::system_clock::now().time_since_epoch();
-    auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
+    // auto start = std::chrono::system_clock::now().time_since_epoch();
+    // auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
     std::queue<Message> messageQueue; // added 2024
 
 
@@ -2076,12 +2079,12 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     // detector->refine_edges = 0; // Turn off edge refinement
 
     uint32_t seq = 0;
-    int global_search_counter = 0;
+    // int global_search_counter = 0;
     int loop_count = 0;
-    int hz_counter = 0;
-    int tot_hz = 0;
-    int avg_hz = 0;
-    int sum_hz = 0;
+    // int hz_counter = 0;
+    // int tot_hz = 0;
+    // int avg_hz = 0;
+    // int sum_hz = 0;
 
     while (true) {
 
@@ -2114,8 +2117,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 
         float avg_time_gap = -1;
-        auto while_start = std::chrono::system_clock::now().time_since_epoch();
-        auto while_start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(while_start).count();
+        // auto while_start = std::chrono::system_clock::now().time_since_epoch();
+        // auto while_start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(while_start).count();
 
 
 
@@ -2123,7 +2126,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         auto detectionTime = std::chrono::system_clock::now().time_since_epoch();
         uint64_t detectionTime_ms = std::chrono::duration_cast<std::chrono::milliseconds>(detectionTime).count();
 
-        ptime import_start = boost::posix_time::microsec_clock::universal_time();
+        // ptime import_start = boost::posix_time::microsec_clock::universal_time();
 
 #if PRODUCE_FRAME_MODE == 1 || PRODUCE_FRAME_MODE == 3
 
@@ -2217,15 +2220,15 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // ptime search_start1 = boost::posix_time::microsec_clock::universal_time();
 
         // Initialize frame count
-        uint32_t frame_count = 0;
+        // uint32_t frame_count = 0;
 
         // Before search
-        uint32_t frames_before_search = shared_frame_count.load();
+        // uint32_t frames_before_search = shared_frame_count.load();
 
         //Use exhaustive search
 
         loop_count = 1;
-        global_search_counter = 0;
+        // global_search_counter = 0;
         //Clear previous coordinates of all tags.
         for (Tag* tag = tags; tag < tags + MAX_TAG_ID; tag++) {
             reset_tag(im.width, im.height, tag);
@@ -2235,7 +2238,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         ptime latest_frame = boost::posix_time::microsec_clock::universal_time();
 
-        uint32_t import_time = (latest_frame - import_start).total_milliseconds();
+        // uint32_t import_time = (latest_frame - import_start).total_milliseconds();
             
         detections = exhaustive_search(im, detector);
 
@@ -2261,7 +2264,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         if (zarray_size(detections) != 0) {
             // Get time of frame/detection----------------
 
-            size_t index = 0;
+            // size_t index = 0;
             Message buf {
                 htobe32(1) /* type */ ,
                 htobe32(2) /* subtype */,
@@ -2300,8 +2303,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             vector<at::Point> room_corner_detections(2*zarray_size(detections)); 
 
             
-            static ptime epoch(boost::gregorian::date(1970,1,1));
-            uint64_t msecs = (import_start - epoch).total_milliseconds();
+            // static ptime epoch(boost::gregorian::date(1970,1,1));
+            // uint64_t msecs = (import_start - epoch).total_milliseconds();
 
             buf.cam_id = htobe32(CAM_NAME);
             int n_detections = zarray_size(detections);
@@ -2322,7 +2325,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
                 detection_data.tags[dd->id].found = true;
                 // detection_data.tags[dd->id].area = tag->area;
-                detection_data.tags[dd->id].camera_coords = DetectionData::CameraCoordinates{tag->x, tag->y, tag->theta};
+                // detection_data.tags[dd->id].camera_coords = DetectionData::CameraCoordinates{tag->x, tag->y, tag->theta};
 
              // First create an apriltag_detection_info_t struct using your known parameters.
                 apriltag_detection_info_t info;
@@ -2372,8 +2375,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 
                 // Then call estimate_tag_pose.
-                apriltag_pose_t pose;
-                double err = estimate_tag_pose(&info, &pose);
+                // apriltag_pose_t pose;
+                // double err = estimate_tag_pose(&info, &pose);
                 // Do something with pose.
                 
                 // Now, pose.t should contain the translation vector (x, y, z)
@@ -2400,16 +2403,16 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         }
 
 
-        auto copy_start = std::chrono::high_resolution_clock::now();
+        // auto copy_start = std::chrono::high_resolution_clock::now();
 
         std::copy(std::begin(tags), std::end(tags), detection_data.tag_data);
 
 
         // End measurement
-        auto copy_end = std::chrono::high_resolution_clock::now();
+        // auto copy_end = std::chrono::high_resolution_clock::now();
 
         // Calculation time (in microseconds)
-        auto copy_duration = std::chrono::duration_cast<std::chrono::microseconds>(copy_end - copy_start).count();
+        // auto copy_duration = std::chrono::duration_cast<std::chrono::microseconds>(copy_end - copy_start).count();
 
         // std::cout << "Execution time for the copy: " << copy_duration << " microseconds" << std::endl;
 
@@ -2523,8 +2526,8 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     //     file_output << "USING BINDING CPU CORES" << endl;
     // #endif
 
-    auto start = std::chrono::system_clock::now().time_since_epoch();
-    auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
+    // auto start = std::chrono::system_clock::now().time_since_epoch();
+    // auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
     std::queue<Message> messageQueue; // added 2024
 
     Tag tags[MAX_TAG_ID];
@@ -2604,8 +2607,8 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     }
 
 
-    const int epsilon_max = 6;
-    const int epsilon_min = 1;
+    // const int epsilon_max = 6;
+    // const int epsilon_min = 1;
     // int epsilon = 5;
 
     // for (int epsilon = epsilon_max; epsilon >= epsilon_min; epsilon--) {
@@ -2680,8 +2683,8 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 
         float avg_time_gap = -1;
-        auto while_start = std::chrono::system_clock::now().time_since_epoch();
-        auto while_start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(while_start).count();
+        // auto while_start = std::chrono::system_clock::now().time_since_epoch();
+        // auto while_start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(while_start).count();
 
 #if USE_MEMORY_SHARING
 
@@ -2847,7 +2850,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         ptime latest_frame = boost::posix_time::microsec_clock::universal_time();
 
-        uint32_t import_time = (latest_frame - import_start).total_milliseconds();
+        // uint32_t import_time = (latest_frame - import_start).total_milliseconds();
 
         fast_search2(im, latest_frame, v_max, a_max, alpha,
                         min_search_dim, CAM_NAME, time_uncertainty, detector,
@@ -2877,7 +2880,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
             // Get time of frame/detection----------------
 
-            size_t index = 0;
+            // size_t index = 0;
             Message buf {
                 htobe32(1) /* type */ ,
                 htobe32(2) /* subtype */,
@@ -2920,13 +2923,9 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             vector<at::Point> room_corner_detections(2*zarray_size(detections)); 
 
             
-            static ptime epoch(boost::gregorian::date(1970,1,1));
-            uint64_t msecs = (import_start - epoch).total_milliseconds();
-#if TIME_PROFILING
+            // static ptime epoch(boost::gregorian::date(1970,1,1));
+            // uint64_t msecs = (import_start - epoch).total_milliseconds();
 
-#else
-
-#endif
             buf.cam_id = htobe32(CAM_NAME);
             int n_detections = zarray_size(detections);
             std::vector<cv::Point2f> points;
@@ -3016,7 +3015,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
                 // Then call estimate_tag_pose.
                 apriltag_pose_t pose;
-                double err = estimate_tag_pose(&info, &pose);
+                // double err = estimate_tag_pose(&info, &pose);
                 // Do something with pose.
 
                 // change to Eigen format
@@ -3035,7 +3034,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
                 Eigen::Matrix4d T_tag_to_world = camera_to_world * T_tag_to_camera;
 
                 // Extract the world coordinate position of the label
-                Eigen::Vector3d position = T_tag_to_world.block<3, 1>(0, 3);
+                // Eigen::Vector3d position = T_tag_to_world.block<3, 1>(0, 3);
 
                 // Extract the world coordinate direction of the label
                 Eigen::Matrix3d rotation = T_tag_to_world.block<3, 3>(0, 0);
@@ -3073,8 +3072,8 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 
                 // Calculate the size of the AprilTag in pixels
-                float scaling_f = 0.125;
-                DetectionArea* area = &tag->area;
+                // float scaling_f = 0.125;
+                // DetectionArea* area = &tag->area;
                 double apriltag_size = 0.0;
                 for (int j = 0; j < 4; j++) {
                     int next = (j + 1) % 4;
@@ -3085,12 +3084,12 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
                 apriltag_size /= 4.0; // Average size of edges
 
                 // Calculate the size of the search area
-                double search_area_width = scaling_f * (area->x_end - area->x_start);
-                double search_area_height = scaling_f * (area->y_end - area->y_start);
-                double search_area_size = search_area_width * search_area_height;
+                // double search_area_width = scaling_f * (area->x_end - area->x_start);
+                // double search_area_height = scaling_f * (area->y_end - area->y_start);
+                // double search_area_size = search_area_width * search_area_height;
 
                 // Calculate the ratio of search area size to AprilTag size
-                double ratio = search_area_size / apriltag_size;
+                // double ratio = search_area_size / apriltag_size;
 
 #if PRINT_DEBUG_MSG           
                 // Print out the ratio and related information
@@ -3601,6 +3600,8 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     nice_consumer.join();
     fast_consumer.join();
     producer.join();
+
+    return 0;
 }
 
 // Add general settings to log
