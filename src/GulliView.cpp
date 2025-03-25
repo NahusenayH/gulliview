@@ -72,7 +72,7 @@
 
 #include "apriltag/apriltag.h"
 
-#define PRINT_DEBUG_MSG         true
+#define PRINT_DEBUG_MSG         false
 #define FAST_SEARCH_ACC_TEST    false
 #define TIME_PROFILING          false
 
@@ -955,6 +955,7 @@ class Log_Time {
         std::ofstream& file;
 };
 
+// Built in logging
 bool transform_frame(cv::Mat& frame,
 			cv::Mat& gray,
 			cv::Mat& map1,
@@ -962,39 +963,30 @@ bool transform_frame(cv::Mat& frame,
             std::ofstream& file_output // added 2025
             ) {
     // TODO save timestamp (maybe return the timestamp instead of bool)
-    // cv::Mat undistorted_frame;
 
     if (frame.empty()) {
         cout << "no frame to transform, exiting" << endl;
         return false;
     }
-#if ENABLE_LOGS
-    Log_Time remap_timer("Remap", file_output);
-#endif
+    // Log_Time remap_timer("Remap", file_output);
     // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
-#if ENABLE_LOGS
-    remap_timer.stop_us();
-#endif
+    // remap_timer.stop_us();
 
-#if ENABLE_LOGS
     Log_Time color_timer("Transform color", file_output);
-#endif
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-#if ENABLE_LOGS
     color_timer.stop_us();
-#endif
 
     return !frame.empty();
 }
 
+// No logging
 bool transform_frame(cv::Mat& frame,
 			cv::Mat& gray,
 			cv::Mat& map1,
 			cv::Mat& map2) {
     // TODO save timestamp (maybe return the timestamp instead of bool)
+    
     // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
-
-
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
 
     return !frame.empty();
@@ -1333,10 +1325,12 @@ image_u8_t* get_partial_image(const image_u8_t& im, const DetectionArea& area){
     return im_part;
 }
 
+// No logging
 void partial_search(const image_u8_t& im,
                     const DetectionArea& area,
                     zarray_t* detections,
                     apriltag_detector_t* detector) {
+        
     image_u8_t* im_part = get_partial_image(im, area);
     //detect tags in part image
     zarray_t *detection = apriltag_detector_detect(detector, im_part);
@@ -1347,7 +1341,8 @@ void partial_search(const image_u8_t& im,
     }
 }
 
-void partial_search1(const image_u8_t& im,
+// Built in logging
+void partial_search(const image_u8_t& im,
                     const DetectionArea& area,
                     zarray_t* detections,
                     apriltag_detector_t* detector,
@@ -1355,34 +1350,20 @@ void partial_search1(const image_u8_t& im,
                     std::ofstream& file_output
                     ) {
 
-    auto start = std::chrono::high_resolution_clock::now();
-
+    Log_Time partial_timer("Get partial image", file_output);
     image_u8_t* im_part = get_partial_image(im, area);
-
-    auto end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Get partial image time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-#endif
+    partial_timer.stop_us();
 
     ptime search_end = boost::posix_time::microsec_clock::universal_time();
-
     uint32_t total_time = (search_end - total_start_time).total_microseconds();    
     if (total_time > 17000)
         return;
 
-    start = std::chrono::high_resolution_clock::now();
 
+    Log_Time detector_timer("Apriltag detector detect time", file_output);
     //detect tags in part image
     zarray_t *detection = apriltag_detector_detect(detector, im_part);
-
-    end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Apriltag detector detect time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-#endif
+    detector_timer.stop_us();
 
     search_end = boost::posix_time::microsec_clock::universal_time();
 
@@ -1390,22 +1371,13 @@ void partial_search1(const image_u8_t& im,
     if (total_time > 17000)
         return;
 
-    start = std::chrono::high_resolution_clock::now();
-
-
+    Log_Time zarray_timer("Zarray time", file_output);
     if(zarray_size(detection) != 0){
         apriltag_detection_t *temp;
         zarray_get(detection, 0, &temp);
         zarray_add(detections, &temp);
     }
-
-    end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Zarray time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-#endif
-
+    zarray_timer.stop_us();
 }
 
 float calc_displacement(const float velocity, 
@@ -1616,8 +1588,6 @@ void fast_search2(const image_u8_t& im,
         float us = elapsed.total_microseconds();
         float time_s = us / 1e6 + time_uncertainty;  // Time elapsed in seconds
 
-        // file_output << "time s: " << time_s << endl;
-
         // auto initial_start = std::chrono::high_resolution_clock::now();
 
         float max_travel;
@@ -1627,9 +1597,6 @@ void fast_search2(const image_u8_t& im,
                         min_travel, max_travel, alpha, *tag);
 
 #if PRINT_DEBUG_MSG
-        // file_output <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
-        //     << tag->area.x_length << "x" << tag->area.y_length 
-        //     << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
         file_output <<"CAM#"<<CAM_NAME << " using PART SEARCH " 
             << tag->area.x_length << "x" << tag->area.y_length 
             << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
@@ -1652,7 +1619,7 @@ void fast_search2(const image_u8_t& im,
 
         // file_output << "Search Area Size: " << search_area_size << endl;
 
-        partial_search1(im, tag->area, detections, detector, total_start_time, file_output);
+        partial_search(im, tag->area, detections, detector, total_start_time, file_output);
 
         auto partial_end = std::chrono::high_resolution_clock::now();
         auto partial_duration = std::chrono::duration_cast<std::chrono::microseconds>(partial_end - partial_start).count() / 1000.0;
@@ -1663,8 +1630,7 @@ void fast_search2(const image_u8_t& im,
         int index = static_cast<int>(tag - tags_start);
 
 #if PRINT_DEBUG_MSG
-        // file_output <<"CAM#"<<CAM_NAME<<": " <<"tag#"<< index <<": "<< "FAST SEARCH: search_time: " << std::fixed << std::setprecision(2) << partial_duration << " milliseconds\n";
-        file_output << "CAM#" << CAM_NAME << " tag#"<< index <<
+         file_output << "CAM#" << CAM_NAME << " tag#"<< index <<
             " FAST SEARCH time: " << std::fixed << std::setprecision(2) << partial_duration << " ms\n";
 #endif
         uint32_t total_time = (search_end - total_start_time).total_microseconds();
@@ -1952,9 +1918,9 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
         }
 #endif
 
-        // Start
-        auto start = std::chrono::high_resolution_clock::now();
-
+#if ENABLE_LOGS
+        Log_Time producer_exec_timer("Get partial image", file_output);
+#endif
         unsigned int next = (producer_counter[camera_id].load() + 1) % BUFFER_SIZE;
 
         while(next == fast_consumer_counter[camera_id].load() && next == nice_consumer_counter[camera_id].load()) {
@@ -1964,23 +1930,16 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
         *cap >> buffer[camera_id][next];
         producer_counter[camera_id] = next;
 
-        // End measurement
-        auto end = std::chrono::high_resolution_clock::now();
-
-        // Calculation time (in microseconds)
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-
-#if PRINT_DEBUG_MSG
-        // printing time
-        file_output << "Execution time for the producer: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
+#if ENABLE_LOGS
+        producer_exec_timer.stop_us();
 #endif
+
         // added 2025
         // Increment the shared frame counter
         // shared_frame_count++;
     }
 
     file_output.close();
-
 }
 
 
@@ -2155,7 +2114,11 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 
         ptime transform_start = boost::posix_time::microsec_clock::universal_time();
+#if ENABLE_LOGS
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
+#else
+        bool frame_captured = transform_frame(frame, gray, map1, map2);
+#endif
 
         if (!frame_captured) {
             cout << "no frame captured (nice), exiting. Camera " << camera_id << endl;
@@ -2782,9 +2745,13 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         // ptime transform_start = boost::posix_time::microsec_clock::universal_time();
         
-        auto transform_start = std::chrono::high_resolution_clock::now();        
+        auto transform_start = std::chrono::high_resolution_clock::now();
 
+#if ENABLE_LOGS
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
+#else
+        bool frame_captured = transform_frame(frame, gray, map1, map2);
+#endif
 
         if (!frame_captured) {
             cout << "no frame captured (fast), exiting. Camera " << camera_id << endl;
