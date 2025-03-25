@@ -97,15 +97,9 @@
 
 #define FPS 60
 #define BUFFER_SIZE 128
-#define PARALLELL_FRAME_COUNT 2
 #define GLOBAL_SEARCH_MIN 16
 
 // ### ADDED MARS 2025
-#define TIME_PERIOD "VT25"
-// Version string, adds to time period ex VT25.2
-#define VERSION "1"
-// change this text to denote version, this is saved by log script to catagorize
-#define COMMENT ""
 #define NEW_PERFORMANCE_DEBUG_MODE true
 #define LIVE_FEED false
 #define RECORDING_FOLDER "recordings0.5"
@@ -146,6 +140,15 @@ std::atomic<uint32_t> shared_frame_count(0);
 /*if (shared_memory == MAP_FAILED) {
     std::cerr << "mmap failed" << std::endl;
     return 1;
+}*/
+
+void signal_handler(int signum) {
+    // Unlink the shared memory
+    if (shm_unlink("/my_shared_memory") == -1) {
+        std::cerr << "shm_unlink failed" << std::endl;
+    }
+
+    // Remove the semaphore
     boost::interprocess::named_semaphore::remove("/my_semaphore");
     sig_stop = 1;
     exit(signum);
@@ -1291,8 +1294,6 @@ video_capture >> frame;
 
 cout << "enter here" << endl;
 
-std::cout << "Frame rate: " << video_capture.get(cv::CAP_PROP_FPS) << " FPS" << std::endl;
-
 if (frame.empty()) {
 cerr << "no frames from camera " << device_number << endl;
 // exit(1);
@@ -1509,10 +1510,7 @@ void fast_search(const image_u8_t& im,
         {
             std::lock_guard<std::mutex> lock(log_mutex);
 #if PRINT_DEBUG_MSG
-            // std::cout << "CAM#" << CAM_NAME << ": Using PART SEARCH "
-            //           << current_tag->area.x_length << "x" << current_tag->area.y_length
-            //           << "\n";
-            std::cout << "CAM#" << CAM_NAME << " using PART SEARCH "
+            std::cout << "CAM#" << CAM_NAME << ": Using PART SEARCH "
                       << current_tag->area.x_length << "x" << current_tag->area.y_length
                       << "\n";
 #endif
@@ -1601,10 +1599,7 @@ void fast_search1(const image_u8_t& im,
 #if PRINT_DEBUG_MSG
 
         // modified 2025
-        // cout <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
-        //     << tag->area.x_length << "x" << tag->area.y_length 
-        //     << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
-        cout <<"CAM#"<<CAM_NAME<<" " << "using PART SEARCH " 
+        cout <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
             << tag->area.x_length << "x" << tag->area.y_length 
             << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
 #endif
@@ -1619,7 +1614,7 @@ void fast_search1(const image_u8_t& im,
 
     int index = static_cast<int>(tag - tags_start);
             
-    std::cout <<"CAM#"<<CAM_NAME<<": " <<"tag#"<< index <<": "<< "FAST SEARCH: search_time: " << st << " microseconds\n";
+    std::cout <<"CAM#"<<CAM_NAME<<": " <<"tag#"<< index <<": "<< "FAST SEARCH: search_time:" << st << " microseconds\n";
 
     }
 
@@ -1669,10 +1664,7 @@ void fast_search2(const image_u8_t& im,
                         min_travel, max_travel, alpha, *tag);
 
 #if PRINT_DEBUG_MSG
-        // file_output <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
-        //     << tag->area.x_length << "x" << tag->area.y_length 
-        //     << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
-        file_output <<"CAM#"<<CAM_NAME << " using PART SEARCH " 
+        file_output <<"CAM#"<<CAM_NAME<<": " << "Using PART SEARCH " 
             << tag->area.x_length << "x" << tag->area.y_length 
             << " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
 #endif
@@ -1705,9 +1697,7 @@ void fast_search2(const image_u8_t& im,
         int index = static_cast<int>(tag - tags_start);
 
 #if PRINT_DEBUG_MSG
-        // file_output <<"CAM#"<<CAM_NAME<<": " <<"tag#"<< index <<": "<< "FAST SEARCH: search_time: " << std::fixed << std::setprecision(2) << partial_duration << " milliseconds\n";
-        file_output << "CAM#" << CAM_NAME << " tag#"<< index <<
-            " FAST SEARCH time: " << std::fixed << std::setprecision(2) << partial_duration << " ms\n";
+        file_output <<"CAM#"<<CAM_NAME<<": " <<"tag#"<< index <<": "<< "FAST SEARCH: search_time:" << std::fixed << std::setprecision(2) << partial_duration << " microseconds\n";
 #endif
         uint32_t total_time = (search_end - total_start_time).total_microseconds();
         // cout << "fast_search2 time: " << total_time << endl;
@@ -1715,8 +1705,8 @@ void fast_search2(const image_u8_t& im,
         if (total_time > DEFAULT_LIMIT_MAX) {
 
 #if PRINT_DEBUG_MSG
-            file_output << "CAM#" << CAM_NAME << " tag#"<< index <<
-                " exceeded " << DEFAULT_LIMIT_MAX / 1000 << "ms search time. Switching to exhaustive search.\n";
+            file_output << "CAM#" << CAM_NAME << ": tag#" << index
+                      << " exceeded " << DEFAULT_LIMIT_MAX / 1000 << "ms search time. Switching to exhaustive search.\n";
 #endif
 
             use_exhaustive_search = true;
@@ -1988,7 +1978,7 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
         // Find the core where the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
-                file_output << "Core number: " << i << std::endl;
+                file_output << "Thread is running on core " << i << std::endl;
                 break;
             }
         }
@@ -2148,7 +2138,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // Find the core on which the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
-                file_output << "Core number: " << i << std::endl;
+                file_output << "Thread is running on core " << i << std::endl;
                 break;
             }
         }
@@ -2295,8 +2285,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // modified 2025
         // double st = boost::posix_time::milliseconds(search_time).total_microseconds();
             
-        // file_output <<"CAM#"<<CAM_NAME<<": "<< "GLOBAL SEARCH: search_time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
-        file_output <<"CAM#"<<CAM_NAME<< " GLOBAL SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
+        file_output <<"CAM#"<<CAM_NAME<<": "<< "GLOBAL SEARCH: search_time:" << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
 
 #endif
 
@@ -2716,7 +2705,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // Find the core where the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
-                file_output << "Core number: " << i << std::endl;
+                file_output << "Thread is running on core " << i << std::endl;
                 break;
             }
         }
@@ -2926,8 +2915,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // modified 2025
         // double st = boost::posix_time::milliseconds(search_time).total_microseconds();
 
-        // file_output <<"CAM#"<<CAM_NAME<<": "<< "PART SEARCH: search_time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
-        file_output <<"CAM#"<<CAM_NAME<<" "<< "PART SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
+        file_output <<"CAM#"<<CAM_NAME<<": "<< "PART SEARCH: search_time:" << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
 
 #endif
 
@@ -2968,13 +2956,9 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
                 camera_detections[i].y += tag->area.y_start;
 #if PRINT_DEBUG_MSG           
 
-                    // file_output <<"CAM#"<<CAM_NAME<<": " 
-                    //           << "Found when using PART_IMAGE. X: " 
-                    //           << camera_detections[i].x << " Y:" 
-                    //           << camera_detections[i].y << endl;
-                    file_output <<"CAM#"<<CAM_NAME<<" " 
-                              << "Found when using PART_IMAGE. X = " 
-                              << camera_detections[i].x << ", Y = " 
+                    file_output <<"CAM#"<<CAM_NAME<<": " 
+                              << "Found when using PART_IMAGE. X: " 
+                              << camera_detections[i].x << " Y:" 
                               << camera_detections[i].y << endl;
 #endif         
             }
@@ -3026,8 +3010,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 #if PRINT_DEBUG_MSG           
 
-                    // file_output << "Previous velocity: " << previous_tag->velocity << " Current velocity: " << tag->velocity << " time s: " << time_s << " acceleration: " << temp_a << endl;
-                    file_output << "Previous velocity = " << previous_tag->velocity << ", Current velocity = " << tag->velocity << ", time s = " << time_s << ", acceleration = " << temp_a << endl;
+                    file_output << "Previous velocity: " << previous_tag->velocity << " Current velocity: " << tag->velocity << " time s: " << time_s << " acceleration: " << temp_a << endl;
 
 #endif
 
@@ -3294,8 +3277,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 
 #if PRINT_DEBUG_MSG
-            // file_output <<"CAM#"<<CAM_NAME<<": " << "Using GLOBAL SEARCH ##############################################\n";
-            file_output <<"CAM#"<<CAM_NAME<<" " << "Using GLOBAL SEARCH ##############################################\n";
+            file_output <<"CAM#"<<CAM_NAME<<": " << "Using GLobal SEARCH ##############################################\n";
 #endif
 
             loop_count = 1;
@@ -3334,8 +3316,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
             // double st = boost::posix_time::milliseconds(search_time).total_microseconds();
 
-            // file_output <<"CAM#"<<CAM_NAME<<": "<< "GLOBAL SEARCH: search_time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
-            file_output <<"CAM#"<<CAM_NAME<<" "<< "GLOBAL SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
+            file_output <<"CAM#"<<CAM_NAME<<": "<< "GLOBAL SEARCH: search_time:" << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
 #endif
 
             fast_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, search_time, fast_consumer_counter[camera_id].load());
@@ -3363,19 +3344,14 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
                         max_temp_a = max(max_temp_a, temp_a);
 
 #if PRINT_DEBUG_MSG
-                        // file_output << "Previous velocity: " << previous_tags[i].velocity << " Current velocity: " << tags[i].velocity << " time s: " << time_s << " acceleration: " << temp_a << endl;
-                        file_output << "Previous velocity = " << previous_tags[i].velocity << ", Current velocity = " << tags[i].velocity << ", time s = " << time_s << " acceleration: " << temp_a << endl;
+                        file_output << "Previous velocity: " << previous_tags[i].velocity << " Current velocity: " << tags[i].velocity << " time s: " << time_s << " acceleration: " << temp_a << endl;
 #endif
                     }
 
 #if PRINT_DEBUG_MSG
-                    // file_output <<"CAM#"<<CAM_NAME<<": " 
-                    //           << "Found when using GLOBAL_IMAGE. X: " 
-                    //           << detection_data.tags[i].camera_coords->x << " Y:" 
-                    //           << detection_data.tags[i].camera_coords->y << endl;
-                    file_output <<"CAM#"<<CAM_NAME<<" " 
-                              << "Found when using GLOBAL_IMAGE. X = " 
-                              << detection_data.tags[i].camera_coords->x << " Y = " 
+                    file_output <<"CAM#"<<CAM_NAME<<": " 
+                              << "Found when using GLOBAL_IMAGE. X: " 
+                              << detection_data.tags[i].camera_coords->x << " Y:" 
                               << detection_data.tags[i].camera_coords->y << endl;
 #endif
                 }
@@ -3450,8 +3426,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 #if PRINT_DEBUG_MSG
             // file_output << "Hz: " << avg_hz << std::endl;
-	        // file_output << "CAM " << CAM_NAME << ": " << avg_hz << "Hz"  << std::endl;
-            file_output << "Frequency " << CAM_NAME << ": " << avg_hz << "Hz"  << std::endl;
+	        file_output << "CAM " << CAM_NAME << ": " << avg_hz << "Hz"  << std::endl;
 #endif
 
             hz_counter = 0;
@@ -3470,7 +3445,7 @@ int fast_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     // std::cout << "Execution time for one loop: " << std::fixed << std::setprecision(2) << loop_duration / 1000.0 << " ms" << std::endl;
     // Log the performance
     // file_output << "Loop " << total_loop_count - 1 << ": epsilon=" << epsilon << ", Duration=" << loop_duration / 1000 << " ms\n";
-    file_output << "Loop: count=" << total_loop_count - 1 << ", trial=" << trial << ", Duration=" << std::fixed << std::setprecision(2) << loop_duration << " us\n";
+    file_output << "Loop " << total_loop_count - 1 << ": trial=" << trial << ", Duration=" << std::fixed << std::setprecision(2) << loop_duration << " us\n";
 
 #endif
 
@@ -3701,9 +3676,13 @@ void general_log(){
 
     auto t = std::time(nullptr);
     auto tm = *std::localtime(&t);
-    file_output << "TIME: " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << endl;
-    file_output << "VERSION: " << TIME_PERIOD << "." << VERSION << endl; 
-    file_output << "COMMENT: " << COMMENT << endl;
+    file_output << "Human readable time: " << std::put_time(&tm, "%c") << endl;
+    file_output << "Dag: " << std::put_time(&tm, "%d") << endl;
+    file_output << "Månad: " << std::put_time(&tm, "%m") << endl;
+    file_output << "År: " << std::put_time(&tm, "%Y") << endl;
+    file_output << "Timme: " << std::put_time(&tm, "%H") << endl;
+    file_output << "Minut: " << std::put_time(&tm, "%M") << endl;
+    file_output << "Sekund: " << std::put_time(&tm, "%S") << endl;
 
     file_output << "PRINT_DEBUG_MSG: " << PRINT_DEBUG_MSG << endl;
     file_output << "FAST_SEARCH_ACC_TEST: " << FAST_SEARCH_ACC_TEST << endl;
