@@ -1,5 +1,5 @@
 
-add_executable(GulliView GulliView.cpp CameraUtil.h CameraUtil.cpp TagFamily.cpp TagFamily.h)
+add_executable(GulliView GulliView/main.cpp CameraUtil.h CameraUtil.cpp TagFamily.cpp TagFamily.h)
 target_link_libraries(GulliView ${OPENCV_LDFLAGS})
 target_link_libraries(GulliView ${Boost_LIBRARIES})
 target_link_libraries(GulliView ${APRILTAGS_LDFLAGS})

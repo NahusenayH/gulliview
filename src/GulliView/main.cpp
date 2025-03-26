@@ -13,9 +13,9 @@
  * Copyright (c) 2014 Thomas Petig <petig@chalmers.se>
  ********************************************************************/
 
- #include "AprilTypes.h"
- #include "TagFamily.h"
- #include "Detections.h"
+ #include "../AprilTypes.h"
+ #include "../TagFamily.h"
+ #include "../Detections.h"
  
  #include "apriltag/apriltag_pose.h" // added 2025;
  #include "apriltag/common/image_u8.h" // added 2025;
@@ -67,7 +67,7 @@
  #include <sstream>
  #include <thread>
  
- #include "CameraUtil.h"
+ #include "../CameraUtil.h"
  
  
  #include "apriltag/apriltag.h"
@@ -103,9 +103,9 @@
  // ### ADDED MARS 2025
  #define TIME_PERIOD "VT25"
  // Version string, adds to time period ex VT25.2
- #define VERSION "4"
+ #define VERSION "6"
  // change this text to denote version, this is saved by log script to catagorize
- #define COMMENT "After troubleshooting, problem: -Y flag"
+ #define COMMENT ""
  
  #define ENABLE_LOGS        true
  #define LIVE_FEED          false
