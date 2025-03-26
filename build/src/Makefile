@@ -168,29 +168,29 @@ CameraUtil.cpp.s:
 	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/CameraUtil.cpp.s
 .PHONY : CameraUtil.cpp.s
 
-GulliView.o: GulliView.cpp.o
-.PHONY : GulliView.o
+GulliView/main.o: GulliView/main.cpp.o
+.PHONY : GulliView/main.o
 
 # target to build an object file
-GulliView.cpp.o:
-	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView.cpp.o
-.PHONY : GulliView.cpp.o
+GulliView/main.cpp.o:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o
+.PHONY : GulliView/main.cpp.o
 
-GulliView.i: GulliView.cpp.i
-.PHONY : GulliView.i
+GulliView/main.i: GulliView/main.cpp.i
+.PHONY : GulliView/main.i
 
 # target to preprocess a source file
-GulliView.cpp.i:
-	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView.cpp.i
-.PHONY : GulliView.cpp.i
+GulliView/main.cpp.i:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/main.cpp.i
+.PHONY : GulliView/main.cpp.i
 
-GulliView.s: GulliView.cpp.s
-.PHONY : GulliView.s
+GulliView/main.s: GulliView/main.cpp.s
+.PHONY : GulliView/main.s
 
 # target to generate assembly for a file
-GulliView.cpp.s:
-	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView.cpp.s
-.PHONY : GulliView.cpp.s
+GulliView/main.cpp.s:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/main.cpp.s
+.PHONY : GulliView/main.cpp.s
 
 TagFamily.o: TagFamily.cpp.o
 .PHONY : TagFamily.o
@@ -253,9 +253,9 @@ help:
 	@echo "... CameraUtil.o"
 	@echo "... CameraUtil.i"
 	@echo "... CameraUtil.s"
-	@echo "... GulliView.o"
-	@echo "... GulliView.i"
-	@echo "... GulliView.s"
+	@echo "... GulliView/main.o"
+	@echo "... GulliView/main.i"
+	@echo "... GulliView/main.s"
 	@echo "... TagFamily.o"
 	@echo "... TagFamily.i"
 	@echo "... TagFamily.s"

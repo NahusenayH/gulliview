@@ -37,10 +37,10 @@ sleep 1
 # ./GulliView -d 1 -f tag36h11 -n -W 1920 -H 1080 -V 192.168.50.255 -B -N my_semaphore2 -T shared_memory2 &     # camera 0 
 # ./GulliView -d 2 -f tag36h11 -n -W 1920 -H 1080 -V 192.168.50.255 -B -N my_semaphore3 -T shared_memory3 &     # camera 3
 # ./GulliView -d 3 -f tag36h11 -n -W 1920 -H 1080 -V 192.168.50.255 -B -N my_semaphore4 -T shared_memory4 &   # camera  1 
-./GulliView -d 0 -f tag36h11 -n -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore1 -T shared_memory1 &   # camera 2 
-./GulliView -d 1 -f tag36h11 -n -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore2 -T shared_memory2 &     # camera 0 
-./GulliView -d 2 -f tag36h11 -n -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore3 -T shared_memory3 &     # camera 3
-./GulliView -d 3 -f tag36h11 -n -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore4 -T shared_memory4 &   # camera  1 
+./GulliView -d 0 -f tag36h11 -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore1 -T shared_memory1 &   # camera 2 
+./GulliView -d 1 -f tag36h11 -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore2 -T shared_memory2 &     # camera 0 
+./GulliView -d 2 -f tag36h11 -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore3 -T shared_memory3 &     # camera 3
+./GulliView -d 3 -f tag36h11 -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore4 -T shared_memory4 &   # camera  1 
 sleep 2
 ./Transmitter & 
 

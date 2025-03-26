@@ -69,19 +69,19 @@ include src/CMakeFiles/GulliView.dir/progress.make
 # Include the compile flags for this target's objects.
 include src/CMakeFiles/GulliView.dir/flags.make
 
-src/CMakeFiles/GulliView.dir/GulliView.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
-src/CMakeFiles/GulliView.dir/GulliView.cpp.o: ../src/GulliView.cpp
-src/CMakeFiles/GulliView.dir/GulliView.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView.cpp.o"
-	cd /home/gulliview/advanced_mobility_model/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView.cpp.o -MF CMakeFiles/GulliView.dir/GulliView.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView.cpp
+src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: ../src/GulliView/main.cpp
+src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/main.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/main.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/main.cpp
 
-src/CMakeFiles/GulliView.dir/GulliView.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView.cpp.i"
-	cd /home/gulliview/advanced_mobility_model/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView.cpp > CMakeFiles/GulliView.dir/GulliView.cpp.i
+src/CMakeFiles/GulliView.dir/GulliView/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/main.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/main.cpp > CMakeFiles/GulliView.dir/GulliView/main.cpp.i
 
-src/CMakeFiles/GulliView.dir/GulliView.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView.cpp.s"
-	cd /home/gulliview/advanced_mobility_model/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView.cpp -o CMakeFiles/GulliView.dir/GulliView.cpp.s
+src/CMakeFiles/GulliView.dir/GulliView/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/main.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/main.cpp -o CMakeFiles/GulliView.dir/GulliView/main.cpp.s
 
 src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
 src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o: ../src/CameraUtil.cpp
@@ -113,14 +113,14 @@ src/CMakeFiles/GulliView.dir/TagFamily.cpp.s: cmake_force
 
 # Object files for target GulliView
 GulliView_OBJECTS = \
-"CMakeFiles/GulliView.dir/GulliView.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/main.cpp.o" \
 "CMakeFiles/GulliView.dir/CameraUtil.cpp.o" \
 "CMakeFiles/GulliView.dir/TagFamily.cpp.o"
 
 # External object files for target GulliView
 GulliView_EXTERNAL_OBJECTS =
 
-GulliView: src/CMakeFiles/GulliView.dir/GulliView.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/TagFamily.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/build.make
