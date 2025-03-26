@@ -179,7 +179,7 @@ int main() {
                     updateMessage(msg, updated_message);
                     //std::cout << "counter: " << counter << std::endl;
                     uint64_t updated_avg_time = htobe64(updated_message.avg_time_gap);
-                    uint64_t recived_avg_time = htobe64(msg.avg_time_gap);
+                    uint64_t recived_avg_time = htobe64(msg.avg_time_gap);memcpy
                     // Write the speed and recived_avg_time_gap to the CSV file
                     
                     /*if (recived_avg_time < 1000){
