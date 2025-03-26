@@ -20,6 +20,7 @@
 // HERE WE INCLUDE THE DIFFERENT PARTS THAT WERE ONCE ONE FILE
 #include "AccelerationTracker.h"
 #include "AngleTracker.h"
+#include "DebugLogger.h"
 
 #include "apriltag/apriltag_pose.h" // added 2025;
 #include "apriltag/common/image_u8.h" // added 2025;
@@ -107,9 +108,9 @@
 // ### ADDED MARS 2025
 #define TIME_PERIOD "VT25"
 // Version string, adds to time period ex VT25.2
-#define VERSION "6"
+#define VERSION "7"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT ""
+#define COMMENT "DebugLogger in sep file"
 
 #define ENABLE_LOGS        true
 #define LIVE_FEED          false
@@ -414,100 +415,6 @@ const OverlapRange overlap_ranges[4][2] = {
     {{1580, 2160}, {0, 460}}, // buffer_21, buffer_23
     // Camera 3's overlap area
     {{1700, 2160}, {0, 0}} // buffer_32
-};
-
-
-// added 2025
-
-class DebugLogger {
-private:
-struct LogEntry {
-    uint8_t reason; // reason enumeration (1 byte)
-    uint32_t value; // value (4 bytes)
-    uint8_t counter; // current count (max 128, 1 byte)
-    uint32_t timestamp; // timestamp (4 bytes)
-};
-
-LogEntry* log_buffer; // fixed size memory array
-size_t buffer_capacity; // array capacity (16000 entries = 32 KB)
-size_t write_index; // current write index
-bool is_buffer_full; // Flag if the oldest data has been overwritten.
-
-public:
-enum Reason : uint8_t {
-    TRANSFORM_TIME = 0,
-    CONSUMER_TIME,
-    INITIALIZE_TIME,
-    PART_SEARCH_TIME,
-    PROCESS_TIME,
-    GLOBAL_SEARCH_TIME,
-    LOOP_TIME
-};
-
-DebugLogger(size_t max_entries = 16000) {
-    buffer_capacity = max_entries;
-    log_buffer = new LogEntry[buffer_capacity];
-    write_index = 0;
-    is_buffer_full = false;
-}
-
-~DebugLogger() {
-    delete[] log_buffer;
-}
-
-void log_operation(Reason reason, uint32_t value, uint8_t counter) {
-    auto now = std::chrono::system_clock::now();
-    auto now_time_t = std::chrono::system_clock::to_time_t(now);
-
-    // fill in the log entry
-    log_buffer[write_index] = {reason, value, counter, static_cast<uint32_t>(now_time_t)};
-
-    // update the write index, use it as circularly
-    write_index = (write_index + 1) % buffer_capacity;
-    if (write_index == 0) {
-        is_buffer_full = true;
-    }
-}
-
-void write_to_file_if_needed(uint32_t loop_time, const std::string& thread_name, const std::string& file_name) {
-    if (loop_time > 100000) {
-        std::ofstream file(file_name, std::ios::app);
-        if (file.is_open()) {
-            file << "Thread: " << thread_name << ", Loop time exceeded: " << std::fixed << std::setprecision(2)<< loop_time / 1000.0 << "ms\n";
-            // size_t start_index = is_buffer_full ? write_index : 0;
-            size_t end_index = is_buffer_full ? buffer_capacity : write_index;
-
-            size_t start_index = thread_name == "fast-producer"? end_index - 5 : end_index - 5;
-
-            // size_t latest_index = is_buffer_full ? buffer_capacity - 1 : write_index - 1;
-            // const auto& entry = log_buffer[latest_index];
-
-            for (size_t i = start_index; i < end_index; ++i) {
-                const auto& entry = log_buffer[i];
-                file << "Reason: " << reason_to_string(static_cast<Reason>(entry.reason))
-                    << ", Value: " << std::fixed << std::setprecision(2) << static_cast<int>(entry.value) / 1000.0
-                    << ", Counter: " << static_cast<int>(entry.counter)
-                    << ", Timestamp: " << entry.timestamp << "\n";
-            }
-            file << "----------------------------------------\n";
-            file.close();
-        }
-    }
-}
-
-private:
-std::string reason_to_string(Reason reason) {
-    switch (reason) {
-        case TRANSFORM_TIME: return "transform time";
-        case CONSUMER_TIME: return "consumer time";
-        case INITIALIZE_TIME: return "initialize time";
-        case PART_SEARCH_TIME: return "part search time";
-        case PROCESS_TIME: return "process time";
-        case GLOBAL_SEARCH_TIME: return "global search time";
-        case LOOP_TIME: return "loop time";
-        default: return "unknown";
-    }
-}
 };
 
 // std::atomic<unsigned int> producer_counter(0);
