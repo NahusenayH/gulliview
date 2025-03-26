@@ -103,13 +103,13 @@
  // ### ADDED MARS 2025
  #define TIME_PERIOD "VT25"
  // Version string, adds to time period ex VT25.2
- #define VERSION "1/2/3ish"
+ #define VERSION "4"
  // change this text to denote version, this is saved by log script to catagorize
- #define COMMENT "Moved if statements"
+ #define COMMENT "After troubleshooting, problem: -Y flag"
  
- #define ENABLE_LOGS true
- #define LIVE_FEED false
- #define RECORDING_FOLDER "recordings0.5"
+ #define ENABLE_LOGS        true
+ #define LIVE_FEED          false
+ #define RECORDING_FOLDER   "recordings0.5"
  
  using namespace std;
  using boost::asio::ip::udp;
