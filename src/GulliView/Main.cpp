@@ -17,10 +17,6 @@
 #include "../TagFamily.h"
 #include "../Detections.h"
 
-// HERE WE INCLUDE THE DIFFERENT PARTS THAT WERE ONCE ONE FILE
-#include "AccelerationTracker.h"
-#include "AngleTracker.h"
-#include "DebugLogger.h"
 
 #include "apriltag/apriltag_pose.h" // added 2025;
 #include "apriltag/common/image_u8.h" // added 2025;
@@ -74,54 +70,24 @@
 
 #include "../CameraUtil.h"
 
-
 #include "apriltag/apriltag.h"
 
-#define PRINT_DEBUG_MSG         true
-#define FAST_SEARCH_ACC_TEST    false
-#define TIME_PROFILING          false
 
-#define USE_MEMORY_SHARING      false // added 2025
-#define USE_EWMA                true // added 2025
-#define BINDING_CPU_CORES       true // added 2025
 
-#define PRODUCE_FRAME_MODE      1 // added 2025
+// HERE WE INCLUDE THE DIFFERENT PARTS THAT WERE ONCE ONE FILE
+#include "Declarations.hpp"
+#include "AccelerationTracker.hpp"
+#include "AngleTracker.hpp"
+#include "DebugLogger.hpp"
+#include "CalibrateCameras.hpp"
+#include "TransformFrame.hpp"
+#include "GeneralSearchFunctions.hpp"
 
-#define DEFAULT_TAG_FAMILY "tag36h11" // tag36h11
-#define DEFAULT_IP "127.0.0.1"
-#define DEFAULT_PORT "2121"
-
-#define MAX_TAG_ID                      10
-#define FORCE_GLOBAL_SEARCH_LOOP_NUM    10
-
-#define ROOM_WIDTH_METER  5.035f
-
-#define DEFAULT_VELOCITY_MAX 0.3
-#define DEFAULT_ACCELERATION_MAX 8
-#define DEFAULT_LIMIT_MAX 17000
-
-#define FPS 60
-#define BUFFER_SIZE 128
-#define PARALLELL_FRAME_COUNT 2
-#define GLOBAL_SEARCH_MIN 16
-
-// ### ADDED MARS 2025
-#define TIME_PERIOD "VT25"
-// Version string, adds to time period ex VT25.2
-#define VERSION "7"
-// change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "DebugLogger in sep file"
-
-#define ENABLE_LOGS        true
-#define LIVE_FEED          false
-#define RECORDING_FOLDER   "recordings0.5"
 
 using namespace std;
 using boost::asio::ip::udp;
 using boost::posix_time::ptime;
 using boost::posix_time::time_duration;
-
-string CALIBRATION_TAG_FAMILY = "tag25h9";
 
 
 sig_atomic_t sig_stop = 0;
@@ -188,35 +154,10 @@ void multi_signal_handler(int signum) {
 }
 
 
-typedef struct __attribute__ ((packed)) DetectionMessage {
-    uint32_t id;
-    uint64_t time_msec;    //added 2024
-    uint32_t x;
-    uint32_t y;
-    float theta;
-    float speed;
-    uint32_t camera_id;
-} DetectionMessage;
 
-typedef struct __attribute__ ((packed)) DetectionArea {
-    int32_t x_start;
-    int32_t y_start;
-    int32_t x_end;
-    int32_t y_end;
-    int32_t x_length;
-    int32_t y_length;
-} DetectionArea;
 
-typedef struct __attribute__ ((packed)) Message {
-    uint32_t type;
-    uint32_t subtype;
-    uint32_t seq;
-    uint64_t time_msec;
-    uint64_t avg_time_gap;   //modified 2024, previously UNUSED
-    uint32_t cam_id;    // previously UNUSED2
-    uint32_t length;
-    DetectionMessage detections[11];
-} Message;
+
+
 
 struct SharedData {
     int flag;
@@ -288,16 +229,8 @@ uint32_t xMaxLimit = 4600;
 uint32_t yMinLimit = 500;
 uint32_t yMaxLimit = 9000;
 
-typedef struct Tag {
-    int32_t x = 0;
-    int32_t y = 0;
-    bool is_detected = 0;
-    float velocity = 0;
-    bool valid_velocity = false;
-    float theta;
-    ptime latest_detection;
-    DetectionArea area;
-} Tag;
+
+
 
 
 // added 2025
@@ -599,46 +532,6 @@ GulliViewOptions parse_options(int argc, char **argv) {
     return opts;
 }
 
-
-bool tag_exists(const int x_center, const int y_center) {
-    return 0 < x_center && 0 < y_center;
-}
-
-
-//sets the true point of the tags for autocalibration (coordinates in meters)
-//TODO Maybe change to coordinates in centimeters
-void setDestinationPoints(const int cam_name, at::Point* destination) {
-
-    // _____________________________________________________________________________________________________
-    // TODO: UPDATE DESTINATION POINTS TO THE POSITION OF THE ROBOT IF ITS TAG IS IN THE CALIBRATIONTAGS POSITION
-    //this is due to the tags being on the floor while the tags on the robots are a bit off the floor therefore the true
-    //position of the tag is not the same as the position we want to give to a robot in these pixel coordinates.
-    // _____________________________________________________________________________________________________
-    switch(cam_name) {
-    case 0:
-        destination[0] = at::Point(0.35, 0.68);
-        destination[1] = at::Point(4.71, 0.69);
-        destination[2] = at::Point(0.35, 2.60);
-        destination[3] = at::Point(4.60, 2.74);
-        break;
-    case 1:
-        destination[0] = at::Point(0.35, 2.60);
-        destination[1] = at::Point(4.60, 2.74);
-        destination[2] = at::Point(0.25, 4.84);
-        destination[3] = at::Point(4.55, 4.91);
-    case 2:
-        destination[0] = at::Point(0.25, 4.84);
-        destination[1] = at::Point(4.55, 4.91);
-        destination[2] = at::Point(0.23, 6.95);
-        destination[3] = at::Point(4.51, 7.02);
-    case 3:
-        destination[0] = at::Point(0.23, 6.95);
-        destination[1] = at::Point(4.51, 7.02);
-        destination[2] = at::Point(0.17, 9.26);
-        destination[3] = at::Point(4.61, 9.18);
-    }
-}
-
 float get_uncertainty() {
     float t_min;
     float t_max;
@@ -725,51 +618,6 @@ std::ofstream log_file(const std::string& name){
     #endif
 }
 
-bool transform_frame(cv::Mat& frame,
-            cv::Mat& gray,
-            cv::Mat& map1,
-            cv::Mat& map2,
-            std::ofstream& file_output // added 2025
-            ) {
-    // TODO save timestamp (maybe return the timestamp instead of bool)
-    // cv::Mat undistorted_frame;
-
-    if (frame.empty()) {
-        cout << "no frame to transform, exiting" << endl;
-        return false;
-    }
-#if ENABLE_LOGS
-    Log_Time remap_timer("Remap", file_output);
-#endif
-    // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
-#if ENABLE_LOGS
-    remap_timer.stop_us();
-#endif
-
-#if ENABLE_LOGS
-    Log_Time color_timer("Transform color", file_output);
-#endif
-    cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-#if ENABLE_LOGS
-    color_timer.stop_us();
-#endif
-
-    return !frame.empty();
-}
-
-bool transform_frame(cv::Mat& frame,
-            cv::Mat& gray,
-            cv::Mat& map1,
-            cv::Mat& map2) {
-    // TODO save timestamp (maybe return the timestamp instead of bool)
-    // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
-
-
-    cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-
-    return !frame.empty();
-}
-
 std::map<int, Eigen::Matrix4d> camera_to_world_matrices = {
     {0, (Eigen::Matrix4d() << 2270.416948, 0.0, 1997.865610, 0.0,
                             0.0, 2267.062650, 1060.169248, 0.0,
@@ -788,172 +636,6 @@ std::map<int, Eigen::Matrix4d> camera_to_world_matrices = {
                             0.0, 0.0, 1.0, 0.0,
                             0.0, 0.0, 0.0, 1.0).finished()},
 };
-
-
-
-// define global variables
-std::map<int, cv::Mat> camera_matrices = {
-    {0, (cv::Mat_<double>(3, 3) << 2270.416948, 0.0, 1997.865610,
-                                0.0, 2267.062650, 1060.169248,
-                                0.0, 0.0, 1.0)},
-    {1, (cv::Mat_<double>(3, 3) << 2290.512606, 0.0, 1923.229236,
-                                0.0, 2283.316632, 1028.981542,
-                                0.0, 0.0, 1.0)},
-    {2, (cv::Mat_<double>(3, 3) << 2292.991706, 0.0, 1907.952064,
-                                0.0, 2292.022166, 1143.737530,
-                                0.0, 0.0, 1.0)},
-    {3, (cv::Mat_<double>(3, 3) << 2297.690708, 0.0, 1974.297454,
-                                0.0, 2273.936552, 1047.443252,
-                                0.0, 0.0, 1.0)},
-};
-
-std::map<int, cv::Mat> global_distortion_coefficients = {
-    {0, (cv::Mat_<double>(1, 5) << -0.073165, 0.025731, 0.006159, 0.007375, 0.0)},
-    {1, (cv::Mat_<double>(1, 5) << -0.079821, 0.027860, -0.002763, -0.00027, 0.0)},
-    {2, (cv::Mat_<double>(1, 5) << -0.080634, 0.032041, 0.006835, 0.000915, 0.0)},
-    {3, (cv::Mat_<double>(1, 5) << -0.095870, 0.038556, 0.007781, 0.001609, 0.0)},
-};
-
-// void init_undistortion_matrices(const cv::VideoCapture& video_capture,
-//                                 const cv::Size frame_size,
-// 				cv::Mat& map1,
-// 				cv::Mat& map2) {
-//     // create 3x3 matrix of doubles
-//     cv::Mat k1 = (cv::Mat1d(3, 3) << (927.42805517 / 800) * video_capture.get(cv::CAP_PROP_FRAME_WIDTH), 0.0, (401.59811614 / 800) * video_capture.get(cv::CAP_PROP_FRAME_WIDTH), 0, 
-//                                     (850.04900153 / 448) * video_capture.get(cv::CAP_PROP_FRAME_HEIGHT), (225.08468986 / 448) * video_capture.get(cv::CAP_PROP_FRAME_HEIGHT), 0, 0, 1);
-//     // create 1x5 matrix of doubles
-//     cv::Mat d1 = (cv::Mat1d(1, 5) << 0.24592604, -1.97913584, -0.01938124, 
-//                                      0.00740747, 2.37610561);
-
-//     cv::Mat opt1 = cv::getOptimalNewCameraMatrix(k1, d1, frame_size, 0);
-
-//     cv::initUndistortRectifyMap(k1, d1, cv::Mat(), opt1, frame_size, CV_32FC1, map1, map2);
-// }
-
-// added 2025
-
-void init_undistortion_matrices(const cv::VideoCapture& video_capture,
-                                const cv::Size& frame_size,
-                                cv::Mat& map1,
-                                cv::Mat& map2,
-                                int camera_id) {
-    // Check that the camera number is valid
-    if (camera_matrices.find(camera_id) == camera_matrices.end() ||
-        global_distortion_coefficients.find(camera_id) == global_distortion_coefficients.end()) {
-        throw std::invalid_argument("Invalid camera ID or parameters not found!");
-    }
-
-    // Get camera matrix and distortion factor
-    const cv::Mat& camera_matrix = camera_matrices[camera_id];
-    const cv::Mat& distortion_coefficients = global_distortion_coefficients[camera_id];
-
-    // Computationally optimised new camera matrices
-    cv::Mat optimal_camera_matrix = cv::getOptimalNewCameraMatrix(
-        camera_matrix, distortion_coefficients, frame_size, 1, frame_size);
-
-    // Initialise the mapping matrix
-    cv::initUndistortRectifyMap(
-        camera_matrix, distortion_coefficients, cv::Mat(),
-        optimal_camera_matrix, frame_size, CV_32FC1, map1, map2);
-}
-
-
-void automated_calibration(const int32_t width,
-                            const int32_t height,
-                            at::Point* destination,
-                            at::Point* source,
-                            int32_t* camera,
-                            cv::VideoCapture& video_capture,
-                    cv::Mat &map1,
-                            cv::Mat &map2, int camera_id) { // modified 2025, add camera_id
-    // declare frame
-    cv::Mat frame, gray;
-
-    // get frame from video_capture
-    video_capture >> frame;
-
-    if (frame.empty()) {
-        // no frame was found, ouputs error and exits
-        std::cerr << "no frames\n";
-        // exit(1);
-    }
-
-    // tag family for calibration
-    TagFamily family(CALIBRATION_TAG_FAMILY);
-
-    // set up april tag detector
-    apriltag_detector_t* detector = apriltag_detector_create();
-    apriltag_detector_add_family(detector, family.at_family);
-
-    detector->quad_decimate = 1.0f;
-    detector->quad_sigma = 0.6f; // low-pass blur, negative values sharpen
-    detector->refine_edges = 1; // align edges of rags
-
-    init_undistortion_matrices(video_capture, frame.size(), map1, map2, camera_id); // modified 2025
-
-    video_capture.read(frame);
-
-    transform_frame(frame, gray, map1, map2);
-
-    image_u8_t im = {
-        gray.cols,
-        gray.rows,
-        gray.cols,
-        gray.data   
-    };
-    
-    zarray_t* detections = apriltag_detector_detect(detector, &im);
-
-    if (zarray_size(detections) != 4){
-        apriltag_detections_destroy(detections);
-        apriltag_detector_destroy(detector);
-
-        // start new calibration if all calibration tags were not found
-        automated_calibration(width,
-                            height,
-                            destination,
-                            source,
-                            camera,
-                            video_capture,
-                            map1,
-                            map2,
-                            camera_id);
-        return;
-    }
-
-    int32_t tag_sum = 0;
-
-    // get detections of the calibration tags
-    for (int i = 0; i < zarray_size(detections); i++) {
-        apriltag_detection_t* detection;
-        zarray_get(detections, i, &detection);
-
-        // sum id's to figure out which camera 
-        tag_sum += detection->id;
-    }
-
-    // updating camera name to the real one
-    int32_t cam_name = (tag_sum - 6) / 8;
-
-    for (int i = 0; i < zarray_size(detections); i++) {
-        apriltag_detection_t* detection;
-        zarray_get(detections, i, &detection);
-
-        // set source points (pixel coordinates for the calibration tags)
-        double x = detection->c[0];
-        double y = detection->c[1];
-        int32_t src_index = detection->id - (cam_name * 2);
-        source[src_index] = at::Point(x, y);
-    }
-
-    apriltag_detections_destroy(detections);
-    apriltag_detector_destroy(detector);
-
-    setDestinationPoints(cam_name, destination);
-    *camera = cam_name;
-
-    cout << "Calibration done for camera " << cam_name << "\n";
-}
 
 void init_video_open(const int32_t device_number,
                         const int32_t frame_width,
@@ -1069,19 +751,6 @@ void set_search_area(const int32_t im_width,
 
     area.x_length = area.x_end - area.x_start;
     area.y_length = area.y_end - area.y_start;
-}
-
-void reset_tag(const int image_width, const int image_height, Tag *tag) {
-    tag->x = 0;
-    tag->y = 0;
-    tag->valid_velocity = false;
-    tag->velocity = 0;
-    tag->area.x_start = 0;
-    tag->area.y_start = 0;
-    tag->area.x_end = image_width;
-    tag->area.y_end = image_height;
-    tag->area.x_length = image_width;
-    tag->area.y_length = image_height;
 }
 
 zarray* exhaustive_search(image_u8_t& im, apriltag_detector_t* detector) {
@@ -1465,19 +1134,6 @@ void fast_search2(const image_u8_t& im,
 
 
 
-float calc_velocity(const int old_x, const int old_y, 
-                    const int new_x, const int new_y,
-                    const ptime old_frame,
-                    const ptime new_frame) {
-    float dy = new_y - old_y;
-    float dx = new_x - old_x;
-    float diag = sqrt(powf(dx, 2) + powf(dy, 2));
-    auto elapsed = new_frame - old_frame;
-    auto dt = (elapsed).total_microseconds();
-    return diag / (dt / 1e6f);
-}
-
-
 /**
 * Updates GUI to display search areas.
 */
@@ -1599,74 +1255,8 @@ void update_exhaustive_gui(DetectionData detection_data, Tag* tags_start, cv::Ma
 
         return;
     }
-
 }
 
-
-void update_tag(const cv::Point2f* detection,
-                const cv::Point2f* cornerDetections,
-                const ptime latest_frame,
-                Tag* tag, std::ofstream& file_output) {
-    if (tag_exists(tag->x, tag->y)) {
-        tag->velocity = calc_velocity(tag->x, tag->y, 
-                                    detection->x, detection->y,
-                                    tag->latest_detection, latest_frame);
-        tag->valid_velocity = true;
-
-#if PRINT_DEBUG_MSG
-        file_output << "tag->x: " << tag->x << " tag->y: " << tag->y << " detection->x: " << detection->x << " detection->y: " << detection->y << endl;
-#endif
-    }
-    tag->x = detection->x;
-    tag->y = detection->y;
-    tag->latest_detection = latest_frame;
-    tag->is_detected = true;
-    float x0 = (cornerDetections + 1)->x;
-    float y0 = (cornerDetections + 1)->y;
-    float x1 = cornerDetections->x;
-    float y1 = cornerDetections->y;
-    tag->theta = atan2(y1 - y0, x1 - x0);
-}
-
-
-// modifeid 2024, "detectoinTime_ms" added
-void add_detection_to_msg(const int id, uint64_t detectionTime_ms, const float room_x, const float room_y, 
-                        const float theta, const size_t index, 
-                        const int CAM_NAME, Message& buf) {
-    int32_t x_coord = (int32_t) (room_x * 1000.0);
-    int32_t y_coord = (int32_t) (room_y * 1000.0);
-    union {
-        float        f;
-        unsigned int i;
-    } angle;
-    union {
-        float        f;
-        unsigned int i;
-    } speed_f;
-    float speed = 0.25f; // I HAVE SET THIS TO AN ARBITRARY VALUE SINCE REMOVING THE "safeSpeed" FUNCTION. 
-                                        // IT IS SENT TO SOCKET BUT NOT USED LATER.    // Convert theta to big endian angle
-    angle.f = theta;
-    angle.i = htobe32(angle.i);
-    // Convert speed to big endian speed
-    speed_f.f = speed;
-    speed_f.i = htobe32(speed_f.i);
-    buf.detections[index] = {      
-        htobe32(id),  /* id */
-        htobe64(detectionTime_ms),   /* added 2024*/
-        htobe32(x_coord), /* x */
-        htobe32(y_coord), /* y */
-        angle.f,          /* angle theta */
-        speed_f.f,        /* speed */
-        htobe32(CAM_NAME) /* camera_id */
-    };
-
-#if PRINT_DEBUG_MSG
-    // cout << "[*] Camera: " << CAM_NAME << " Tag: " << id 
-    //     << " X: " << x_coord << " Y: " << y_coord << " Theta: " 
-    //     << theta << " Speed: " << speed << " Time: " 
-    //     << detectionTime_ms << endl;
-#endif
-}
 
 void produce_frame(int camera_id, cv::VideoCapture *cap) {
 

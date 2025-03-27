@@ -1,5 +1,5 @@
-src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
- /home/gulliview/advanced_mobility_model/src/GulliView/main.cpp \
+src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.o: \
+ /home/gulliview/advanced_mobility_model/src/GulliView/Main.cpp \
  /usr/include/stdc-predef.h \
  /home/gulliview/advanced_mobility_model/src/GulliView/../AprilTypes.h \
  /usr/include/opencv4/opencv2/core/core.hpp \
@@ -293,24 +293,12 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/local/include/apriltag/tagStandard41h12.h \
  /usr/local/include/apriltag/tagStandard52h13.h \
  /home/gulliview/advanced_mobility_model/src/GulliView/../Detections.h \
- /home/gulliview/advanced_mobility_model/src/GulliView/AccelerationTracker.hpp \
- /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
- /usr/include/c++/11/bits/deque.tcc \
- /home/gulliview/advanced_mobility_model/src/GulliView/AngleTracker.hpp \
- /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.hpp \
+ /usr/local/include/apriltag/apriltag_pose.h /usr/include/c++/11/optional \
  /usr/include/c++/11/fstream /usr/include/c++/11/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
- /usr/include/c++/11/bits/fstream.tcc /usr/include/c++/11/iomanip \
- /usr/include/c++/11/locale \
- /usr/include/c++/11/bits/locale_facets_nonio.h \
- /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
- /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
- /usr/include/libintl.h /usr/include/c++/11/bits/locale_facets_nonio.tcc \
- /usr/include/c++/11/bits/locale_conv.h \
- /usr/include/c++/11/bits/quoted_string.h \
- /usr/local/include/apriltag/apriltag_pose.h /usr/include/c++/11/optional \
- /usr/include/eigen3/Eigen/Dense /usr/include/eigen3/Eigen/Core \
+ /usr/include/c++/11/bits/fstream.tcc /usr/include/eigen3/Eigen/Dense \
+ /usr/include/eigen3/Eigen/Core \
  /usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
  /usr/include/eigen3/Eigen/src/Core/util/Macros.h \
  /usr/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h \
@@ -1407,6 +1395,13 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/boost/date_time/iso_format.hpp \
  /usr/include/boost/date_time/parse_format_base.hpp \
  /usr/include/boost/io/ios_state.hpp /usr/include/boost/io_fwd.hpp \
+ /usr/include/c++/11/locale \
+ /usr/include/c++/11/bits/locale_facets_nonio.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+ /usr/include/libintl.h /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+ /usr/include/c++/11/bits/locale_conv.h /usr/include/c++/11/iomanip \
+ /usr/include/c++/11/bits/quoted_string.h \
  /usr/include/boost/date_time/date_format_simple.hpp \
  /usr/include/boost/date_time/gregorian/gregorian_io.hpp \
  /usr/include/boost/date_time/date_facet.hpp \
@@ -1561,6 +1556,8 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/boost/type_traits/has_minus_assign.hpp \
  /usr/include/boost/iterator/advance.hpp \
  /usr/include/boost/algorithm/string/find_format.hpp \
+ /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
+ /usr/include/c++/11/bits/deque.tcc \
  /usr/include/boost/range/as_literal.hpp \
  /usr/include/boost/range/iterator_range.hpp \
  /usr/include/boost/range/iterator_range_io.hpp \
@@ -1856,4 +1853,11 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct_shmid_ds.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_shmid64_ds.h \
  /home/gulliview/advanced_mobility_model/src/GulliView/../CameraUtil.h \
- /home/gulliview/advanced_mobility_model/src/GulliView/../AprilTypes.h
+ /home/gulliview/advanced_mobility_model/src/GulliView/../AprilTypes.h \
+ /home/gulliview/advanced_mobility_model/src/GulliView/Declarations.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/AccelerationTracker.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/AngleTracker.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/CalibrateCameras.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/GeneralSearchFunctions.hpp

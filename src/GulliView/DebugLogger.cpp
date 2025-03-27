@@ -5,7 +5,7 @@
 #include <chrono>      // For std::chrono::system_clock
 #include <iostream>    // Optional: For debugging or console output
 
-#include "DebugLogger.h"
+#include "DebugLogger.hpp"
 
 DebugLogger::DebugLogger(size_t max_entries = 16000) {
     buffer_capacity = max_entries;

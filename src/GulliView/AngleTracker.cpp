@@ -3,7 +3,7 @@
 #include <deque>       // For std::deque
 #include <algorithm>   // For std::max
 
-#include "AngleTracker.h"
+#include "AngleTracker.hpp"
 
 // Constructor initializes average to 0
 AngleTracker::AngleTracker() : average(0.0) {}

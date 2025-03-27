@@ -91,8 +91,14 @@
 			"sourceIndexes" : 
 			[
 				0,
+				1,
 				2,
-				3
+				3,
+				4,
+				5,
+				6,
+				8,
+				9
 			]
 		}
 	],
@@ -425,16 +431,22 @@
 			"sourceIndexes" : 
 			[
 				0,
+				1,
 				2,
-				3
+				3,
+				4,
+				5,
+				6,
+				8,
+				9
 			]
 		},
 		{
 			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
-				1,
-				4
+				7,
+				10
 			]
 		}
 	],
@@ -443,7 +455,43 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/GulliView/main.cpp",
+			"path" : "src/GulliView/Main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/GulliView/AccelerationTracker.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/GulliView/AngleTracker.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/GulliView/DebugLogger.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/GulliView/CalibrateCameras.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/GulliView/TransformFrame.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/GulliView/GeneralSearchFunctions.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

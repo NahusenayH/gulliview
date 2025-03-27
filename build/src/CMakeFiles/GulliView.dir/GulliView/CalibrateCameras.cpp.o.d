@@ -1,5 +1,5 @@
-src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
- /home/gulliview/advanced_mobility_model/src/GulliView/main.cpp \
+src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o: \
+ /home/gulliview/advanced_mobility_model/src/GulliView/CalibrateCameras.cpp \
  /usr/include/stdc-predef.h \
  /home/gulliview/advanced_mobility_model/src/GulliView/../AprilTypes.h \
  /usr/include/opencv4/opencv2/core/core.hpp \
@@ -292,236 +292,6 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/local/include/apriltag/tagCustom48h12.h \
  /usr/local/include/apriltag/tagStandard41h12.h \
  /usr/local/include/apriltag/tagStandard52h13.h \
- /home/gulliview/advanced_mobility_model/src/GulliView/../Detections.h \
- /home/gulliview/advanced_mobility_model/src/GulliView/AccelerationTracker.hpp \
- /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
- /usr/include/c++/11/bits/deque.tcc \
- /home/gulliview/advanced_mobility_model/src/GulliView/AngleTracker.hpp \
- /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.hpp \
- /usr/include/c++/11/fstream /usr/include/c++/11/bits/codecvt.h \
- /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
- /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
- /usr/include/c++/11/bits/fstream.tcc /usr/include/c++/11/iomanip \
- /usr/include/c++/11/locale \
- /usr/include/c++/11/bits/locale_facets_nonio.h \
- /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
- /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
- /usr/include/libintl.h /usr/include/c++/11/bits/locale_facets_nonio.tcc \
- /usr/include/c++/11/bits/locale_conv.h \
- /usr/include/c++/11/bits/quoted_string.h \
- /usr/local/include/apriltag/apriltag_pose.h /usr/include/c++/11/optional \
- /usr/include/eigen3/Eigen/Dense /usr/include/eigen3/Eigen/Core \
- /usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
- /usr/include/eigen3/Eigen/src/Core/util/Macros.h \
- /usr/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h \
- /usr/include/eigen3/Eigen/src/Core/util/MKL_support.h \
- /usr/include/c++/11/cassert \
- /usr/include/eigen3/Eigen/src/Core/util/Constants.h \
- /usr/include/eigen3/Eigen/src/Core/util/Meta.h \
- /usr/include/eigen3/Eigen/src/Core/util/ForwardDeclarations.h \
- /usr/include/eigen3/Eigen/src/Core/util/StaticAssert.h \
- /usr/include/eigen3/Eigen/src/Core/util/XprHelper.h \
- /usr/include/eigen3/Eigen/src/Core/util/Memory.h \
- /usr/include/eigen3/Eigen/src/Core/util/IntegralConstant.h \
- /usr/include/eigen3/Eigen/src/Core/util/SymbolicIndex.h \
- /usr/include/eigen3/Eigen/src/Core/NumTraits.h \
- /usr/include/eigen3/Eigen/src/Core/MathFunctions.h \
- /usr/include/eigen3/Eigen/src/Core/GenericPacketMath.h \
- /usr/include/eigen3/Eigen/src/Core/MathFunctionsImpl.h \
- /usr/include/eigen3/Eigen/src/Core/arch/Default/ConjHelper.h \
- /usr/include/eigen3/Eigen/src/Core/arch/Default/Half.h \
- /usr/include/eigen3/Eigen/src/Core/arch/Default/BFloat16.h \
- /usr/include/eigen3/Eigen/src/Core/arch/Default/TypeCasting.h \
- /usr/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h \
- /usr/include/eigen3/Eigen/src/Core/arch/SSE/PacketMath.h \
- /usr/include/eigen3/Eigen/src/Core/arch/SSE/TypeCasting.h \
- /usr/include/eigen3/Eigen/src/Core/arch/SSE/MathFunctions.h \
- /usr/include/eigen3/Eigen/src/Core/arch/SSE/Complex.h \
- /usr/include/eigen3/Eigen/src/Core/arch/Default/Settings.h \
- /usr/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctions.h \
- /usr/include/eigen3/Eigen/src/Core/functors/TernaryFunctors.h \
- /usr/include/eigen3/Eigen/src/Core/functors/BinaryFunctors.h \
- /usr/include/eigen3/Eigen/src/Core/functors/UnaryFunctors.h \
- /usr/include/eigen3/Eigen/src/Core/functors/NullaryFunctors.h \
- /usr/include/eigen3/Eigen/src/Core/functors/StlFunctors.h \
- /usr/include/eigen3/Eigen/src/Core/functors/AssignmentFunctors.h \
- /usr/include/eigen3/Eigen/src/Core/util/IndexedViewHelper.h \
- /usr/include/eigen3/Eigen/src/Core/util/ReshapedHelper.h \
- /usr/include/eigen3/Eigen/src/Core/ArithmeticSequence.h \
- /usr/include/eigen3/Eigen/src/Core/IO.h \
- /usr/include/eigen3/Eigen/src/Core/DenseCoeffsBase.h \
- /usr/include/eigen3/Eigen/src/Core/DenseBase.h \
- /usr/include/eigen3/Eigen/src/plugins/CommonCwiseUnaryOps.h \
- /usr/include/eigen3/Eigen/src/plugins/BlockMethods.h \
- /usr/include/eigen3/Eigen/src/plugins/IndexedViewMethods.h \
- /usr/include/eigen3/Eigen/src/plugins/IndexedViewMethods.h \
- /usr/include/eigen3/Eigen/src/plugins/ReshapedMethods.h \
- /usr/include/eigen3/Eigen/src/plugins/ReshapedMethods.h \
- /usr/include/eigen3/Eigen/src/Core/MatrixBase.h \
- /usr/include/eigen3/Eigen/src/plugins/CommonCwiseBinaryOps.h \
- /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseUnaryOps.h \
- /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseBinaryOps.h \
- /usr/include/eigen3/Eigen/src/Core/EigenBase.h \
- /usr/include/eigen3/Eigen/src/Core/Product.h \
- /usr/include/eigen3/Eigen/src/Core/CoreEvaluators.h \
- /usr/include/eigen3/Eigen/src/Core/AssignEvaluator.h \
- /usr/include/eigen3/Eigen/src/Core/Assign.h \
- /usr/include/eigen3/Eigen/src/Core/ArrayBase.h \
- /usr/include/eigen3/Eigen/src/plugins/ArrayCwiseUnaryOps.h \
- /usr/include/eigen3/Eigen/src/plugins/ArrayCwiseBinaryOps.h \
- /usr/include/eigen3/Eigen/src/Core/util/BlasUtil.h \
- /usr/include/eigen3/Eigen/src/Core/DenseStorage.h \
- /usr/include/eigen3/Eigen/src/Core/NestByValue.h \
- /usr/include/eigen3/Eigen/src/Core/ReturnByValue.h \
- /usr/include/eigen3/Eigen/src/Core/NoAlias.h \
- /usr/include/eigen3/Eigen/src/Core/PlainObjectBase.h \
- /usr/include/eigen3/Eigen/src/Core/Matrix.h \
- /usr/include/eigen3/Eigen/src/Core/Array.h \
- /usr/include/eigen3/Eigen/src/Core/CwiseTernaryOp.h \
- /usr/include/eigen3/Eigen/src/Core/CwiseBinaryOp.h \
- /usr/include/eigen3/Eigen/src/Core/CwiseUnaryOp.h \
- /usr/include/eigen3/Eigen/src/Core/CwiseNullaryOp.h \
- /usr/include/eigen3/Eigen/src/Core/CwiseUnaryView.h \
- /usr/include/eigen3/Eigen/src/Core/SelfCwiseBinaryOp.h \
- /usr/include/eigen3/Eigen/src/Core/Dot.h \
- /usr/include/eigen3/Eigen/src/Core/StableNorm.h \
- /usr/include/eigen3/Eigen/src/Core/Stride.h \
- /usr/include/eigen3/Eigen/src/Core/MapBase.h \
- /usr/include/eigen3/Eigen/src/Core/Map.h \
- /usr/include/eigen3/Eigen/src/Core/Ref.h \
- /usr/include/eigen3/Eigen/src/Core/Block.h \
- /usr/include/eigen3/Eigen/src/Core/VectorBlock.h \
- /usr/include/eigen3/Eigen/src/Core/IndexedView.h \
- /usr/include/eigen3/Eigen/src/Core/Reshaped.h \
- /usr/include/eigen3/Eigen/src/Core/Transpose.h \
- /usr/include/eigen3/Eigen/src/Core/DiagonalMatrix.h \
- /usr/include/eigen3/Eigen/src/Core/Diagonal.h \
- /usr/include/eigen3/Eigen/src/Core/DiagonalProduct.h \
- /usr/include/eigen3/Eigen/src/Core/Redux.h \
- /usr/include/eigen3/Eigen/src/Core/Visitor.h \
- /usr/include/eigen3/Eigen/src/Core/Fuzzy.h \
- /usr/include/eigen3/Eigen/src/Core/Swap.h \
- /usr/include/eigen3/Eigen/src/Core/CommaInitializer.h \
- /usr/include/eigen3/Eigen/src/Core/GeneralProduct.h \
- /usr/include/eigen3/Eigen/src/Core/Solve.h \
- /usr/include/eigen3/Eigen/src/Core/Inverse.h \
- /usr/include/eigen3/Eigen/src/Core/SolverBase.h \
- /usr/include/eigen3/Eigen/src/Core/PermutationMatrix.h \
- /usr/include/eigen3/Eigen/src/Core/Transpositions.h \
- /usr/include/eigen3/Eigen/src/Core/TriangularMatrix.h \
- /usr/include/eigen3/Eigen/src/Core/SelfAdjointView.h \
- /usr/include/eigen3/Eigen/src/Core/products/GeneralBlockPanelKernel.h \
- /usr/include/eigen3/Eigen/src/Core/products/Parallelizer.h \
- /usr/include/c++/11/atomic \
- /usr/include/eigen3/Eigen/src/Core/ProductEvaluators.h \
- /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixVector.h \
- /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrix.h \
- /usr/include/eigen3/Eigen/src/Core/SolveTriangular.h \
- /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrixTriangular.h \
- /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixVector.h \
- /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixMatrix.h \
- /usr/include/eigen3/Eigen/src/Core/products/SelfadjointProduct.h \
- /usr/include/eigen3/Eigen/src/Core/products/SelfadjointRank2Update.h \
- /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixVector.h \
- /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixMatrix.h \
- /usr/include/eigen3/Eigen/src/Core/products/TriangularSolverMatrix.h \
- /usr/include/eigen3/Eigen/src/Core/products/TriangularSolverVector.h \
- /usr/include/eigen3/Eigen/src/Core/BandMatrix.h \
- /usr/include/eigen3/Eigen/src/Core/CoreIterators.h \
- /usr/include/eigen3/Eigen/src/Core/ConditionEstimator.h \
- /usr/include/eigen3/Eigen/src/Core/BooleanRedux.h \
- /usr/include/eigen3/Eigen/src/Core/Select.h \
- /usr/include/eigen3/Eigen/src/Core/VectorwiseOp.h \
- /usr/include/eigen3/Eigen/src/Core/PartialReduxEvaluator.h \
- /usr/include/eigen3/Eigen/src/Core/Random.h \
- /usr/include/eigen3/Eigen/src/Core/Replicate.h \
- /usr/include/eigen3/Eigen/src/Core/Reverse.h \
- /usr/include/eigen3/Eigen/src/Core/ArrayWrapper.h \
- /usr/include/eigen3/Eigen/src/Core/StlIterators.h \
- /usr/include/eigen3/Eigen/src/Core/GlobalFunctions.h \
- /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
- /usr/include/eigen3/Eigen/LU /usr/include/eigen3/Eigen/src/misc/Kernel.h \
- /usr/include/eigen3/Eigen/src/misc/Image.h \
- /usr/include/eigen3/Eigen/src/LU/FullPivLU.h \
- /usr/include/eigen3/Eigen/src/LU/PartialPivLU.h \
- /usr/include/eigen3/Eigen/src/LU/Determinant.h \
- /usr/include/eigen3/Eigen/src/LU/InverseImpl.h \
- /usr/include/eigen3/Eigen/src/LU/arch/InverseSize4.h \
- /usr/include/eigen3/Eigen/Cholesky /usr/include/eigen3/Eigen/Jacobi \
- /usr/include/eigen3/Eigen/src/Jacobi/Jacobi.h \
- /usr/include/eigen3/Eigen/src/Cholesky/LLT.h \
- /usr/include/eigen3/Eigen/src/Cholesky/LDLT.h \
- /usr/include/eigen3/Eigen/QR /usr/include/eigen3/Eigen/Householder \
- /usr/include/eigen3/Eigen/src/Householder/Householder.h \
- /usr/include/eigen3/Eigen/src/Householder/HouseholderSequence.h \
- /usr/include/eigen3/Eigen/src/Householder/BlockHouseholder.h \
- /usr/include/eigen3/Eigen/src/QR/HouseholderQR.h \
- /usr/include/eigen3/Eigen/src/QR/FullPivHouseholderQR.h \
- /usr/include/eigen3/Eigen/src/QR/ColPivHouseholderQR.h \
- /usr/include/eigen3/Eigen/src/QR/CompleteOrthogonalDecomposition.h \
- /usr/include/eigen3/Eigen/SVD \
- /usr/include/eigen3/Eigen/src/misc/RealSvd2x2.h \
- /usr/include/eigen3/Eigen/src/SVD/UpperBidiagonalization.h \
- /usr/include/eigen3/Eigen/src/SVD/SVDBase.h \
- /usr/include/eigen3/Eigen/src/SVD/JacobiSVD.h \
- /usr/include/eigen3/Eigen/src/SVD/BDCSVD.h \
- /usr/include/eigen3/Eigen/Geometry \
- /usr/include/eigen3/Eigen/src/Geometry/OrthoMethods.h \
- /usr/include/eigen3/Eigen/src/Geometry/EulerAngles.h \
- /usr/include/eigen3/Eigen/src/Geometry/Homogeneous.h \
- /usr/include/eigen3/Eigen/src/Geometry/RotationBase.h \
- /usr/include/eigen3/Eigen/src/Geometry/Rotation2D.h \
- /usr/include/eigen3/Eigen/src/Geometry/Quaternion.h \
- /usr/include/eigen3/Eigen/src/Geometry/AngleAxis.h \
- /usr/include/eigen3/Eigen/src/Geometry/Transform.h \
- /usr/include/eigen3/Eigen/src/Geometry/Translation.h \
- /usr/include/eigen3/Eigen/src/Geometry/Scaling.h \
- /usr/include/eigen3/Eigen/src/Geometry/Hyperplane.h \
- /usr/include/eigen3/Eigen/src/Geometry/ParametrizedLine.h \
- /usr/include/eigen3/Eigen/src/Geometry/AlignedBox.h \
- /usr/include/eigen3/Eigen/src/Geometry/Umeyama.h \
- /usr/include/eigen3/Eigen/src/Geometry/arch/Geometry_SIMD.h \
- /usr/include/eigen3/Eigen/Eigenvalues \
- /usr/include/eigen3/Eigen/src/Eigenvalues/Tridiagonalization.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/RealSchur.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/HessenbergDecomposition.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/EigenSolver.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/RealSchur.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/Tridiagonalization.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/HessenbergDecomposition.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/ComplexSchur.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/ComplexEigenSolver.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/ComplexSchur.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
- /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
- /usr/include/eigen3/Eigen/Geometry /usr/include/getopt.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_ext.h \
- /usr/include/c++/11/csignal /usr/include/signal.h \
- /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
- /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
- /usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h \
- /usr/include/x86_64-linux-gnu/bits/siginfo-arch.h \
- /usr/include/x86_64-linux-gnu/bits/siginfo-consts.h \
- /usr/include/x86_64-linux-gnu/bits/siginfo-consts-arch.h \
- /usr/include/x86_64-linux-gnu/bits/types/sigval_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h \
- /usr/include/x86_64-linux-gnu/bits/sigevent-consts.h \
- /usr/include/x86_64-linux-gnu/bits/sigaction.h \
- /usr/include/x86_64-linux-gnu/bits/sigcontext.h \
- /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
- /usr/include/x86_64-linux-gnu/sys/ucontext.h \
- /usr/include/x86_64-linux-gnu/bits/sigstack.h \
- /usr/include/x86_64-linux-gnu/bits/sigstksz.h \
- /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h \
- /usr/include/x86_64-linux-gnu/bits/sigthread.h \
- /usr/include/x86_64-linux-gnu/bits/signal_ext.h \
  /usr/include/opencv4/opencv2/highgui/highgui.hpp \
  /usr/include/opencv4/opencv2/highgui.hpp \
  /usr/include/opencv4/opencv2/imgcodecs.hpp \
@@ -536,6 +306,7 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/opencv4/opencv2/imgproc/imgproc.hpp \
  /usr/include/opencv4/opencv2/imgproc.hpp \
  /usr/include/opencv4/opencv2/./imgproc/segmentation.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/Declarations.hpp \
  /usr/include/boost/asio.hpp \
  /usr/include/boost/asio/associated_allocator.hpp \
  /usr/include/boost/asio/detail/config.hpp /usr/include/boost/config.hpp \
@@ -559,7 +330,7 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/boost/asio/execution/execute.hpp \
  /usr/include/boost/asio/execution/detail/as_invocable.hpp \
  /usr/include/boost/asio/detail/atomic_count.hpp \
- /usr/include/boost/asio/detail/memory.hpp \
+ /usr/include/c++/11/atomic /usr/include/boost/asio/detail/memory.hpp \
  /usr/include/boost/asio/execution/receiver_invocation_error.hpp \
  /usr/include/boost/asio/execution/impl/receiver_invocation_error.ipp \
  /usr/include/boost/asio/execution/set_done.hpp \
@@ -650,7 +421,7 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/boost/system/detail/system_category_posix.hpp \
  /usr/include/boost/system/detail/std_interoperability.hpp \
  /usr/include/boost/asio/detail/impl/throw_error.ipp \
- /usr/include/boost/system/system_error.hpp \
+ /usr/include/boost/system/system_error.hpp /usr/include/c++/11/cassert \
  /usr/include/boost/asio/error.hpp /usr/include/netdb.h \
  /usr/include/netinet/in.h /usr/include/x86_64-linux-gnu/sys/socket.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
@@ -670,6 +441,8 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
  /usr/include/x86_64-linux-gnu/bits/socket2.h \
  /usr/include/x86_64-linux-gnu/bits/in.h /usr/include/rpc/netdb.h \
+ /usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h \
  /usr/include/x86_64-linux-gnu/bits/netdb.h \
  /usr/include/boost/asio/impl/error.ipp \
  /usr/include/boost/asio/detail/mutex.hpp \
@@ -777,6 +550,26 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/boost/asio/detail/scheduler_thread_info.hpp \
  /usr/include/boost/asio/detail/signal_blocker.hpp \
  /usr/include/boost/asio/detail/posix_signal_blocker.hpp \
+ /usr/include/c++/11/csignal /usr/include/signal.h \
+ /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
+ /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
+ /usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h \
+ /usr/include/x86_64-linux-gnu/bits/siginfo-arch.h \
+ /usr/include/x86_64-linux-gnu/bits/siginfo-consts.h \
+ /usr/include/x86_64-linux-gnu/bits/siginfo-consts-arch.h \
+ /usr/include/x86_64-linux-gnu/bits/types/sigval_t.h \
+ /usr/include/x86_64-linux-gnu/bits/sigevent-consts.h \
+ /usr/include/x86_64-linux-gnu/bits/sigaction.h \
+ /usr/include/x86_64-linux-gnu/bits/sigcontext.h \
+ /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
+ /usr/include/x86_64-linux-gnu/sys/ucontext.h \
+ /usr/include/x86_64-linux-gnu/bits/sigstack.h \
+ /usr/include/x86_64-linux-gnu/bits/sigstksz.h \
+ /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h \
+ /usr/include/x86_64-linux-gnu/bits/sigthread.h \
+ /usr/include/x86_64-linux-gnu/bits/signal_ext.h \
  /usr/include/boost/asio/detail/thread_group.hpp \
  /usr/include/boost/asio/impl/system_context.hpp \
  /usr/include/boost/asio/impl/system_context.ipp \
@@ -1407,6 +1200,14 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/boost/date_time/iso_format.hpp \
  /usr/include/boost/date_time/parse_format_base.hpp \
  /usr/include/boost/io/ios_state.hpp /usr/include/boost/io_fwd.hpp \
+ /usr/include/c++/11/locale \
+ /usr/include/c++/11/bits/locale_facets_nonio.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+ /usr/include/libintl.h /usr/include/c++/11/bits/codecvt.h \
+ /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+ /usr/include/c++/11/bits/locale_conv.h /usr/include/c++/11/iomanip \
+ /usr/include/c++/11/bits/quoted_string.h \
  /usr/include/boost/date_time/date_format_simple.hpp \
  /usr/include/boost/date_time/gregorian/gregorian_io.hpp \
  /usr/include/boost/date_time/date_facet.hpp \
@@ -1561,6 +1362,8 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/boost/type_traits/has_minus_assign.hpp \
  /usr/include/boost/iterator/advance.hpp \
  /usr/include/boost/algorithm/string/find_format.hpp \
+ /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
+ /usr/include/c++/11/bits/deque.tcc \
  /usr/include/boost/range/as_literal.hpp \
  /usr/include/boost/range/iterator_range.hpp \
  /usr/include/boost/range/iterator_range_io.hpp \
@@ -1783,77 +1586,5 @@ src/CMakeFiles/GulliView.dir/GulliView/main.cpp.o: \
  /usr/include/boost/date_time/posix_time/conversion.hpp \
  /usr/include/boost/date_time/filetime_functions.hpp \
  /usr/include/boost/date_time/posix_time/time_parsers.hpp \
- /usr/include/c++/11/thread /usr/include/c++/11/bits/this_thread_sleep.h \
- /usr/include/c++/11/queue /usr/include/c++/11/bits/stl_queue.h \
- /usr/include/c++/11/regex /usr/include/c++/11/bitset \
- /usr/include/c++/11/stack /usr/include/c++/11/bits/stl_stack.h \
- /usr/include/c++/11/bits/regex_constants.h \
- /usr/include/c++/11/bits/regex_error.h \
- /usr/include/c++/11/bits/regex_automaton.h \
- /usr/include/c++/11/bits/regex_automaton.tcc \
- /usr/include/c++/11/bits/regex_scanner.h \
- /usr/include/c++/11/bits/regex_scanner.tcc \
- /usr/include/c++/11/bits/regex_compiler.h \
- /usr/include/c++/11/bits/regex_compiler.tcc \
- /usr/include/c++/11/bits/regex.h /usr/include/c++/11/bits/regex.tcc \
- /usr/include/c++/11/bits/regex_executor.h \
- /usr/include/c++/11/bits/regex_executor.tcc \
- /usr/include/x86_64-linux-gnu/sys/mman.h \
- /usr/include/x86_64-linux-gnu/bits/mman.h \
- /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h \
- /usr/include/x86_64-linux-gnu/bits/mman-linux.h \
- /usr/include/x86_64-linux-gnu/bits/mman-shared.h \
- /usr/include/boost/interprocess/sync/named_semaphore.hpp \
- /usr/include/boost/interprocess/detail/config_begin.hpp \
- /usr/include/boost/interprocess/detail/workaround.hpp \
- /usr/include/boost/interprocess/creation_tags.hpp \
- /usr/include/boost/interprocess/detail/config_end.hpp \
- /usr/include/boost/interprocess/exceptions.hpp \
- /usr/include/boost/interprocess/errors.hpp \
- /usr/include/boost/interprocess/permissions.hpp \
- /usr/include/boost/interprocess/interprocess_fwd.hpp \
- /usr/include/boost/interprocess/detail/std_fwd.hpp \
- /usr/include/boost/interprocess/detail/interprocess_tester.hpp \
- /usr/include/boost/interprocess/detail/posix_time_types_wrk.hpp \
- /usr/include/boost/interprocess/sync/posix/named_semaphore.hpp \
- /usr/include/boost/interprocess/sync/posix/semaphore_wrapper.hpp \
- /usr/include/boost/interprocess/detail/os_file_functions.hpp \
- /usr/include/boost/move/detail/type_traits.hpp \
- /usr/include/boost/move/detail/config_begin.hpp \
- /usr/include/boost/move/detail/workaround.hpp \
- /usr/include/boost/move/detail/meta_utils.hpp \
- /usr/include/boost/move/detail/meta_utils_core.hpp \
- /usr/include/boost/move/detail/config_end.hpp /usr/include/dirent.h \
- /usr/include/x86_64-linux-gnu/bits/dirent.h \
- /usr/include/x86_64-linux-gnu/bits/dirent_ext.h \
- /usr/include/boost/interprocess/detail/shared_dir_helpers.hpp \
- /usr/include/semaphore.h /usr/include/x86_64-linux-gnu/bits/semaphore.h \
- /usr/include/boost/interprocess/sync/posix/ptime_to_timespec.hpp \
- /usr/include/boost/interprocess/file_mapping.hpp \
- /usr/include/boost/interprocess/detail/utilities.hpp \
- /usr/include/boost/move/utility_core.hpp \
- /usr/include/boost/move/core.hpp \
- /usr/include/boost/interprocess/detail/min_max.hpp \
- /usr/include/boost/interprocess/detail/type_traits.hpp \
- /usr/include/boost/interprocess/detail/mpl.hpp \
- /usr/include/boost/intrusive/pointer_traits.hpp \
- /usr/include/boost/intrusive/detail/config_begin.hpp \
- /usr/include/boost/intrusive/detail/workaround.hpp \
- /usr/include/boost/intrusive/pointer_rebind.hpp \
- /usr/include/boost/move/detail/pointer_element.hpp \
- /usr/include/boost/intrusive/detail/mpl.hpp \
- /usr/include/boost/intrusive/detail/config_end.hpp \
- /usr/include/boost/interprocess/detail/simple_swap.hpp \
- /usr/include/boost/interprocess/mapped_region.hpp \
- /usr/include/boost/move/adl_move_swap.hpp \
- /usr/include/x86_64-linux-gnu/sys/shm.h \
- /usr/include/x86_64-linux-gnu/sys/ipc.h \
- /usr/include/x86_64-linux-gnu/bits/ipctypes.h \
- /usr/include/x86_64-linux-gnu/bits/ipc.h \
- /usr/include/x86_64-linux-gnu/bits/ipc-perm.h \
- /usr/include/x86_64-linux-gnu/bits/shm.h \
- /usr/include/x86_64-linux-gnu/bits/shmlba.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_shmid_ds.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_shmid64_ds.h \
- /home/gulliview/advanced_mobility_model/src/GulliView/../CameraUtil.h \
- /home/gulliview/advanced_mobility_model/src/GulliView/../AprilTypes.h
+ /home/gulliview/advanced_mobility_model/src/GulliView/CalibrateCameras.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.hpp

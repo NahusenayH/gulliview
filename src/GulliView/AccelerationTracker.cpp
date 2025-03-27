@@ -4,7 +4,7 @@
 #include <algorithm>   // For std::max
 #include <iostream>    // For debugging or output (if needed)
 
-#include "AccelerationTracker.h"
+#include "AccelerationTracker.hpp"
 
 
 // Constructor initializes average to 0
