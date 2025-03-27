@@ -1,8 +1,3 @@
-#include <cmath>       // For std::abs
-#include <chrono>      // For std::chrono::steady_clock
-#include <deque>       // For std::deque
-#include <algorithm>   // For std::max
-
 #include "AngleTracker.hpp"
 
 // Constructor initializes average to 0

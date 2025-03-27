@@ -1,12 +1,26 @@
 #ifndef _DECLARATIONS_H_
 #define _DECLARATIONS_H_
 
+#include <cstdlib>
 #include <cstring>
 #include <string>
 #include <ctime>
 #include <boost/asio.hpp>
 #include "boost/date_time/posix_time/posix_time.hpp"
+#include <optional>
 
+// This is for visualize_GulliView_logs
+// Version string, adds to time period ex VT25.2
+#define TIME_PERIOD "VT25"
+#define VERSION "9"
+// change this text to denote version, this is saved by log script to catagorize
+#define COMMENT "More code split into files"
+
+#define ENABLE_LOGS        true
+#define LIVE_FEED          false
+#define RECORDING_FOLDER   "recordings0.5"
+
+// Older defines
 #define PRINT_DEBUG_MSG         true
 #define FAST_SEARCH_ACC_TEST    false
 #define TIME_PROFILING          false
@@ -35,21 +49,7 @@
 #define PARALLELL_FRAME_COUNT 2
 #define GLOBAL_SEARCH_MIN 16
 
-// ### ADDED MARS 2025
-#define TIME_PERIOD "VT25"
-// Version string, adds to time period ex VT25.2
-#define VERSION "8"
-// change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "More code split into files"
-
-#define ENABLE_LOGS        true
-#define LIVE_FEED          false
-#define RECORDING_FOLDER   "recordings0.5"
-
 const std::string CALIBRATION_TAG_FAMILY = "tag25h9";
-
-
-
 
 typedef struct __attribute__ ((packed)) DetectionArea {
     int32_t x_start;
@@ -92,7 +92,52 @@ typedef struct __attribute__ ((packed)) Message {
     DetectionMessage detections[11];
 } Message;
 
+struct DetectionData {
+    // timestamp
+    std::chrono::system_clock::time_point timestamp;
 
+    // Structures representing coordinates
+    struct CameraCoordinates {
+        float x, y, theta;  // camera coordinate (x, y, theta)
+    };
+
+    struct SpaceCoordinates {
+        double x, y, z;  // space coordinate (x, y, z)
+    };
+
+    // single tag data
+    struct TagData {
+        bool found;  // find or not
+        // DetectionArea area;
+        std::optional<CameraCoordinates> camera_coords;  // Camera coordinates, valid when found
+        std::optional<SpaceCoordinates> space_coords;  // Spatial coordinates, valid when found
+
+        TagData() : found(false) {}  // Default constructor, initialised to not found
+    };
+
+    // 10 tag data
+    std::array<TagData, 10> tags;
+
+    Tag tag_data[MAX_TAG_ID];
+
+    // Optional packed Message buffer
+    std::optional<Message> buf;
+
+    // Default constructor to initialize timestamp
+    DetectionData() : timestamp(std::chrono::system_clock::now()) {}
+
+    // Method to copy an existing Message into DetectionData
+    void storeMessage(const Message& message) {
+        buf.emplace();  // Create space for a Message in the optional
+        std::memcpy(&(*buf), &message, sizeof(Message)); // Copy the content
+    }
+
+    // Method to clear the stored Message
+    void clearMessage() {
+        buf.reset();
+    }
+
+};
 
 
 #endif

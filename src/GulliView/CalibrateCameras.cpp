@@ -1,16 +1,5 @@
-#include "../AprilTypes.h"
-#include "../TagFamily.h"
-#include "apriltag/common/image_u8.h"
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include "apriltag/apriltag.h" 
-#include <cstring>
-#include <string>
-
-#include "Declarations.hpp"
 #include "CalibrateCameras.hpp"
-#include "TransformFrame.hpp"
+
 
 //sets the true point of the tags for autocalibration (coordinates in meters)
 //TODO Maybe change to coordinates in centimeters

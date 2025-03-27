@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o.d"
   "CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o"
   "CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o.d"
+  "CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o"
+  "CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o.d"
   "CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o"
   "CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o.d"
   "CMakeFiles/GulliView.dir/GulliView/Main.cpp.o"

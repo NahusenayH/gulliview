@@ -264,6 +264,30 @@ GulliView/DebugLogger.cpp.s:
 	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s
 .PHONY : GulliView/DebugLogger.cpp.s
 
+GulliView/GUI.o: GulliView/GUI.cpp.o
+.PHONY : GulliView/GUI.o
+
+# target to build an object file
+GulliView/GUI.cpp.o:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o
+.PHONY : GulliView/GUI.cpp.o
+
+GulliView/GUI.i: GulliView/GUI.cpp.i
+.PHONY : GulliView/GUI.i
+
+# target to preprocess a source file
+GulliView/GUI.cpp.i:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.i
+.PHONY : GulliView/GUI.cpp.i
+
+GulliView/GUI.s: GulliView/GUI.cpp.s
+.PHONY : GulliView/GUI.s
+
+# target to generate assembly for a file
+GulliView/GUI.cpp.s:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.s
+.PHONY : GulliView/GUI.cpp.s
+
 GulliView/GeneralSearchFunctions.o: GulliView/GeneralSearchFunctions.cpp.o
 .PHONY : GulliView/GeneralSearchFunctions.o
 
@@ -409,6 +433,9 @@ help:
 	@echo "... GulliView/DebugLogger.o"
 	@echo "... GulliView/DebugLogger.i"
 	@echo "... GulliView/DebugLogger.s"
+	@echo "... GulliView/GUI.o"
+	@echo "... GulliView/GUI.i"
+	@echo "... GulliView/GUI.s"
 	@echo "... GulliView/GeneralSearchFunctions.o"
 	@echo "... GulliView/GeneralSearchFunctions.i"
 	@echo "... GulliView/GeneralSearchFunctions.s"

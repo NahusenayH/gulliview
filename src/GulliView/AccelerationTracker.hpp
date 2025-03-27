@@ -1,11 +1,9 @@
 #ifndef _ACCELERATIONTRACKER_H_
 #define _ACCELERATIONTRACKER_H_
 
-#include <cmath>       // For std::abs
-#include <chrono>      // For std::chrono::steady_clock
-#include <deque>       // For std::deque
-#include <algorithm>   // For std::max
-#include <iostream>    // For debugging or output (if needed)
+#include <cmath>
+#include <chrono>
+#include <deque>
 
 class AccelerationTracker {
 private:

@@ -1860,4 +1860,5 @@ src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.o: \
  /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.hpp \
  /home/gulliview/advanced_mobility_model/src/GulliView/CalibrateCameras.hpp \
  /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.hpp \
- /home/gulliview/advanced_mobility_model/src/GulliView/GeneralSearchFunctions.hpp
+ /home/gulliview/advanced_mobility_model/src/GulliView/GeneralSearchFunctions.hpp \
+ /home/gulliview/advanced_mobility_model/src/GulliView/GUI.hpp
