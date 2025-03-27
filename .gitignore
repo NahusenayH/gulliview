@@ -48,3 +48,35 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Build artifacts
+build/
+bin/
+out/
+obj/
+
+# CMake build directories
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Backup files
+*.bak
+*.old
+
+# Python virtual environments
+venv/
+.env/
+
+# Coverage reports
+coverage/
+*.lcov
+
+# System-specific files
+Thumbs.db
+.DS_Store
