@@ -53,6 +53,7 @@ build/
 bin/
 out/
 obj/
+.cache
 
 # CMake build directories
 CMakeFiles/

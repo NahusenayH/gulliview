@@ -1,13 +1,10 @@
 #ifndef _DEBUGLOGGER_H_
 #define _DEBUGLOGGER_H_
 
-#include <cstdint>     // For uint8_t, uint32_t
-#include <string>      // For std::string
-#include <fstream>     // For std::ofstream
-#include <iomanip>     // For std::fixed, std::setprecision
-#include <chrono>      // For std::chrono::system_clock
-#include <iostream>    // Optional: For debugging or console output
 
+#include <fstream>
+#include <iomanip>
+#include <chrono>
 
 class DebugLogger {
 private:

@@ -1,10 +1,3 @@
-#include <cstdint>     // For uint8_t, uint32_t
-#include <string>      // For std::string
-#include <fstream>     // For std::ofstream
-#include <iomanip>     // For std::fixed, std::setprecision
-#include <chrono>      // For std::chrono::system_clock
-#include <iostream>    // Optional: For debugging or console output
-
 #include "DebugLogger.hpp"
 
 DebugLogger::DebugLogger(size_t max_entries = 16000) {
