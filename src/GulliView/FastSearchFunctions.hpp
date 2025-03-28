@@ -1,5 +1,5 @@
-#ifndef _FASTSEARCH_H_
-#define _FASTSEARCH_H_
+#ifndef _FASTSEARCHFUNCTIONS_H_
+#define _FASTSEARCHFUNCTIONS_H_
 
 #include <fstream>
 #include <optional>

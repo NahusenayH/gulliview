@@ -6,9 +6,9 @@
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "17"
+#define VERSION "18"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "FastSearchFunctions file created"
+#define COMMENT "FastSearch file complete"
 
 #define ENABLE_LOGS        true
 #define LIVE_FEED          false
