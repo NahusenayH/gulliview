@@ -168,29 +168,197 @@ CameraUtil.cpp.s:
 	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/CameraUtil.cpp.s
 .PHONY : CameraUtil.cpp.s
 
-GulliView.o: GulliView.cpp.o
-.PHONY : GulliView.o
+GulliView/AccelerationTracker.o: GulliView/AccelerationTracker.cpp.o
+.PHONY : GulliView/AccelerationTracker.o
 
 # target to build an object file
-GulliView.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView.cpp.o
-.PHONY : GulliView.cpp.o
+GulliView/AccelerationTracker.cpp.o:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AccelerationTracker.cpp.o
+.PHONY : GulliView/AccelerationTracker.cpp.o
 
-GulliView.i: GulliView.cpp.i
-.PHONY : GulliView.i
+GulliView/AccelerationTracker.i: GulliView/AccelerationTracker.cpp.i
+.PHONY : GulliView/AccelerationTracker.i
 
 # target to preprocess a source file
-GulliView.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView.cpp.i
-.PHONY : GulliView.cpp.i
+GulliView/AccelerationTracker.cpp.i:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AccelerationTracker.cpp.i
+.PHONY : GulliView/AccelerationTracker.cpp.i
 
-GulliView.s: GulliView.cpp.s
-.PHONY : GulliView.s
+GulliView/AccelerationTracker.s: GulliView/AccelerationTracker.cpp.s
+.PHONY : GulliView/AccelerationTracker.s
 
 # target to generate assembly for a file
-GulliView.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView.cpp.s
-.PHONY : GulliView.cpp.s
+GulliView/AccelerationTracker.cpp.s:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AccelerationTracker.cpp.s
+.PHONY : GulliView/AccelerationTracker.cpp.s
+
+GulliView/AngleTracker.o: GulliView/AngleTracker.cpp.o
+.PHONY : GulliView/AngleTracker.o
+
+# target to build an object file
+GulliView/AngleTracker.cpp.o:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.o
+.PHONY : GulliView/AngleTracker.cpp.o
+
+GulliView/AngleTracker.i: GulliView/AngleTracker.cpp.i
+.PHONY : GulliView/AngleTracker.i
+
+# target to preprocess a source file
+GulliView/AngleTracker.cpp.i:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.i
+.PHONY : GulliView/AngleTracker.cpp.i
+
+GulliView/AngleTracker.s: GulliView/AngleTracker.cpp.s
+.PHONY : GulliView/AngleTracker.s
+
+# target to generate assembly for a file
+GulliView/AngleTracker.cpp.s:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.s
+.PHONY : GulliView/AngleTracker.cpp.s
+
+GulliView/CalibrateCameras.o: GulliView/CalibrateCameras.cpp.o
+.PHONY : GulliView/CalibrateCameras.o
+
+# target to build an object file
+GulliView/CalibrateCameras.cpp.o:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o
+.PHONY : GulliView/CalibrateCameras.cpp.o
+
+GulliView/CalibrateCameras.i: GulliView/CalibrateCameras.cpp.i
+.PHONY : GulliView/CalibrateCameras.i
+
+# target to preprocess a source file
+GulliView/CalibrateCameras.cpp.i:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.i
+.PHONY : GulliView/CalibrateCameras.cpp.i
+
+GulliView/CalibrateCameras.s: GulliView/CalibrateCameras.cpp.s
+.PHONY : GulliView/CalibrateCameras.s
+
+# target to generate assembly for a file
+GulliView/CalibrateCameras.cpp.s:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.s
+.PHONY : GulliView/CalibrateCameras.cpp.s
+
+GulliView/DebugLogger.o: GulliView/DebugLogger.cpp.o
+.PHONY : GulliView/DebugLogger.o
+
+# target to build an object file
+GulliView/DebugLogger.cpp.o:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o
+.PHONY : GulliView/DebugLogger.cpp.o
+
+GulliView/DebugLogger.i: GulliView/DebugLogger.cpp.i
+.PHONY : GulliView/DebugLogger.i
+
+# target to preprocess a source file
+GulliView/DebugLogger.cpp.i:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.i
+.PHONY : GulliView/DebugLogger.cpp.i
+
+GulliView/DebugLogger.s: GulliView/DebugLogger.cpp.s
+.PHONY : GulliView/DebugLogger.s
+
+# target to generate assembly for a file
+GulliView/DebugLogger.cpp.s:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s
+.PHONY : GulliView/DebugLogger.cpp.s
+
+GulliView/GUI.o: GulliView/GUI.cpp.o
+.PHONY : GulliView/GUI.o
+
+# target to build an object file
+GulliView/GUI.cpp.o:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o
+.PHONY : GulliView/GUI.cpp.o
+
+GulliView/GUI.i: GulliView/GUI.cpp.i
+.PHONY : GulliView/GUI.i
+
+# target to preprocess a source file
+GulliView/GUI.cpp.i:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.i
+.PHONY : GulliView/GUI.cpp.i
+
+GulliView/GUI.s: GulliView/GUI.cpp.s
+.PHONY : GulliView/GUI.s
+
+# target to generate assembly for a file
+GulliView/GUI.cpp.s:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.s
+.PHONY : GulliView/GUI.cpp.s
+
+GulliView/GeneralSearchFunctions.o: GulliView/GeneralSearchFunctions.cpp.o
+.PHONY : GulliView/GeneralSearchFunctions.o
+
+# target to build an object file
+GulliView/GeneralSearchFunctions.cpp.o:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o
+.PHONY : GulliView/GeneralSearchFunctions.cpp.o
+
+GulliView/GeneralSearchFunctions.i: GulliView/GeneralSearchFunctions.cpp.i
+.PHONY : GulliView/GeneralSearchFunctions.i
+
+# target to preprocess a source file
+GulliView/GeneralSearchFunctions.cpp.i:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.i
+.PHONY : GulliView/GeneralSearchFunctions.cpp.i
+
+GulliView/GeneralSearchFunctions.s: GulliView/GeneralSearchFunctions.cpp.s
+.PHONY : GulliView/GeneralSearchFunctions.s
+
+# target to generate assembly for a file
+GulliView/GeneralSearchFunctions.cpp.s:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.s
+.PHONY : GulliView/GeneralSearchFunctions.cpp.s
+
+GulliView/Main.o: GulliView/Main.cpp.o
+.PHONY : GulliView/Main.o
+
+# target to build an object file
+GulliView/Main.cpp.o:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.o
+.PHONY : GulliView/Main.cpp.o
+
+GulliView/Main.i: GulliView/Main.cpp.i
+.PHONY : GulliView/Main.i
+
+# target to preprocess a source file
+GulliView/Main.cpp.i:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.i
+.PHONY : GulliView/Main.cpp.i
+
+GulliView/Main.s: GulliView/Main.cpp.s
+.PHONY : GulliView/Main.s
+
+# target to generate assembly for a file
+GulliView/Main.cpp.s:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.s
+.PHONY : GulliView/Main.cpp.s
+
+GulliView/TransformFrame.o: GulliView/TransformFrame.cpp.o
+.PHONY : GulliView/TransformFrame.o
+
+# target to build an object file
+GulliView/TransformFrame.cpp.o:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o
+.PHONY : GulliView/TransformFrame.cpp.o
+
+GulliView/TransformFrame.i: GulliView/TransformFrame.cpp.i
+.PHONY : GulliView/TransformFrame.i
+
+# target to preprocess a source file
+GulliView/TransformFrame.cpp.i:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.i
+.PHONY : GulliView/TransformFrame.cpp.i
+
+GulliView/TransformFrame.s: GulliView/TransformFrame.cpp.s
+.PHONY : GulliView/TransformFrame.s
+
+# target to generate assembly for a file
+GulliView/TransformFrame.cpp.s:
+	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s
+.PHONY : GulliView/TransformFrame.cpp.s
 
 TagFamily.o: TagFamily.cpp.o
 .PHONY : TagFamily.o
@@ -253,9 +421,30 @@ help:
 	@echo "... CameraUtil.o"
 	@echo "... CameraUtil.i"
 	@echo "... CameraUtil.s"
-	@echo "... GulliView.o"
-	@echo "... GulliView.i"
-	@echo "... GulliView.s"
+	@echo "... GulliView/AccelerationTracker.o"
+	@echo "... GulliView/AccelerationTracker.i"
+	@echo "... GulliView/AccelerationTracker.s"
+	@echo "... GulliView/AngleTracker.o"
+	@echo "... GulliView/AngleTracker.i"
+	@echo "... GulliView/AngleTracker.s"
+	@echo "... GulliView/CalibrateCameras.o"
+	@echo "... GulliView/CalibrateCameras.i"
+	@echo "... GulliView/CalibrateCameras.s"
+	@echo "... GulliView/DebugLogger.o"
+	@echo "... GulliView/DebugLogger.i"
+	@echo "... GulliView/DebugLogger.s"
+	@echo "... GulliView/GUI.o"
+	@echo "... GulliView/GUI.i"
+	@echo "... GulliView/GUI.s"
+	@echo "... GulliView/GeneralSearchFunctions.o"
+	@echo "... GulliView/GeneralSearchFunctions.i"
+	@echo "... GulliView/GeneralSearchFunctions.s"
+	@echo "... GulliView/Main.o"
+	@echo "... GulliView/Main.i"
+	@echo "... GulliView/Main.s"
+	@echo "... GulliView/TransformFrame.o"
+	@echo "... GulliView/TransformFrame.i"
+	@echo "... GulliView/TransformFrame.s"
 	@echo "... TagFamily.o"
 	@echo "... TagFamily.i"
 	@echo "... TagFamily.s"

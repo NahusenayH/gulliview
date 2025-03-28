@@ -3,6 +3,7 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
+#include <boost/asio.hpp>   //Included in declarations.hpp as well
 
 #include "../AprilTypes.h"
 #include "../TagFamily.h"

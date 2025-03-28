@@ -1,20 +1,15 @@
 #ifndef _DECLARATIONS_H_
 #define _DECLARATIONS_H_
 
-#include <cstdlib>
-#include <cstring>
-#include <string>
-#include <ctime>
 #include <boost/asio.hpp>
-#include "boost/date_time/posix_time/posix_time.hpp"
 #include <optional>
 
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "10"
+#define VERSION "11"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "Unused #includes removed DebugLogger"
+#define COMMENT "Unused #includes removed Declarations"
 
 #define ENABLE_LOGS        true
 #define LIVE_FEED          false
