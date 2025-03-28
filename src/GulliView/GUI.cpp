@@ -92,25 +92,24 @@ void update_exhaustive_gui(DetectionData detection_data, Tag* tags_start, cv::Ma
     bool found = false;
 
     for (int i = 0; i < 10; i++) 
-    if (detection_data.tags[i].found)
-    {
-        found = true;
+        if (detection_data.tags[i].found){
+            found = true;
 
-        Tag* tag = tags_start + i;
-        DetectionArea* area = &detection_data.tag_data[i].area;
-        // Draw green square around the search area
-        cv::rectangle(frame,
-                    cv::Point(scaling_f*area->x_start, scaling_f*area->y_start),
-                    cv::Point(scaling_f*area->x_end, scaling_f*area->y_end),
-                    cv::Scalar(0, 255, 0));
-        // Print out Tag ID in center of Tag
-        putText(frame, std::to_string(i), cv::Point(scaling_f*detection_data.tags[i].camera_coords->x, scaling_f*detection_data.tags[i].camera_coords->y),
-                cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 250, 0), 2,
-                cv::LINE_AA);
-    }
+            Tag* tag = tags_start + i;
+            DetectionArea* area = &detection_data.tag_data[i].area;
+            // Draw green square around the search area
+            cv::rectangle(frame,
+                        cv::Point(scaling_f*area->x_start, scaling_f*area->y_start),
+                        cv::Point(scaling_f*area->x_end, scaling_f*area->y_end),
+                        cv::Scalar(0, 255, 0));
+            // Print out Tag ID in center of Tag
+            putText(frame, std::to_string(i), cv::Point(scaling_f*detection_data.tags[i].camera_coords->x, scaling_f*detection_data.tags[i].camera_coords->y),
+                    cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 250, 0), 2,
+                    cv::LINE_AA);
+        }
 
     if (!found) {
-                std::string idToText = "---Nothing Detected---";
+        std::string idToText = "---Nothing Detected---";
         putText(frame, idToText,
                 cv::Point(30, 30),
                 cv::FONT_HERSHEY_PLAIN,

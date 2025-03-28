@@ -1,19 +1,21 @@
 #include "GeneralSearchFunctions.hpp"
 
 void update_tag(const cv::Point2f* detection,
-    const cv::Point2f* cornerDetections,
-    const boost::posix_time::ptime latest_frame,
-    Tag* tag, std::ofstream& file_output) {
+                const cv::Point2f* cornerDetections,
+                const boost::posix_time::ptime latest_frame,
+                Tag* tag, std::ofstream& file_output) {
+
     if (tag_exists(tag->x, tag->y)) {
         tag->velocity = calc_velocity(tag->x, tag->y, 
                         detection->x, detection->y,
                         tag->latest_detection, latest_frame);
-    tag->valid_velocity = true;
+        tag->valid_velocity = true;
 
 #if PRINT_DEBUG_MSG
-file_output << "tag->x: " << tag->x << " tag->y: " << tag->y << " detection->x: " << detection->x << " detection->y: " << detection->y << std::endl;
+        file_output << "tag->x: " << tag->x << " tag->y: " << tag->y << " detection->x: " << detection->x << " detection->y: " << detection->y << std::endl;
 #endif
     }
+
     tag->x = detection->x;
     tag->y = detection->y;
     tag->latest_detection = latest_frame;
@@ -27,48 +29,51 @@ file_output << "tag->x: " << tag->x << " tag->y: " << tag->y << " detection->x: 
 
 
 float calc_velocity(const int old_x, const int old_y, 
-    const int new_x, const int new_y,
-    const boost::posix_time::ptime old_frame,
-    const boost::posix_time::ptime new_frame) {
-float dy = new_y - old_y;
-float dx = new_x - old_x;
-float diag = sqrt(powf(dx, 2) + powf(dy, 2));
-auto elapsed = new_frame - old_frame;
-auto dt = (elapsed).total_microseconds();
-return diag / (dt / 1e6f);
+                    const int new_x, const int new_y,
+                    const boost::posix_time::ptime old_frame,
+                    const boost::posix_time::ptime new_frame) {
+    float dy = new_y - old_y;
+    float dx = new_x - old_x;
+    float diag = sqrt(powf(dx, 2) + powf(dy, 2));
+    auto elapsed = new_frame - old_frame;
+    auto dt = (elapsed).total_microseconds();
+    return diag / (dt / 1e6f);
 }
 
 
 // modifeid 2024, "detectoinTime_ms" added
 void add_detection_to_msg(const int id, uint64_t detectionTime_ms, const float room_x, const float room_y, 
-    const float theta, const size_t index, 
-    const int CAM_NAME, Message& buf) {
-int32_t x_coord = (int32_t) (room_x * 1000.0);
-int32_t y_coord = (int32_t) (room_y * 1000.0);
-union {
-float        f;
-unsigned int i;
-} angle;
-union {
-float        f;
-unsigned int i;
-} speed_f;
-float speed = 0.25f; // I HAVE SET THIS TO AN ARBITRARY VALUE SINCE REMOVING THE "safeSpeed" FUNCTION. 
-                    // IT IS SENT TO SOCKET BUT NOT USED LATER.    // Convert theta to big endian angle
-angle.f = theta;
-angle.i = htobe32(angle.i);
-// Convert speed to big endian speed
-speed_f.f = speed;
-speed_f.i = htobe32(speed_f.i);
-buf.detections[index] = {      
-htobe32(id),  /* id */
-htobe64(detectionTime_ms),   /* added 2024*/
-htobe32(x_coord), /* x */
-htobe32(y_coord), /* y */
-angle.f,          /* angle theta */
-speed_f.f,        /* speed */
-htobe32(CAM_NAME) /* camera_id */
-};
+                        const float theta, const size_t index, 
+                        const int CAM_NAME, Message& buf) {
+    int32_t x_coord = (int32_t) (room_x * 1000.0);
+    int32_t y_coord = (int32_t) (room_y * 1000.0);
+    union {
+        float        f;
+        unsigned int i;
+        } angle;
+
+    union {
+        float        f;
+        unsigned int i;
+    } speed_f;
+    
+    float speed = 0.25f; // I HAVE SET THIS TO AN ARBITRARY VALUE SINCE REMOVING THE "safeSpeed" FUNCTION. 
+                            // IT IS SENT TO SOCKET BUT NOT USED LATER.    // Convert theta to big endian angle
+    angle.f = theta;
+    angle.i = htobe32(angle.i);
+    // Convert speed to big endian speed
+    speed_f.f = speed;
+    speed_f.i = htobe32(speed_f.i);
+
+    buf.detections[index] = {      
+        htobe32(id),  /* id */
+        htobe64(detectionTime_ms),   /* added 2024*/
+        htobe32(x_coord), /* x */
+        htobe32(y_coord), /* y */
+        angle.f,          /* angle theta */
+        speed_f.f,        /* speed */
+        htobe32(CAM_NAME) /* camera_id */
+    };
 
 #if PRINT_DEBUG_MSG
 // cout << "[*] Camera: " << CAM_NAME << " Tag: " << id 
