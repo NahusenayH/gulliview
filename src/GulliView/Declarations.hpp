@@ -2,13 +2,16 @@
 #define _DECLARATIONS_H_
 
 #include <boost/asio.hpp>   //Used in GUI.cpp and CalibrateCameras.cpp but needed here as well
+#include <opencv2/highgui/highgui.hpp>
+
+#include "../Detections.h"
 
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "18"
+#define VERSION "19"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "FastSearch file complete"
+#define COMMENT "Fast and Nice thead complete"
 
 #define ENABLE_LOGS        true
 #define LIVE_FEED          false
@@ -44,6 +47,16 @@
 #define GLOBAL_SEARCH_MIN 16
 
 const std::string CALIBRATION_TAG_FAMILY = "tag25h9";
+
+extern sig_atomic_t sig_stop;
+
+extern int nines;
+
+// added 2025
+// Global shared frame counter (thread-safe)
+extern std::atomic<uint32_t> shared_frame_count;
+
+extern cv::Mat buffer[4][BUFFER_SIZE]; // modified 2025
 
 typedef struct __attribute__ ((packed)) DetectionArea {
     int32_t x_start;
@@ -133,5 +146,151 @@ struct DetectionData {
 
 };
 
+typedef struct GulliViewOptions {
+    GulliViewOptions() :
+            family_str(DEFAULT_TAG_FAMILY),
+            error_fraction(1),
+            device_num(0),
+            focal_length(500),
+            tag_size(0.1905),
+            frame_width(1920),
+            frame_height(1080),
+            acceleration_max(DEFAULT_ACCELERATION_MAX),
+            velocity_max(DEFAULT_VELOCITY_MAX),
+            /* Changed to False so that text comes out correctly. */
+            /* Issues with detection when set to False */
+            mirror_display(false), //Change to true?? merge
+            no_gui(false), //merge
+            // *ADDED: Default value for IP address and port number to server
+            ip(DEFAULT_IP),
+            broadcast(false),
+            port(DEFAULT_PORT) ,
+            shared_memory(), // added 2024
+            shared_semaphore()
+            {
+    }
+
+    std::string family_str;
+    double error_fraction;
+    int device_num;
+    double focal_length;
+    double tag_size;
+    int frame_width;
+    int frame_height;
+    float acceleration_max;
+    float velocity_max;
+    int certainty;
+    bool mirror_display;
+    bool no_gui;
+    // *ADDED: Variables for storing IP address and port number to server
+    std::string ip;
+    bool broadcast;
+    std::string port;
+    std::string shared_memory; // added 2024
+    std::string shared_semaphore; // added 2024
+} GulliViewOptions;
+
+typedef struct IntPoint {
+    uint32_t x;
+    uint32_t y;
+} IntPoint;
+
+struct SharedData {
+    int flag;
+    Message msg;
+};
+
+extern IntPoint mainEntry;
+extern IntPoint rampEntry;
+extern IntPoint mainBot;
+extern IntPoint rampBot;
+extern uint32_t entryRadius;
+
+//std::shared_ptr<EntryDetection> mainDetection = std::make_shared<EntryDetection>();
+
+extern EntryDetection rampDetection;
+
+// Limits of the lab
+extern uint32_t xMinLimit;
+extern uint32_t xMaxLimit;
+extern uint32_t yMinLimit;
+extern uint32_t yMaxLimit;
+
+extern DetectionData search_buffer[4][BUFFER_SIZE]; // added 2025
+
+// using for storing data produced by producer
+struct BufferData {
+    cv::Mat frame;         // original frame
+    cv::Mat gray;          // gray frame
+
+};
+
+
+// Overlapping data structure
+struct OverlapTagInfo {
+    int tag_id;
+    float a_max;
+    float alpha;
+    boost::posix_time::ptime timestamp;         // Timestamp indicating the time of inspection at the time of production
+};
+
+struct OverlapRange {
+    int min_y;
+    int max_y;
+};
+
+// Table of overlapping ranges
+const OverlapRange overlap_ranges[4][2] = {
+    // Overlap range for camera 0
+    {{0, 500}, {0, 0}}, // buffer_01
+    // Camera 1's overlap range
+    {{1660, 2160}, {0, 580}}, // buffer_10, buffer_12
+    // Camera 2's overlap area
+    {{1580, 2160}, {0, 460}}, // buffer_21, buffer_23
+    // Camera 3's overlap area
+    {{1700, 2160}, {0, 0}} // buffer_32
+};
+
+// std::atomic<unsigned int> producer_counter(0);
+// std::atomic<unsigned int> consumer_counter(0);
+
+// modified 2025
+
+extern std::vector<std::atomic<unsigned int>> producer_counter;
+extern std::vector<std::atomic<unsigned int>> search_producer_counter;
+extern std::vector<std::atomic<unsigned int>> search_consumer_counter;
+extern std::vector<std::atomic<unsigned int>> fast_consumer_counter;
+extern std::vector<std::atomic<unsigned int>> nice_consumer_counter;
+
+// cyclic buffer
+class CyclicBuffer {
+public:
+    OverlapTagInfo buffer[BUFFER_SIZE];
+    std::atomic<unsigned int> producer_counter{0};
+    std::atomic<unsigned int> consumer_counter{0};
+
+    // Producer：write data
+    void produce(const OverlapTagInfo& data) {
+        unsigned int next = (producer_counter + 1) % BUFFER_SIZE;
+        while (next == consumer_counter.load(std::memory_order_acquire)) {
+            std::this_thread::yield(); // Buffer full, wait
+        }
+        buffer[producer_counter] = data;
+        producer_counter.store(next, std::memory_order_release);
+    }
+
+    // Consumer：read data
+    bool consume(OverlapTagInfo& data) {
+        if (consumer_counter.load(std::memory_order_acquire) == producer_counter.load(std::memory_order_relaxed)) {
+            return false; // Buffer is empty 
+        }
+        data = buffer[consumer_counter];
+        consumer_counter.store((consumer_counter + 1) % BUFFER_SIZE, std::memory_order_release);
+        return true;
+    }
+};
+
+// Global buffer definition
+extern CyclicBuffer buffer_01, buffer_10, buffer_12, buffer_21, buffer_23, buffer_32;
 
 #endif
