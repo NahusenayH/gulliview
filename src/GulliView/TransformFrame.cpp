@@ -1,13 +1,3 @@
-#include <opencv2/core.hpp>
-#include <opencv2/imgproc.hpp>
-#include <iostream>
-#include <fstream>
-#include <chrono>
-#include <iomanip>
-#include <cstring>
-#include <string>
-
-#include "LogTime.hpp"
 #include "TransformFrame.hpp"
 
 bool transform_frame(cv::Mat& frame,
