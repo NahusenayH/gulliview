@@ -1,6 +1,5 @@
 #include "GeneralSearchFunctions.hpp"
 
-
 void update_tag(const cv::Point2f* detection,
     const cv::Point2f* cornerDetections,
     const boost::posix_time::ptime latest_frame,

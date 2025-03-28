@@ -1,8 +1,8 @@
 #ifndef _ANGLETRACKER_H_
 #define _ANGLETRACKER_H_
 
-#include <cmath>
 #include <chrono>
+#include <cmath>
 #include <deque>
 
 class AngleTracker {

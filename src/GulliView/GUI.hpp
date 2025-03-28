@@ -1,19 +1,11 @@
 #ifndef _GUI_H_
 #define _GUI_H_
 
-#include <cstring>
-#include <cstdlib>
-#include <string>
-#include "apriltag/apriltag.h"
-#include "opencv2/core/cvstd.hpp"
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/core/types.hpp>
 #include <fstream>
-#include <cmath>
 #include <optional>
+#include <opencv2/imgproc/imgproc.hpp>
 
+#include "apriltag/apriltag.h"
 
 #include "Declarations.hpp"
 

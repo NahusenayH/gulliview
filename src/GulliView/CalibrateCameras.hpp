@@ -1,10 +1,10 @@
 #ifndef _CALIBRATECAMERAS_H_
 #define _CALIBRATECAMERAS_H_
 
+#include <optional>
+#include <boost/asio.hpp>   //Included in declarations.hpp as well
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
-#include <boost/asio.hpp>   //Included in declarations.hpp as well
-#include <optional>
 
 #include "../AprilTypes.h"
 #include "../TagFamily.h"

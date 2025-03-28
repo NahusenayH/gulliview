@@ -1,10 +1,9 @@
 #ifndef _DEBUGLOGGER_H_
 #define _DEBUGLOGGER_H_
 
-
+#include <chrono>
 #include <fstream>
 #include <iomanip>
-#include <chrono>
 
 class DebugLogger {
 private:
