@@ -49,7 +49,6 @@ Thumbs.db
 *.wmv
 
 # Build artifacts
-build/
 bin/
 out/
 obj/

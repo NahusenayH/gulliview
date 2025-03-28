@@ -1,6 +1,9 @@
 #ifndef _LOGTIME_H_
 #define _LOGTIME_H_
 
+/*
+Created to reduce clutter from reused lines and to increase readability
+*/
 
 class LogTime {
 private:
