@@ -56,6 +56,7 @@ obj/
 
 # CMake build directories
 CMakeFiles/
+.cmake/
 CMakeCache.txt
 cmake_install.cmake
 Makefile

@@ -16,18 +16,13 @@
 },
 {
   "directory": "/home/gulliview/advanced_mobility_model/build/src",
-  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DMZ_HAVE_CAIRO -I/usr/include/opencv4 -Wall -Wpedantic -g -I /usr/include/boost -l boost_system -pthread -O -o CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp",
-  "file": "/home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp"
-},
-{
-  "directory": "/home/gulliview/advanced_mobility_model/build/src",
   "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DMZ_HAVE_CAIRO -I/usr/include/opencv4 -Wall -Wpedantic -g -I /usr/include/boost -l boost_system -pthread -O -o CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/CalibrateCameras.cpp",
   "file": "/home/gulliview/advanced_mobility_model/src/GulliView/CalibrateCameras.cpp"
 },
 {
   "directory": "/home/gulliview/advanced_mobility_model/build/src",
-  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DMZ_HAVE_CAIRO -I/usr/include/opencv4 -Wall -Wpedantic -g -I /usr/include/boost -l boost_system -pthread -O -o CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp",
-  "file": "/home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp"
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DMZ_HAVE_CAIRO -I/usr/include/opencv4 -Wall -Wpedantic -g -I /usr/include/boost -l boost_system -pthread -O -o CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp",
+  "file": "/home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp"
 },
 {
   "directory": "/home/gulliview/advanced_mobility_model/build/src",
@@ -38,6 +33,16 @@
   "directory": "/home/gulliview/advanced_mobility_model/build/src",
   "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DMZ_HAVE_CAIRO -I/usr/include/opencv4 -Wall -Wpedantic -g -I /usr/include/boost -l boost_system -pthread -O -o CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/GUI.cpp",
   "file": "/home/gulliview/advanced_mobility_model/src/GulliView/GUI.cpp"
+},
+{
+  "directory": "/home/gulliview/advanced_mobility_model/build/src",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DMZ_HAVE_CAIRO -I/usr/include/opencv4 -Wall -Wpedantic -g -I /usr/include/boost -l boost_system -pthread -O -o CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/InitCameras.cpp",
+  "file": "/home/gulliview/advanced_mobility_model/src/GulliView/InitCameras.cpp"
+},
+{
+  "directory": "/home/gulliview/advanced_mobility_model/build/src",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DMZ_HAVE_CAIRO -I/usr/include/opencv4 -Wall -Wpedantic -g -I /usr/include/boost -l boost_system -pthread -O -o CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp",
+  "file": "/home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp"
 },
 {
   "directory": "/home/gulliview/advanced_mobility_model/build/src",
