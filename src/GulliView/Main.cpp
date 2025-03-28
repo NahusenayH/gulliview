@@ -80,6 +80,7 @@
 #include "CalibrateCameras.hpp"
 #include "DebugLogger.hpp"
 #include "Declarations.hpp"
+#include "FastSearchFunctions.hpp"
 #include "GeneralSearchFunctions.hpp"
 #include "GUI.hpp"
 #include "InitCameras.hpp"
@@ -549,116 +550,6 @@ zarray* exhaustive_search(image_u8_t& im, apriltag_detector_t* detector) {
     //detect tags
 
     return apriltag_detector_detect(detector, &im);
-}
-
-image_u8_t* get_partial_image(const image_u8_t& im, const DetectionArea& area){
-    image_u8_t* im_part = image_u8_create(area.x_length, area.y_length);
-    int y_part = 0;
-    for(int y = area.y_start; y < area.y_end; y++){
-        uint8_t* dest = &im_part->buf[y_part * im_part->stride];
-        uint8_t* src = &im.buf[y*im.stride + area.x_start];
-        size_t size = area.x_length;
-        memcpy(dest, src, size);
-        y_part++;
-    }
-    return im_part;
-}
-
-void partial_search(const image_u8_t& im,
-                    const DetectionArea& area,
-                    zarray_t* detections,
-                    apriltag_detector_t* detector) {
-    image_u8_t* im_part = get_partial_image(im, area);
-    //detect tags in part image
-    zarray_t *detection = apriltag_detector_detect(detector, im_part);
-    if(zarray_size(detection) != 0){
-        apriltag_detection_t *temp;
-        zarray_get(detection, 0, &temp);
-        zarray_add(detections, &temp);
-    }
-}
-
-void partial_search1(const image_u8_t& im,
-                    const DetectionArea& area,
-                    zarray_t* detections,
-                    apriltag_detector_t* detector,
-                    ptime total_start_time,
-                    std::ofstream& file_output
-                    ) {
-
-    auto start = std::chrono::high_resolution_clock::now();
-
-    image_u8_t* im_part = get_partial_image(im, area);
-
-    auto end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Get partial image time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-#endif
-
-    ptime search_end = boost::posix_time::microsec_clock::universal_time();
-
-    uint32_t total_time = (search_end - total_start_time).total_microseconds();    
-    if (total_time > 17000)
-        return;
-
-    start = std::chrono::high_resolution_clock::now();
-
-    //detect tags in part image
-    zarray_t *detection = apriltag_detector_detect(detector, im_part);
-
-    end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Apriltag detector detect time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-#endif
-
-    search_end = boost::posix_time::microsec_clock::universal_time();
-
-    total_time = (search_end - total_start_time).total_microseconds();    
-    if (total_time > 17000)
-        return;
-
-    start = std::chrono::high_resolution_clock::now();
-
-
-    if(zarray_size(detection) != 0){
-        apriltag_detection_t *temp;
-        zarray_get(detection, 0, &temp);
-        zarray_add(detections, &temp);
-    }
-
-    end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Zarray time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-#endif
-
-}
-
-float calc_displacement(const float velocity, 
-                        const float time_s,
-                        const float acceleration) {
-    return velocity * time_s + 0.5 * acceleration * pow(time_s, 2);
-}
-
-void get_min_max_travel(const Tag* tag,
-                        const float time_s,
-                        const float v_max,
-                        const float a_max,
-                        float& min_travel, 
-                        float& max_travel){
-    max_travel = v_max * time_s;
-    min_travel = -max_travel;
-    if (tag->valid_velocity) {
-        float tmp_travel = calc_displacement(tag->velocity, time_s, a_max);
-        max_travel = min(tmp_travel, max_travel);
-        tmp_travel = calc_displacement(tag->velocity, time_s, -a_max);
-        min_travel = max(tmp_travel, min_travel);
-    }
 }
 
 void fast_search(const image_u8_t& im,

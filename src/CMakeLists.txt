@@ -1,5 +1,5 @@
 
-add_executable(GulliView GulliView/Main.cpp GulliView/AccelerationTracker.cpp GulliView/AngleTracker.cpp GulliView/CalibrateCameras.cpp GulliView/DebugLogger.cpp GulliView/GeneralSearchFunctions.cpp GulliView/GUI.cpp GulliView/InitCameras.cpp GulliView/TransformFrame.cpp CameraUtil.h CameraUtil.cpp TagFamily.cpp TagFamily.h)
+add_executable(GulliView GulliView/Main.cpp GulliView/AccelerationTracker.cpp GulliView/AngleTracker.cpp GulliView/CalibrateCameras.cpp GulliView/DebugLogger.cpp GulliView/FastSearchFunctions.cpp GulliView/GeneralSearchFunctions.cpp GulliView/GUI.cpp GulliView/InitCameras.cpp GulliView/TransformFrame.cpp CameraUtil.h CameraUtil.cpp TagFamily.cpp TagFamily.h)
 target_link_libraries(GulliView ${OPENCV_LDFLAGS})
 target_link_libraries(GulliView ${Boost_LIBRARIES})
 target_link_libraries(GulliView ${APRILTAGS_LDFLAGS})

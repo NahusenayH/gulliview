@@ -18,12 +18,4 @@ void init_video_capture(const int32_t device_number,
                         const int32_t frame_height,
                         cv::VideoCapture& video_capture,
                         cv::Mat& frame);
-
-void set_search_area(const int32_t im_width,
-                    const int32_t im_height,
-                    const int min_search_dim,
-                    const float min_travel,
-                    const float max_travel,
-                    const float alpha,
-                    Tag& tag);
 #endif
