@@ -70,6 +70,8 @@ typedef struct __attribute__ ((packed)) DetectionArea {
 typedef struct Tag {
     int32_t x = 0;
     int32_t y = 0;
+    float world_x = 0; // used for global coordination
+    float world_y = 0; // used for global coordination
     bool is_detected = 0;
     float velocity = 0;
     bool valid_velocity = false;
