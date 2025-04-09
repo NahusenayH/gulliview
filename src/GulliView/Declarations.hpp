@@ -1,7 +1,8 @@
 #ifndef _DECLARATIONS_H_
 #define _DECLARATIONS_H_
 
-#include <boost/asio.hpp>   //Used in GUI.cpp and CalibrateCameras.cpp but needed here as well
+// Used in other files but needed here as well
+#include <boost/asio.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #include "../Detections.h"

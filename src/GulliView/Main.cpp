@@ -11,90 +11,11 @@
 * Copyright (c) 2013-2014 Andrew Soderberg-Rivkin <sandrew@student.chalmers.se>
 * Copyright (c) 2013-2014 Sanjana Hangal <sanjana@student.chalmers.se>
 * Copyright (c) 2014 Thomas Petig <petig@chalmers.se>
+* Copyright (c) 2025 Emil Nylander <emilnyla@chalmers.se>
+* Copyright (c) 2025 Elias Svensson <eliasve@chalmers.se>
 ********************************************************************/
 
-#include "../AprilTypes.h"
-#include "../TagFamily.h"
-#include "../Detections.h"
-
-
-#include "apriltag/apriltag_pose.h" // added 2025;
-#include "apriltag/common/image_u8.h" // added 2025;
-#include <unordered_map> // added 2025;
-#include "opencv2/core/cvstd.hpp"
-#include "pthread.h"
-#include <optional>
-
-#include <fstream> // added 2025;
-#include <eigen3/Eigen/Dense> // added 2025;
-#include <eigen3/Eigen/Geometry> // added 2025;
-
-#include <ctime>
-#include <iostream>
-#include <cstdio>
-#include <getopt.h>
-#include <cstring>
-#include <cstdlib>
-#include <string>
-#include <csignal>
-#include <cmath>
-
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-// #include <boost/array.hpp>
-#include <boost/asio.hpp>
-#include "boost/date_time/posix_time/posix_time.hpp"
-// #include <boost/chrono/chrono.hpp>
-// #include <boost/chrono/chrono_io.hpp>
-// #include <boost/chrono/process_cpu_clocks.hpp>
-// #include <boost/chrono/ceil.hpp>
-// #include <boost/chrono/floor.hpp>
-// #include <boost/chrono/round.hpp>
-// #include <chrono>
-#include <thread>     // added 2024
-#include <queue> // added 2024
-#include <vector> // added 2024
-#include <tuple> // added 2024
-#include <regex> // added 2024
-#include <fcntl.h> // added 2024
-#include <sys/stat.h> // added 2024
-#include <sys/mman.h> // added 2024
-#include <sstream> // added 2024
-#include <boost/interprocess/sync/named_semaphore.hpp> // added 2024
-#include <boost/interprocess/file_mapping.hpp> // added 2024
-#include <boost/interprocess/mapped_region.hpp> // added 2024
-
-#include <sstream>
-#include <thread>
-
-#include "../CameraUtil.h"
-
-#include "apriltag/apriltag.h"
-
-
-
-// HERE WE INCLUDE THE DIFFERENT PARTS THAT WERE ONCE ONE FILE
-#include "AccelerationTracker.hpp"
-#include "AngleTracker.hpp"
-#include "CalibrateCameras.hpp"
-#include "DebugLogger.hpp"
-#include "Declarations.hpp"
-#include "FastSearch.hpp"
-#include "FastSearchFunctions.hpp"
-#include "FastThread.hpp"
-#include "GeneralSearchFunctions.hpp"
-#include "GUI.hpp"
-#include "InitCameras.hpp"
-#include "NiceThread.hpp"
 #include "ProcessCamera.hpp"
-#include "ProducerThread.hpp"
-#include "TransformFrame.hpp"
-
-using namespace std;
-using boost::asio::ip::udp;
-using boost::posix_time::ptime;
-using boost::posix_time::time_duration;
 
 // DEFINES GLOBAL VARIABLES
 int nines = 0;
@@ -372,41 +293,41 @@ void general_log(){
 
     auto t = std::time(nullptr);
     auto tm = *std::localtime(&t);
-    file_output << "TIME: " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << endl;
-    file_output << "VERSION: " << TIME_PERIOD << "." << VERSION << endl; 
-    file_output << "COMMENT: " << COMMENT << endl;
+    file_output << "TIME: " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S")              << std::endl;
+    file_output << "VERSION: "                      << TIME_PERIOD<<"."<<VERSION    << std::endl; 
+    file_output << "COMMENT: "                      << COMMENT                      << std::endl;
 
-    file_output << "PRINT_DEBUG_MSG: " << PRINT_DEBUG_MSG << endl;
-    file_output << "FAST_SEARCH_ACC_TEST: " << FAST_SEARCH_ACC_TEST << endl;
-    file_output << "TIME_PROFILING: " << TIME_PROFILING << endl;
+    file_output << "PRINT_DEBUG_MSG: "              << PRINT_DEBUG_MSG              << std::endl;
+    file_output << "FAST_SEARCH_ACC_TEST: "         << FAST_SEARCH_ACC_TEST         << std::endl;
+    file_output << "TIME_PROFILING: "               << TIME_PROFILING               << std::endl;
 
-    file_output << "USE_MEMORY_SHARING: " << USE_MEMORY_SHARING << endl;
-    file_output << "USE_EWMA: " << USE_EWMA << endl;
-    file_output << "BINDING_CPU_CORES: " << BINDING_CPU_CORES << endl;
+    file_output << "USE_MEMORY_SHARING: "           << USE_MEMORY_SHARING           << std::endl;
+    file_output << "USE_EWMA: "                     << USE_EWMA                     << std::endl;
+    file_output << "BINDING_CPU_CORES: "            << BINDING_CPU_CORES            << std::endl;
 
-    file_output << "PRODUCE_FRAME_MODE: " << PRODUCE_FRAME_MODE << endl;
-    file_output << "DEFAULT_TAG_FAMILY: " << DEFAULT_TAG_FAMILY << endl;
-    file_output << "DEFAULT_IP: " << DEFAULT_IP << endl;
-    file_output << "DEFAULT_PORT: " << DEFAULT_PORT << endl;
+    file_output << "PRODUCE_FRAME_MODE: "           << PRODUCE_FRAME_MODE           << std::endl;
+    file_output << "DEFAULT_TAG_FAMILY: "           << DEFAULT_TAG_FAMILY           << std::endl;
+    file_output << "DEFAULT_IP: "                   << DEFAULT_IP                   << std::endl;
+    file_output << "DEFAULT_PORT: "                 << DEFAULT_PORT                 << std::endl;
 
-    file_output << "MAX_TAG_ID: " << MAX_TAG_ID << endl;
-    file_output << "FORCE_GLOBAL_SEARCH_LOOP_NUM: " << FORCE_GLOBAL_SEARCH_LOOP_NUM << endl;
+    file_output << "MAX_TAG_ID: "                   << MAX_TAG_ID                   << std::endl;
+    file_output << "FORCE_GLOBAL_SEARCH_LOOP_NUM: " << FORCE_GLOBAL_SEARCH_LOOP_NUM << std::endl;
 
-    file_output << "ROOM_WIDTH_METER: " << ROOM_WIDTH_METER << endl;
+    file_output << "ROOM_WIDTH_METER: "             << ROOM_WIDTH_METER             << std::endl;
 
-    file_output << "DEFAULT_VELOCITY_MAX: " << DEFAULT_VELOCITY_MAX << endl;
-    file_output << "DEFAULT_ACCELERATION_MAX: " << DEFAULT_ACCELERATION_MAX << endl;
-    file_output << "DEFAULT_LIMIT_MAX: " << DEFAULT_LIMIT_MAX << endl;
+    file_output << "DEFAULT_VELOCITY_MAX: "         << DEFAULT_VELOCITY_MAX         << std::endl;
+    file_output << "DEFAULT_ACCELERATION_MAX: "     << DEFAULT_ACCELERATION_MAX     << std::endl;
+    file_output << "DEFAULT_LIMIT_MAX: "            << DEFAULT_LIMIT_MAX            << std::endl;
 
-    file_output << "FPS: " << FPS << endl;
-    file_output << "BUFFER_SIZE: " << BUFFER_SIZE << endl;
-    file_output << "GLOBAL_SEARCH_MIN: " << GLOBAL_SEARCH_MIN << endl;
+    file_output << "FPS: "                          << FPS                          << std::endl;
+    file_output << "BUFFER_SIZE: "                  << BUFFER_SIZE                  << std::endl;
+    file_output << "GLOBAL_SEARCH_MIN: "            << GLOBAL_SEARCH_MIN            << std::endl;
 
-    file_output << "ENABLE_LOGS: " << ENABLE_LOGS << endl;
-    file_output << "LIVE_FEED: " << LIVE_FEED << endl;
+    file_output << "ENABLE_LOGS: "                  << ENABLE_LOGS                  << std::endl;
+    file_output << "LIVE_FEED: "                    << LIVE_FEED                    << std::endl;
     
     #if !LIVE_FEED
-    file_output << "RECORDING_FOLDER: " << RECORDING_FOLDER << endl;
+    file_output << "RECORDING_FOLDER: "             << RECORDING_FOLDER             << std::endl;
     #endif
 
     #endif
