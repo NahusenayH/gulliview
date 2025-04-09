@@ -297,7 +297,7 @@ int fast_consume_frame(int camera_id,
         auto detectionTime = std::chrono::system_clock::now().time_since_epoch();
         uint64_t detectionTime_ms = std::chrono::duration_cast<std::chrono::milliseconds>(detectionTime).count();
 
-        ptime import_start = boost::posix_time::microsec_clock::universal_time();
+        boost::posix_time::ptime import_start = boost::posix_time::microsec_clock::universal_time();
 
         auto init_start = std::chrono::high_resolution_clock::now();
 
@@ -331,7 +331,7 @@ int fast_consume_frame(int camera_id,
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
 
         if (!frame_captured) {
-            cout << "no frame captured (fast), exiting. Camera " << camera_id << endl;
+            std::cout << "no frame captured (fast), exiting. Camera " << camera_id << std::endl;
             // exit(1);
             return -1;
         }
@@ -372,7 +372,7 @@ int fast_consume_frame(int camera_id,
 
         std::copy(std::begin(tags), std::end(tags), previous_tags);
 
-        ptime latest_frame = boost::posix_time::microsec_clock::universal_time();
+        boost::posix_time::ptime latest_frame = boost::posix_time::microsec_clock::universal_time();
 
         uint32_t import_time = (latest_frame - import_start).total_milliseconds();
 
@@ -408,9 +408,9 @@ int fast_consume_frame(int camera_id,
                 // htobe64(msecs) /* time_msec */   // commented out 2024
             };
             // Camera coordinates for tag center.
-            vector<at::Point> camera_detections(zarray_size(detections)); 
+            std::vector<at::Point> camera_detections(zarray_size(detections)); 
             // Camera coordinates for tag corners.
-            vector<at::Point> camera_corner_detections(2*zarray_size(detections)); 
+            std::vector<at::Point> camera_corner_detections(2*zarray_size(detections)); 
 
             for (int i = 0; i < zarray_size(detections); i++) {
                 apriltag_detection_t *dd;
@@ -431,16 +431,16 @@ int fast_consume_frame(int camera_id,
                     file_output <<"CAM#"<<CAM_NAME<<" " 
                             << "Found when using PART_IMAGE. X = " 
                             << camera_detections[i].x << ", Y = " 
-                            << camera_detections[i].y << endl;
+                            << camera_detections[i].y << std::endl;
 #endif         
             }
             // Room coordinates for tag center.
-            vector<at::Point> room_detections(zarray_size(detections)); 
+            std::vector<at::Point> room_detections(zarray_size(detections)); 
             // Room coordinates for tag corner.
-            vector<at::Point> room_corner_detections(2*zarray_size(detections)); 
+            std::vector<at::Point> room_corner_detections(2*zarray_size(detections)); 
 
             
-            static ptime epoch(boost::gregorian::date(1970,1,1));
+            static boost::posix_time::ptime epoch(boost::gregorian::date(1970,1,1));
             uint64_t msecs = (import_start - epoch).total_milliseconds();
 
             buf.cam_id = htobe32(CAM_NAME);
@@ -464,7 +464,7 @@ int fast_consume_frame(int camera_id,
                 add_detection_to_msg(dd->id, detectionTime_ms, tag->x, tag->y, 
                                     tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
                 
-                max_temp_alpha = max(max_temp_alpha, std::abs(tag->theta));
+                max_temp_alpha = std::max(max_temp_alpha, std::abs(tag->theta));
 
                 if (tag->valid_velocity && previous_tag->valid_velocity) {
 
@@ -474,12 +474,12 @@ int fast_consume_frame(int camera_id,
                     float time_s = us / 1e6 + time_uncertainty;
 
                     float temp_a = std::abs((tag->velocity - previous_tag->velocity) / time_s);
-                    max_temp_a = max(max_temp_a, temp_a);
+                    max_temp_a = std::max(max_temp_a, temp_a);
 
 #if PRINT_DEBUG_MSG           
 
                     // file_output << "Previous velocity: " << previous_tag->velocity << " Current velocity: " << tag->velocity << " time s: " << time_s << " acceleration: " << temp_a << endl;
-                    file_output << "Previous velocity = " << previous_tag->velocity << ", Current velocity = " << tag->velocity << ", time s = " << time_s << ", acceleration = " << temp_a << endl;
+                    file_output << "Previous velocity = " << previous_tag->velocity << ", Current velocity = " << tag->velocity << ", time s = " << time_s << ", acceleration = " << temp_a << std::endl;
 
 #endif
 
@@ -621,7 +621,7 @@ int fast_consume_frame(int camera_id,
                         OverlapTagInfo info{id, a_max, alpha, tags[id].latest_detection};
 
 #if PRINT_DEBUG_MSG           
-                        file_output << "Tag#" << id << " detected in the overlapping area. Time frame: " << tags[id].latest_detection << endl;
+                        file_output << "Tag#" << id << " detected in the overlapping area. Time frame: " << tags[id].latest_detection << std::endl;
 #endif
                         produce_buffers[i]->produce(info);
                     }
@@ -634,8 +634,8 @@ int fast_consume_frame(int camera_id,
         for (int i = 0; i < 2 && consume_buffers[i]; ++i) {
             OverlapTagInfo incoming;
             while (consume_buffers[i]->consume(incoming)) {
-                ptime current_frame = boost::posix_time::microsec_clock::universal_time();
-                time_duration frame_duration = current_frame - incoming.timestamp; // 两个ptime相减
+                boost::posix_time::ptime current_frame = boost::posix_time::microsec_clock::universal_time();
+                boost::posix_time::time_duration frame_duration = current_frame - incoming.timestamp; // 两个ptime相减
                 long frame_duration_ms = frame_duration.total_milliseconds(); // 转换为毫秒
 
                 // detect time difference and Tag status
@@ -644,7 +644,7 @@ int fast_consume_frame(int camera_id,
                     a_max = incoming.a_max;
                     alpha = incoming.alpha;
 #if PRINT_DEBUG_MSG           
-                    file_output << "Missing detection of Tag#" << incoming.tag_id << " in the overlapping area. Frame duration time: " << frame_duration_ms << endl;
+                    file_output << "Missing detection of Tag#" << incoming.tag_id << " in the overlapping area. Frame duration time: " << frame_duration_ms << std::endl;
 #endif
                     break;
                 }
@@ -657,7 +657,7 @@ int fast_consume_frame(int camera_id,
             if (!tag->is_detected && tag_exists(tag->x, tag->y)) {
                 use_exhaustive_search = true;
 #if PRINT_DEBUG_MSG           
-                file_output << "Tags are missing." << endl;
+                file_output << "Tags are missing." << std::endl;
 #endif
             }
             tag->is_detected = false; //clears variable for next search
@@ -725,7 +725,7 @@ int fast_consume_frame(int camera_id,
 
                     no_detected = false;
 
-                    max_temp_alpha = max(max_temp_alpha, std::abs(tags[i].theta));
+                    max_temp_alpha = std::max(max_temp_alpha, std::abs(tags[i].theta));
 
                     if (tags[i].valid_velocity && previous_tags[i].valid_velocity) {
 
@@ -734,10 +734,10 @@ int fast_consume_frame(int camera_id,
                         float time_s = us / 1e6 + time_uncertainty;
 
                         float temp_a = std::abs((tags[i].velocity - previous_tags[i].velocity) / time_s);
-                        max_temp_a = max(max_temp_a, temp_a);
+                        max_temp_a = std::max(max_temp_a, temp_a);
 
 #if PRINT_DEBUG_MSG
-                        file_output << "Previous velocity = " << previous_tags[i].velocity << ", Current velocity = " << tags[i].velocity << ", time s = " << time_s << " acceleration: " << temp_a << endl;
+                        file_output << "Previous velocity = " << previous_tags[i].velocity << ", Current velocity = " << tags[i].velocity << ", time s = " << time_s << " acceleration: " << temp_a << std::endl;
 #endif
                     }
 
@@ -745,7 +745,7 @@ int fast_consume_frame(int camera_id,
                 file_output <<"CAM#"<<CAM_NAME<<" " 
                         << "Found when using GLOBAL_IMAGE. X = " 
                         << detection_data.tags[i].camera_coords->x << " Y = " 
-                        << detection_data.tags[i].camera_coords->y << endl;
+                        << detection_data.tags[i].camera_coords->y << std::endl;
 #endif
                 }
             }
@@ -794,7 +794,7 @@ int fast_consume_frame(int camera_id,
 
         loop_count++;
 
-        ptime import_end = boost::posix_time::microsec_clock::universal_time();
+        boost::posix_time::ptime import_end = boost::posix_time::microsec_clock::universal_time();
 
         uint32_t tot_time = (import_end - import_start).total_milliseconds();
         
