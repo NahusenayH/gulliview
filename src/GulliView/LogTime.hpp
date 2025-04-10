@@ -22,6 +22,11 @@
 Created to reduce clutter from reused lines and to increase readability
 */
 
+#include <chrono>
+#include <iomanip>
+#include <fstream>
+#include <ostream>
+
 class LogTime {
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time;

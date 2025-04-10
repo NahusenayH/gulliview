@@ -25,6 +25,7 @@
 #include "../TagFamily.h"
 
 #include "Declarations.hpp"
+#include "LogTime.hpp"
 
 void set_search_area(const int32_t im_width,
                     const int32_t im_height,

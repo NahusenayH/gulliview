@@ -19,6 +19,7 @@
 #define _DECLARATIONS_H_
 
 // Used in other files but needed here as well
+#include <optional>
 #include <boost/asio.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
@@ -27,9 +28,9 @@
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "21"
+#define VERSION "22"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "Removing unused functions"
+#define COMMENT "Started using LogTime"
 
 #define ENABLE_LOGS             true            // Enables log output files
 #define LIVE_FEED               false           // If the cameras live feed or recordings from RECORDING_FOLDER are used

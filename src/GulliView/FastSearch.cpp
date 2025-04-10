@@ -40,23 +40,18 @@ void fast_search(const image_u8_t& im,
             continue;
         }
 
+
         total_tag++;
 
         auto elapsed = latest_frame - tag->latest_detection;
         float us = elapsed.total_microseconds();
         float time_s = us / 1e6 + time_uncertainty;
 
-        auto initial_start = std::chrono::high_resolution_clock::now();
-
         float max_travel;
         float min_travel;
         get_min_max_travel(tag, time_s, v_max, a_max, min_travel, max_travel);
         set_search_area(im.width, im.height, min_search_dim, 
                     min_travel, max_travel, alpha, *tag);
-
-        auto initial_end = std::chrono::high_resolution_clock::now();
-        auto initial_duration = std::chrono::duration_cast<std::chrono::microseconds>(initial_end - initial_start).count() / 1000.0;
-
 
         auto partial_start = std::chrono::high_resolution_clock::now();
 

@@ -22,6 +22,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include "Declarations.hpp"
 #include "LogTime.hpp"
 
 bool transform_frame(cv::Mat& frame,

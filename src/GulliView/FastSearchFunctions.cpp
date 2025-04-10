@@ -97,16 +97,13 @@ void partial_search(const image_u8_t& im,
                     boost::posix_time::ptime total_start_time,
                     std::ofstream& file_output
                     ) {
-
-    auto start = std::chrono::high_resolution_clock::now();
-
+#if ENABLE_LOGS
+    LogTime timer("partial_search", file_output);
+    LogTime timer_get_partial_image("get_partial_image", file_output);
+#endif
     image_u8_t* im_part = get_partial_image(im, area);
-
-    auto end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Get partial image time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
+#if ENABLE_LOGS
+    timer.stop_us();
 #endif
 
     boost::posix_time::ptime search_end = boost::posix_time::microsec_clock::universal_time();
@@ -115,37 +112,31 @@ void partial_search(const image_u8_t& im,
     if (total_time > 17000)
         return;
 
-    start = std::chrono::high_resolution_clock::now();
-
+#if ENABLE_LOGS
+    LogTime apriltag_detector_detect_timer("apriltag_detector_detect", file_output);
+#endif
     //detect tags in part image
     zarray_t *detection = apriltag_detector_detect(detector, im_part);
-
-    end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Apriltag detector detect time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
+#if ENABLE_LOGS
+    apriltag_detector_detect_timer.stop_us();
 #endif
 
     search_end = boost::posix_time::microsec_clock::universal_time();
-
     total_time = (search_end - total_start_time).total_microseconds();    
     if (total_time > 17000)
         return;
 
-    start = std::chrono::high_resolution_clock::now();
-
+#if ENABLE_LOGS
+    LogTime zarray_timer("Zarray time", file_output);
+#endif
 
     if(zarray_size(detection) != 0){
         apriltag_detection_t *temp;
         zarray_get(detection, 0, &temp);
         zarray_add(detections, &temp);
     }
-
-    end = std::chrono::high_resolution_clock::now();
-
-#if PRINT_DEBUG_MSG
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    file_output << "Zarray time: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
+#if ENABLE_LOGS
+    zarray_timer.stop_us();
+    timer.stop_us();
 #endif
 }

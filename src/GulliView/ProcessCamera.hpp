@@ -20,6 +20,7 @@
 
 #include <sys/mman.h>
 
+#include "Declarations.hpp"
 #include "FastThread.hpp"
 #include "ProducerThread.hpp"
 
