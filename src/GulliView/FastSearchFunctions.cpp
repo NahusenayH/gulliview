@@ -93,22 +93,6 @@ void get_min_max_travel(const Tag* tag,
 void partial_search(const image_u8_t& im,
                     const DetectionArea& area,
                     zarray_t* detections,
-                    apriltag_detector_t* detector) {
-
-    image_u8_t* im_part = get_partial_image(im, area);
-    //detect tags in part image
-    zarray_t *detection = apriltag_detector_detect(detector, im_part);
-
-    if(zarray_size(detection) != 0){
-        apriltag_detection_t *temp;
-        zarray_get(detection, 0, &temp);
-        zarray_add(detections, &temp);
-    }
-}
-
-void partial_search1(const image_u8_t& im,
-                    const DetectionArea& area,
-                    zarray_t* detections,
                     apriltag_detector_t* detector,
                     boost::posix_time::ptime total_start_time,
                     std::ofstream& file_output

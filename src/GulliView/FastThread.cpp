@@ -393,7 +393,7 @@ int fast_consume_frame(int camera_id,
 
         uint32_t import_time = (latest_frame - import_start).total_milliseconds();
 
-        fast_search2(im, latest_frame, v_max, a_max, alpha,
+        fast_search(im, latest_frame, v_max, a_max, alpha,
                         min_search_dim, CAM_NAME, time_uncertainty, detector,
                         detections, tags, use_exhaustive_search, file_output);
 

@@ -53,11 +53,6 @@ void get_min_max_travel(const Tag* tag,
 void partial_search(const image_u8_t& im,
                     const DetectionArea& area,
                     zarray_t* detections,
-                    apriltag_detector_t* detector);
-
-void partial_search1(const image_u8_t& im,
-                    const DetectionArea& area,
-                    zarray_t* detections,
                     apriltag_detector_t* detector,
                     boost::posix_time::ptime total_start_time,
                     std::ofstream& file_output
