@@ -31,7 +31,7 @@ bool transform_frame(cv::Mat& frame,
         return false;
     }
 #if ENABLE_LOGS
-    LogTime remap_timer("Remap", file_output);
+    LogTime remap_timer("Remap");
 #endif
     // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
 #if ENABLE_LOGS
@@ -39,11 +39,11 @@ bool transform_frame(cv::Mat& frame,
 #endif
 
 #if ENABLE_LOGS
-    LogTime color_timer("Transform color", file_output);
+    LogTime color_timer("Transform color");
 #endif
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
 #if ENABLE_LOGS
-    color_timer.stop_us();
+    color_timer.stop_us(file_output);
 #endif
 
     return !frame.empty();

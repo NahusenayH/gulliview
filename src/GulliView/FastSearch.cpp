@@ -32,6 +32,8 @@ void fast_search(const image_u8_t& im,
                 std::ofstream& file_output) {
 
     int total_tag = 0;
+
+    LogTime timer("fast_search");
     boost::posix_time::ptime total_start_time = boost::posix_time::microsec_clock::universal_time();
 
     for (Tag* tag = tags_start; tag < tags_start + MAX_TAG_ID; tag++) {
@@ -63,7 +65,7 @@ void fast_search(const image_u8_t& im,
         double search_area_height = scaling_f * (area->y_end - area->y_start);
         double search_area_size = search_area_width * search_area_height;
 
-        partial_search(im, tag->area, detections, detector, total_start_time, file_output);
+        partial_search(im, tag->area, detections, detector, &timer, file_output);
 
         auto partial_end = std::chrono::high_resolution_clock::now();
         auto partial_duration = std::chrono::duration_cast<std::chrono::microseconds>(partial_end - partial_start).count() / 1000.0;
@@ -76,12 +78,11 @@ void fast_search(const image_u8_t& im,
         file_output << "CAM#" << CAM_NAME << " tag#"<< index <<
         " FAST SEARCH time: " << std::fixed << std::setprecision(2) << partial_duration << " ms\n";
 #endif
-        uint32_t total_time = (search_end - total_start_time).total_microseconds();
+        // uint32_t total_time = (search_end - total_start_time).total_microseconds();
 
-        if (total_time > DEFAULT_LIMIT_MAX) {
-#if PRINT_DEBUG_MSG
-            file_output << "CAM#" << CAM_NAME << " tag#"<< index <<
-                " exceeded " << DEFAULT_LIMIT_MAX / 1000 << "ms search time. Switching to exhaustive search.\n";
+        if (timer.stop_us() > DEFAULT_LIMIT_MAX) {
+#if ENABLE_LOGS
+            file_output << "Exceeded fast search time: limit=" << DEFAULT_LIMIT_MAX / 1000 << ", tagID=" << index;
 #endif
             use_exhaustive_search = true;
             break; // Terminate fast search early

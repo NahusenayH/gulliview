@@ -15,6 +15,7 @@
 * Copyright (c) 2025 Elias Svensson <eliasve@chalmers.se>
 ********************************************************************/
 
+// #include "LogTime.hpp"
 #include "ProcessCamera.hpp"
 
 // DEFINES GLOBAL VARIABLES
@@ -330,6 +331,19 @@ void general_log(){
     file_output << "RECORDING_FOLDER: "             << RECORDING_FOLDER             << std::endl;
     #endif
 
+    // One timer that prints to file takes 966 ns
+    // std::ostringstream filename_test;
+    // filename_test << "output/timer_test.log";
+    // std::ofstream file_output_test(filename_test.str(), std::ios::out);
+    // LogTime timer("timer test");
+    // int lenght = 1000000;
+    // for (int i; i<lenght;i++){
+    //     LogTime test_timer("timer test");
+    //     test_timer.stop_us(file_output_test);
+    // }
+    // file_output << lenght << " timer time penalty: " << timer.stop_ms() << " ms" << std::endl;
+    // file_output << "1 timer time penalty: " << timer.stop_ns()/lenght << " ns" << std::endl;
+
     #endif
 }
 
@@ -343,7 +357,6 @@ int main(int argc, char **argv) {
     general_log();
 
     // Doing graceful shutdown, prevents Linux USB system from crashing
-
     if (opts.device_num == 4)
         signal(SIGINT, signal_handler);
     else signal(SIGINT, signal_handler);

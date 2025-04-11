@@ -122,14 +122,9 @@ int fast_consume_frame(int camera_id,
     filename << "output/camera_" << camera_id << "_output-fast.log";
     std::ofstream file_output(filename.str(), std::ios::out);
 
-    // file_output << "CAM_NAME " << CAM_NAME << ": camera id: " << camera_id << endl;
-    // #if BINDING_CPU_CORES
-    //     file_output << "USING BINDING CPU CORES" << endl;
-    // #endif
-
-    auto start = std::chrono::system_clock::now().time_since_epoch();
-    auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
-    std::queue<Message> messageQueue; // added 2024
+    // auto start = std::chrono::system_clock::now().time_since_epoch();
+    // auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
+    // std::queue<Message> messageQueue; // added 2024
 
     Tag tags[MAX_TAG_ID];
 

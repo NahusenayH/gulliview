@@ -32,11 +32,14 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
     std::chrono::time_point<std::chrono::high_resolution_clock> end_time;
     std::string name;
-    std::ofstream& file;
 public:
-    LogTime(const std::string& input_name, std::ofstream& input_file);
-    void stop_ms();
-    void stop_us();
+    LogTime(const std::string& input_name);
+    void stop_ms(std::ofstream& input_file);
+    void stop_us(std::ofstream& input_file);
+    void stop_ns(std::ofstream& input_file);
+    int stop_ms();
+    int stop_us();
+    int stop_ns();
 };
 
 #endif

@@ -55,7 +55,7 @@ void partial_search(const image_u8_t& im,
                     const DetectionArea& area,
                     zarray_t* detections,
                     apriltag_detector_t* detector,
-                    boost::posix_time::ptime total_start_time,
+                    LogTime* parent_timer,
                     std::ofstream& file_output
                     );
 
