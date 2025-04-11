@@ -33,8 +33,7 @@ void fast_search(const image_u8_t& im,
 
     int total_tag = 0;
 
-    LogTime timer("fast_search");
-    boost::posix_time::ptime total_start_time = boost::posix_time::microsec_clock::universal_time();
+    LogTime timer;
 
     for (Tag* tag = tags_start; tag < tags_start + MAX_TAG_ID; tag++) {
         if (!tag_exists(tag->x, tag->y)) {
@@ -78,11 +77,10 @@ void fast_search(const image_u8_t& im,
         file_output << "CAM#" << CAM_NAME << " tag#"<< index <<
         " FAST SEARCH time: " << std::fixed << std::setprecision(2) << partial_duration << " ms\n";
 #endif
-        // uint32_t total_time = (search_end - total_start_time).total_microseconds();
 
         if (timer.stop_us() > DEFAULT_LIMIT_MAX) {
 #if ENABLE_LOGS
-            file_output << "Exceeded fast search time: limit=" << DEFAULT_LIMIT_MAX / 1000 << ", tagID=" << index;
+            file_output << "Exceeded fast search time: limit=" << DEFAULT_LIMIT_MAX / 1000 << " us, tagID=" << index << std::endl;
 #endif
             use_exhaustive_search = true;
             break; // Terminate fast search early
