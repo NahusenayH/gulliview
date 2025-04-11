@@ -122,25 +122,15 @@ int fast_consume_frame(int camera_id,
     filename << "output/camera_" << camera_id << "_output-fast.log";
     std::ofstream file_output(filename.str(), std::ios::out);
 
-    // auto start = std::chrono::system_clock::now().time_since_epoch();
-    // auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
-    // std::queue<Message> messageQueue; // added 2024
-
     Tag tags[MAX_TAG_ID];
-
     Tag previous_tags[MAX_TAG_ID];
-
     TagFamily family(opts.family_str);
     apriltag_detector_t* detector = apriltag_detector_create();
 
-    // apriltag_family_t *tf = tagStandard41h12_create(); // added 2025
-
     apriltag_detector_add_family(detector, family.at_family);
 
-    // apriltag_detector_add_family(detector, tf);
-
     detector->nthreads = 16;
-    detector->quad_decimate = 1.0f; // 
+    detector->quad_decimate = 1.0f;
     detector->quad_sigma = 0.6f; // Low-pass blur, negative values sharpen
     detector->refine_edges = 1; 
 
@@ -172,14 +162,6 @@ int fast_consume_frame(int camera_id,
     AngleTracker angle_tracker;
     AccelerationTracker acceleration_tracker;
 
-    // double max_duration = 0.0;
-    // double avg_duration = 0.0;
-    // double max_search = 0.0;
-    // double avg_search = 0.0;
-
-    // file_output << "Current angle: " << alpha << endl;
-    // file_output << "Current speed: " << v_max << endl;
-
     // Mapping of camera and buffer
     CyclicBuffer* produce_buffers[2] = {nullptr, nullptr};
     CyclicBuffer* consume_buffers[2] = {nullptr, nullptr};
@@ -202,12 +184,6 @@ int fast_consume_frame(int camera_id,
         consume_buffers[0] = &buffer_23;
     }
 
-
-    const int epsilon_max = 6;
-    const int epsilon_min = 1;
-    // int epsilon = 5;
-
-    // for (int epsilon = epsilon_max; epsilon >= epsilon_min; epsilon--) {
     for (int trial = 1; trial <= 1; trial++) {
 
     int total_loop_count = 0;
@@ -242,7 +218,6 @@ int fast_consume_frame(int camera_id,
 
         float avg_time_gap = -1;
         auto while_start = std::chrono::system_clock::now().time_since_epoch();
-        auto while_start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(while_start).count();
 
 #if USE_MEMORY_SHARING
 
@@ -386,8 +361,6 @@ int fast_consume_frame(int camera_id,
 
         boost::posix_time::ptime latest_frame = boost::posix_time::microsec_clock::universal_time();
 
-        uint32_t import_time = (latest_frame - import_start).total_milliseconds();
-
         fast_search(im, latest_frame, v_max, a_max, alpha,
                         min_search_dim, CAM_NAME, time_uncertainty, detector,
                         detections, tags, use_exhaustive_search, file_output);
@@ -409,7 +382,6 @@ int fast_consume_frame(int camera_id,
 
             // Get time of frame/detection----------------
 
-            size_t index = 0;
             Message buf {
                 htobe32(1) /* type */ ,
                 htobe32(2) /* subtype */,
@@ -417,7 +389,6 @@ int fast_consume_frame(int camera_id,
                 // added 2024
                 htobe64(detectionTime_ms), /* detection timestamp */
                 htobe64(avg_time_gap) /* avg time gap */
-                // htobe64(msecs) /* time_msec */   // commented out 2024
             };
             // Camera coordinates for tag center.
             std::vector<at::Point> camera_detections(zarray_size(detections)); 
@@ -451,9 +422,7 @@ int fast_consume_frame(int camera_id,
             // Room coordinates for tag corner.
             std::vector<at::Point> room_corner_detections(2*zarray_size(detections)); 
 
-            
             static boost::posix_time::ptime epoch(boost::gregorian::date(1970,1,1));
-            uint64_t msecs = (import_start - epoch).total_milliseconds();
 
             buf.cam_id = htobe32(CAM_NAME);
             int n_detections = zarray_size(detections);
@@ -544,8 +513,7 @@ int fast_consume_frame(int camera_id,
 
                 // Then call estimate_tag_pose.
                 apriltag_pose_t pose;
-                double err = estimate_tag_pose(&info, &pose);
-                // Do something with pose.
+                estimate_tag_pose(&info, &pose);
 
                 // change to Eigen format
                 Eigen::Matrix4d T_tag_to_camera = Eigen::Matrix4d::Identity();
@@ -562,9 +530,6 @@ int fast_consume_frame(int camera_id,
                 // Calculate the position of the label in the world coordinate system
                 Eigen::Matrix4d T_tag_to_world = camera_to_world * T_tag_to_camera;
 
-                // Extract the world coordinate position of the label
-                Eigen::Vector3d position = T_tag_to_world.block<3, 1>(0, 3);
-
                 // Extract the world coordinate direction of the label
                 Eigen::Matrix3d rotation = T_tag_to_world.block<3, 3>(0, 0);
                 Eigen::Quaterniond orientation(rotation);
@@ -574,8 +539,6 @@ int fast_consume_frame(int camera_id,
                 matd_destroy(pose.t);
 
                 // Calculate the size of the AprilTag in pixels
-                float scaling_f = 0.125;
-                DetectionArea* area = &tag->area;
                 double apriltag_size = 0.0;
                 for (int j = 0; j < 4; j++) {
                     int next = (j + 1) % 4;
@@ -583,15 +546,6 @@ int fast_consume_frame(int camera_id,
                     double dy = dd->p[next][1] - dd->p[j][1];
                     apriltag_size += sqrt(dx * dx + dy * dy); // Sum edge lengths
                 }
-                apriltag_size /= 4.0; // Average size of edges
-
-                // Calculate the size of the search area
-                double search_area_width = scaling_f * (area->x_end - area->x_start);
-                double search_area_height = scaling_f * (area->y_end - area->y_start);
-                double search_area_size = search_area_width * search_area_height;
-
-                // Calculate the ratio of search area size to AprilTag size
-                double ratio = search_area_size / apriltag_size;
             }
 
             // added 2025

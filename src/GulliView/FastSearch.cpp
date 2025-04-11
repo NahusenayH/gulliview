@@ -56,14 +56,6 @@ void fast_search(const image_u8_t& im,
 
         LogTime partial_search_timer;
 
-        float scaling_f = 0.125; // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit 
-
-        // Calculate the size of the search area
-        DetectionArea* area = &tag->area;
-        double search_area_width = scaling_f * (area->x_end - area->x_start);
-        double search_area_height = scaling_f * (area->y_end - area->y_start);
-        double search_area_size = search_area_width * search_area_height;
-
         partial_search(im, tag->area, detections, detector, &timer_total, file_output);
 
 #if ENABLE_LOGS
