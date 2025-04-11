@@ -22,34 +22,9 @@ LogTime::LogTime() {
     start_time = std::chrono::high_resolution_clock::now();
 }
 
-// Stop clock and print to log file only if logs are enabled
-void LogTime::stop_ms(const std::string& name, std::ofstream& file){
+// Stop clock and return
+double LogTime::stop_ns(){
     end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-    file << name << ": " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-}
-void LogTime::stop_us(const std::string& name, std::ofstream& file){
-    end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-    file << name << ": " << std::fixed << std::setprecision(2) << duration << " us" << std::endl;
-}
-void LogTime::stop_ns (const std::string& name, std::ofstream& file){
-    end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-    file << name << ": " << std::fixed << std::setprecision(2) << duration << " ns" << std::endl;
-}
-int LogTime::stop_ms(){
-    end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-    return int(duration);
-}
-int LogTime::stop_us(){
-    end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-    return int(duration);
-}
-int LogTime::stop_ns(){
-    end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-    return int(duration);
+    double duration = double(std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count());
+    return std::round(duration*1000)/1000.0;
 }

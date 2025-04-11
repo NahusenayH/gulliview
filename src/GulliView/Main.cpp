@@ -330,8 +330,42 @@ void general_log(){
     file_output << "RECORDING_FOLDER: "             << RECORDING_FOLDER             << std::endl;
     #endif
 
-    file_output << "start timer time: 28 ns" << std::endl;
-    file_output << "start and print timer time: 968 ns" << std::endl;
+    int lenght = 1000000;
+    std::ostringstream filename_test;
+    filename_test << "output/timer_test_exclude.log";
+    std::ofstream file_output_test(filename_test.str(), std::ios::out);
+
+    LogTime timer_print;
+    for (int i = 0; i<lenght;i++){
+        LogTime test_timer;
+        test_timer.stop_us("testing testing", file_output_test);
+    }
+    file_output << lenght << " timer print penalty: " << timer_print.stop_ms() << " ms" << std::endl;
+    file_output << "1 timer print penalty: " << timer_print.stop_ns()/lenght << " ns" << std::endl;
+
+    LogTime timer_start;
+    for (int i = 0; i<lenght;i++){
+        LogTime test_timer;
+    }
+    file_output << lenght << " timer start penalty: " << timer_start.stop_ms() << " ms" << std::endl;
+    file_output << "1 timer start penalty: " << timer_start.stop_ns()/lenght << " ns" << std::endl;
+
+    LogTime timer_ns;
+    for (int i = 0; i<lenght;i++){
+        LogTime test_timer;
+        test_timer.stop_ns();
+    }
+    file_output << lenght << " timer total ns penalty: " << timer_ns.stop_ms() << " ms" << std::endl;
+    file_output << "1 timer total ns penalty: " << timer_ns.stop_ns()/lenght << " ns" << std::endl;
+
+    LogTime timer_ms;
+    for (int i = 0; i<lenght;i++){
+        LogTime test_timer;
+        test_timer.stop_ms();
+    }
+    file_output << lenght << " timer total ms penalty: " << timer_ms.stop_ms() << " ms" << std::endl;
+    file_output << "1 timer total ms penalty: " << timer_ms.stop_ns()/lenght << " ns" << std::endl;
+
     #endif
 }
 

@@ -125,7 +125,7 @@ void partial_search(const image_u8_t& im,
         zarray_add(detections, &temp);
     }
 #if ENABLE_LOGS
-    zarray_timer.stop_us("Zarray time", file_output);
-    timer.stop_us("partial_search", file_output);
+    zarray_timer.stop_ms("Zarray time", file_output);
+    timer.stop_ms("partial_search", file_output);
 #endif
 }

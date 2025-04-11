@@ -23,6 +23,7 @@ Created to reduce clutter from reused lines and to increase readability
 */
 
 #include <chrono>
+#include <cmath>
 #include <iomanip>
 #include <fstream>
 #include <ostream>
@@ -34,12 +35,25 @@ private:
     std::string name;
 public:
     LogTime();
-    void stop_ms(const std::string& input_name, std::ofstream& input_file);
-    void stop_us(const std::string& input_name, std::ofstream& input_file);
-    void stop_ns(const std::string& input_name, std::ofstream& input_file);
-    int stop_ms();
-    int stop_us();
-    int stop_ns();
+    // Stop clock and print to log file
+    void stop_ns(const std::string& name, std::ofstream& file){
+        file << name << ": " << stop_ns() << " ns" << std::endl;
+    };
+    void stop_us(const std::string& name, std::ofstream& file){
+        file << name << ": " << stop_us() << " us" << std::endl;
+    };
+    void stop_ms(const std::string& name, std::ofstream& file){
+        file << name << ": " << stop_ms() << " ms" << std::endl;
+    };
+
+    // Stop the clock
+    double stop_ns();
+    double stop_us() {
+        return std::round(stop_ns())/1000.0;
+    };
+    double stop_ms() {
+        return std::round(stop_us())/1000.0;
+    };    
 };
 
 #endif

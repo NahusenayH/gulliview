@@ -112,7 +112,7 @@ void update_exhaustive_gui(DetectionData detection_data, Tag* tags_start, cv::Ma
         if (detection_data.tags[i].found){
             found = true;
 
-            Tag* tag = tags_start + i;
+            // Tag* tag = tags_start + i;
             DetectionArea* area = &detection_data.tag_data[i].area;
             // Draw green square around the search area
             cv::rectangle(frame,

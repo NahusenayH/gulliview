@@ -60,13 +60,13 @@ void fast_search(const image_u8_t& im,
 
 #if ENABLE_LOGS
         int index = static_cast<int>(tag - tags_start);
-        file_output << "Part search time: tag#=" << index << ", time=" << partial_search_timer.stop_us() << " us" << std::endl;
-        timer_total.stop_us("Fast search time", file_output);
+        file_output << "Part search time: tag#=" << index << ", time=" << partial_search_timer.stop_ms() << " ms" << std::endl;
+        timer_total.stop_ms("Fast search time", file_output);
 #endif
 
         if (timer_total.stop_us() > DEFAULT_LIMIT_MAX) {
 #if ENABLE_LOGS
-            file_output << "Exceeded fast search time: limit=" << DEFAULT_LIMIT_MAX / 1000 << " us, tagID=" << index << std::endl;
+            file_output << "Exceeded fast search time: limit=" << DEFAULT_LIMIT_MAX / 1000 << " ms, tagID=" << index << std::endl;
 #endif
             use_exhaustive_search = true;
             break; // Terminate fast search early

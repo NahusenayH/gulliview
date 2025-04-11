@@ -27,6 +27,7 @@
 #include "FastSearch.hpp"
 #include "GUI.hpp"
 #include "InitCameras.hpp"
+#include "LogTime.hpp"
 #include "NiceThread.hpp"
 
 float get_uncertainty();

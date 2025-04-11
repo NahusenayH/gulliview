@@ -214,10 +214,11 @@ int fast_consume_frame(int camera_id,
         total_loop_count++;
 
         // Start measurement
-        auto loop_start = std::chrono::high_resolution_clock::now();
+        LogTime timer;
+        // auto loop_start = std::chrono::high_resolution_clock::now();
 
         float avg_time_gap = -1;
-        auto while_start = std::chrono::system_clock::now().time_since_epoch();
+        // auto while_start = std::chrono::system_clock::now().time_since_epoch();
 
 #if USE_MEMORY_SHARING
 
@@ -769,8 +770,8 @@ int fast_consume_frame(int camera_id,
         if (hz_counter == 2*FPS) {
             avg_hz = 1 / (static_cast<float>(tot_hz)/(2*FPS*1000));
 
-#if PRINT_DEBUG_MSG
-            file_output << "Frequency " << CAM_NAME << ": " << avg_hz << "Hz"  << std::endl;
+#if ENABLE_LOGS
+            file_output << "Frequency: " << avg_hz << " Hz"  << std::endl;
 #endif
             hz_counter = 0;
             sum_hz = 0;
@@ -778,16 +779,13 @@ int fast_consume_frame(int camera_id,
         hz_counter++;
 
         // End measurement
-        auto loop_end = std::chrono::high_resolution_clock::now();
-
-        // Calculation time (in microseconds)
-        auto loop_duration = std::chrono::duration_cast<std::chrono::microseconds>(loop_end - loop_start).count();
-
-#if PRINT_DEBUG_MSG
-        file_output << "Loop: count=" << total_loop_count - 1 << ", trial=" << trial << ", Duration=" << std::fixed << std::setprecision(2) << loop_duration << " us\n";
+        int elapsed_time = timer.stop_us();
+#if ENABLE_LOGS
+        file_output << "Loop: count=" << total_loop_count - 1 << ", trial=" << trial << ", Duration=" << timer.stop_us() << " us" << std::endl;;
 #endif
-        fast_thread_logger.log_operation(DebugLogger::LOOP_TIME, loop_duration, fast_consumer_counter[camera_id].load());
-        fast_thread_logger.write_to_file_if_needed(loop_duration, "fast-producer", filename.str());
+        // Maybe remove?
+        fast_thread_logger.log_operation(DebugLogger::LOOP_TIME, elapsed_time, fast_consumer_counter[camera_id].load());
+        fast_thread_logger.write_to_file_if_needed(elapsed_time, "fast-producer", filename.str());
         }
     }
     // tagStandard41h12_destroy(tf);
