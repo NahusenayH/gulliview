@@ -15,7 +15,6 @@
 * Copyright (c) 2025 Elias Svensson <eliasve@chalmers.se>
 ********************************************************************/
 
-// #include "LogTime.hpp"
 #include "ProcessCamera.hpp"
 
 // DEFINES GLOBAL VARIABLES
@@ -284,7 +283,7 @@ std::unordered_map<int, int> cameraMap = {
     {2, 1},
     {3, 0}
 };
-
+#include "LogTime.hpp"
 // Add general settings to log
 void general_log(){
     #if ENABLE_LOGS
@@ -331,19 +330,8 @@ void general_log(){
     file_output << "RECORDING_FOLDER: "             << RECORDING_FOLDER             << std::endl;
     #endif
 
-    // One timer that prints to file takes 966 ns
-    // std::ostringstream filename_test;
-    // filename_test << "output/timer_test.log";
-    // std::ofstream file_output_test(filename_test.str(), std::ios::out);
-    // LogTime timer("timer test");
-    // int lenght = 1000000;
-    // for (int i; i<lenght;i++){
-    //     LogTime test_timer("timer test");
-    //     test_timer.stop_us(file_output_test);
-    // }
-    // file_output << lenght << " timer time penalty: " << timer.stop_ms() << " ms" << std::endl;
-    // file_output << "1 timer time penalty: " << timer.stop_ns()/lenght << " ns" << std::endl;
-
+    file_output << "start timer time: 28 ns" << std::endl;
+    file_output << "start and print timer time: 968 ns" << std::endl;
     #endif
 }
 

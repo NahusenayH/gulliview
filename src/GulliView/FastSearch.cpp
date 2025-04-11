@@ -33,7 +33,7 @@ void fast_search(const image_u8_t& im,
 
     int total_tag = 0;
 
-    LogTime timer;
+    LogTime timer_total;
 
     for (Tag* tag = tags_start; tag < tags_start + MAX_TAG_ID; tag++) {
         if (!tag_exists(tag->x, tag->y)) {
@@ -54,7 +54,7 @@ void fast_search(const image_u8_t& im,
         set_search_area(im.width, im.height, min_search_dim, 
                     min_travel, max_travel, alpha, *tag);
 
-        auto partial_start = std::chrono::high_resolution_clock::now();
+        LogTime partial_search_timer;
 
         float scaling_f = 0.125; // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit 
 
@@ -64,21 +64,15 @@ void fast_search(const image_u8_t& im,
         double search_area_height = scaling_f * (area->y_end - area->y_start);
         double search_area_size = search_area_width * search_area_height;
 
-        partial_search(im, tag->area, detections, detector, &timer, file_output);
+        partial_search(im, tag->area, detections, detector, &timer_total, file_output);
 
-        auto partial_end = std::chrono::high_resolution_clock::now();
-        auto partial_duration = std::chrono::duration_cast<std::chrono::microseconds>(partial_end - partial_start).count() / 1000.0;
-
-        boost::posix_time::ptime search_end = boost::posix_time::microsec_clock::universal_time();
-
+#if ENABLE_LOGS
         int index = static_cast<int>(tag - tags_start);
-
-#if PRINT_DEBUG_MSG
-        file_output << "CAM#" << CAM_NAME << " tag#"<< index <<
-        " FAST SEARCH time: " << std::fixed << std::setprecision(2) << partial_duration << " ms\n";
+        file_output << "Part search time: tag#=" << index << ", time=" << partial_search_timer.stop_us() << " us" << std::endl;
+        timer_total.stop_us("Fast search time", file_output);
 #endif
 
-        if (timer.stop_us() > DEFAULT_LIMIT_MAX) {
+        if (timer_total.stop_us() > DEFAULT_LIMIT_MAX) {
 #if ENABLE_LOGS
             file_output << "Exceeded fast search time: limit=" << DEFAULT_LIMIT_MAX / 1000 << " us, tagID=" << index << std::endl;
 #endif

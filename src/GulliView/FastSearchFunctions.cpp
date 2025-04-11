@@ -97,10 +97,7 @@ void partial_search(const image_u8_t& im,
                     LogTime* parent_timer,
                     std::ofstream& file_output
                     ) {
-#if ENABLE_LOGS
     LogTime timer;
-    LogTime timer_get_partial_image;
-#endif
     image_u8_t* im_part = get_partial_image(im, area);
 #if ENABLE_LOGS
     timer.stop_us("get_partial_image", file_output);
@@ -109,23 +106,18 @@ void partial_search(const image_u8_t& im,
     if (parent_timer->stop_us() > 17000)
         return;
 
-#if ENABLE_LOGS
     LogTime apriltag_detector_detect_timer;
-#endif
+
     //detect tags in part image
     zarray_t *detection = apriltag_detector_detect(detector, im_part);
 #if ENABLE_LOGS
     apriltag_detector_detect_timer.stop_us("apriltag_detector_detect", file_output);
 #endif
-
-    // search_end = boost::posix_time::microsec_clock::universal_time();
-    // total_time = (search_end - total_start_time).total_microseconds();    
+ 
     if (parent_timer->stop_us() > 17000)
         return;
 
-#if ENABLE_LOGS
     LogTime zarray_timer;
-#endif
 
     if(zarray_size(detection) != 0){
         apriltag_detection_t *temp;
