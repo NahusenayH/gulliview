@@ -60,7 +60,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/gulliview/advanced_mobility_model
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gulliview/advanced_mobility_model
+CMAKE_BINARY_DIR = /home/gulliview/advanced_mobility_model/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/gulliview/advanced_mobility_model && $(CMAKE_COMMAND) -E cmake_progress_start /home/gulliview/advanced_mobility_model/CMakeFiles /home/gulliview/advanced_mobility_model/src//CMakeFiles/progress.marks
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gulliview/advanced_mobility_model/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gulliview/advanced_mobility_model/build/CMakeFiles /home/gulliview/advanced_mobility_model/build//CMakeFiles/progress.marks
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gulliview/advanced_mobility_model/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
 .PHONY : clean
 
 # The main clean target
@@ -103,310 +103,44 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/gulliview/advanced_mobility_model && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-# Convenience name for target.
-src/CMakeFiles/GulliView.dir/rule:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/GulliView.dir/rule
-.PHONY : src/CMakeFiles/GulliView.dir/rule
+#=============================================================================
+# Target rules for targets named GulliView
 
-# Convenience name for target.
-GulliView: src/CMakeFiles/GulliView.dir/rule
+# Build rule for target.
+GulliView: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GulliView
 .PHONY : GulliView
 
 # fast build rule for target.
 GulliView/fast:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/build
+	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/build
 .PHONY : GulliView/fast
 
-# Convenience name for target.
-src/CMakeFiles/Transmitter.dir/rule:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/Transmitter.dir/rule
-.PHONY : src/CMakeFiles/Transmitter.dir/rule
+#=============================================================================
+# Target rules for targets named Transmitter
 
-# Convenience name for target.
-Transmitter: src/CMakeFiles/Transmitter.dir/rule
+# Build rule for target.
+Transmitter: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Transmitter
 .PHONY : Transmitter
 
 # fast build rule for target.
 Transmitter/fast:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/Transmitter.dir/build.make src/CMakeFiles/Transmitter.dir/build
+	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/Transmitter.dir/build.make src/CMakeFiles/Transmitter.dir/build
 .PHONY : Transmitter/fast
-
-CameraUtil.o: CameraUtil.cpp.o
-.PHONY : CameraUtil.o
-
-# target to build an object file
-CameraUtil.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o
-.PHONY : CameraUtil.cpp.o
-
-CameraUtil.i: CameraUtil.cpp.i
-.PHONY : CameraUtil.i
-
-# target to preprocess a source file
-CameraUtil.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/CameraUtil.cpp.i
-.PHONY : CameraUtil.cpp.i
-
-CameraUtil.s: CameraUtil.cpp.s
-.PHONY : CameraUtil.s
-
-# target to generate assembly for a file
-CameraUtil.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/CameraUtil.cpp.s
-.PHONY : CameraUtil.cpp.s
-
-GulliView/AccelerationTracker.o: GulliView/AccelerationTracker.cpp.o
-.PHONY : GulliView/AccelerationTracker.o
-
-# target to build an object file
-GulliView/AccelerationTracker.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AccelerationTracker.cpp.o
-.PHONY : GulliView/AccelerationTracker.cpp.o
-
-GulliView/AccelerationTracker.i: GulliView/AccelerationTracker.cpp.i
-.PHONY : GulliView/AccelerationTracker.i
-
-# target to preprocess a source file
-GulliView/AccelerationTracker.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AccelerationTracker.cpp.i
-.PHONY : GulliView/AccelerationTracker.cpp.i
-
-GulliView/AccelerationTracker.s: GulliView/AccelerationTracker.cpp.s
-.PHONY : GulliView/AccelerationTracker.s
-
-# target to generate assembly for a file
-GulliView/AccelerationTracker.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AccelerationTracker.cpp.s
-.PHONY : GulliView/AccelerationTracker.cpp.s
-
-GulliView/AngleTracker.o: GulliView/AngleTracker.cpp.o
-.PHONY : GulliView/AngleTracker.o
-
-# target to build an object file
-GulliView/AngleTracker.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.o
-.PHONY : GulliView/AngleTracker.cpp.o
-
-GulliView/AngleTracker.i: GulliView/AngleTracker.cpp.i
-.PHONY : GulliView/AngleTracker.i
-
-# target to preprocess a source file
-GulliView/AngleTracker.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.i
-.PHONY : GulliView/AngleTracker.cpp.i
-
-GulliView/AngleTracker.s: GulliView/AngleTracker.cpp.s
-.PHONY : GulliView/AngleTracker.s
-
-# target to generate assembly for a file
-GulliView/AngleTracker.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.s
-.PHONY : GulliView/AngleTracker.cpp.s
-
-GulliView/CalibrateCameras.o: GulliView/CalibrateCameras.cpp.o
-.PHONY : GulliView/CalibrateCameras.o
-
-# target to build an object file
-GulliView/CalibrateCameras.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o
-.PHONY : GulliView/CalibrateCameras.cpp.o
-
-GulliView/CalibrateCameras.i: GulliView/CalibrateCameras.cpp.i
-.PHONY : GulliView/CalibrateCameras.i
-
-# target to preprocess a source file
-GulliView/CalibrateCameras.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.i
-.PHONY : GulliView/CalibrateCameras.cpp.i
-
-GulliView/CalibrateCameras.s: GulliView/CalibrateCameras.cpp.s
-.PHONY : GulliView/CalibrateCameras.s
-
-# target to generate assembly for a file
-GulliView/CalibrateCameras.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.s
-.PHONY : GulliView/CalibrateCameras.cpp.s
-
-GulliView/DebugLogger.o: GulliView/DebugLogger.cpp.o
-.PHONY : GulliView/DebugLogger.o
-
-# target to build an object file
-GulliView/DebugLogger.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o
-.PHONY : GulliView/DebugLogger.cpp.o
-
-GulliView/DebugLogger.i: GulliView/DebugLogger.cpp.i
-.PHONY : GulliView/DebugLogger.i
-
-# target to preprocess a source file
-GulliView/DebugLogger.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.i
-.PHONY : GulliView/DebugLogger.cpp.i
-
-GulliView/DebugLogger.s: GulliView/DebugLogger.cpp.s
-.PHONY : GulliView/DebugLogger.s
-
-# target to generate assembly for a file
-GulliView/DebugLogger.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s
-.PHONY : GulliView/DebugLogger.cpp.s
-
-GulliView/GUI.o: GulliView/GUI.cpp.o
-.PHONY : GulliView/GUI.o
-
-# target to build an object file
-GulliView/GUI.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o
-.PHONY : GulliView/GUI.cpp.o
-
-GulliView/GUI.i: GulliView/GUI.cpp.i
-.PHONY : GulliView/GUI.i
-
-# target to preprocess a source file
-GulliView/GUI.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.i
-.PHONY : GulliView/GUI.cpp.i
-
-GulliView/GUI.s: GulliView/GUI.cpp.s
-.PHONY : GulliView/GUI.s
-
-# target to generate assembly for a file
-GulliView/GUI.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.s
-.PHONY : GulliView/GUI.cpp.s
-
-GulliView/GeneralSearchFunctions.o: GulliView/GeneralSearchFunctions.cpp.o
-.PHONY : GulliView/GeneralSearchFunctions.o
-
-# target to build an object file
-GulliView/GeneralSearchFunctions.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o
-.PHONY : GulliView/GeneralSearchFunctions.cpp.o
-
-GulliView/GeneralSearchFunctions.i: GulliView/GeneralSearchFunctions.cpp.i
-.PHONY : GulliView/GeneralSearchFunctions.i
-
-# target to preprocess a source file
-GulliView/GeneralSearchFunctions.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.i
-.PHONY : GulliView/GeneralSearchFunctions.cpp.i
-
-GulliView/GeneralSearchFunctions.s: GulliView/GeneralSearchFunctions.cpp.s
-.PHONY : GulliView/GeneralSearchFunctions.s
-
-# target to generate assembly for a file
-GulliView/GeneralSearchFunctions.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.s
-.PHONY : GulliView/GeneralSearchFunctions.cpp.s
-
-GulliView/Main.o: GulliView/Main.cpp.o
-.PHONY : GulliView/Main.o
-
-# target to build an object file
-GulliView/Main.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.o
-.PHONY : GulliView/Main.cpp.o
-
-GulliView/Main.i: GulliView/Main.cpp.i
-.PHONY : GulliView/Main.i
-
-# target to preprocess a source file
-GulliView/Main.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.i
-.PHONY : GulliView/Main.cpp.i
-
-GulliView/Main.s: GulliView/Main.cpp.s
-.PHONY : GulliView/Main.s
-
-# target to generate assembly for a file
-GulliView/Main.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.s
-.PHONY : GulliView/Main.cpp.s
-
-GulliView/TransformFrame.o: GulliView/TransformFrame.cpp.o
-.PHONY : GulliView/TransformFrame.o
-
-# target to build an object file
-GulliView/TransformFrame.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o
-.PHONY : GulliView/TransformFrame.cpp.o
-
-GulliView/TransformFrame.i: GulliView/TransformFrame.cpp.i
-.PHONY : GulliView/TransformFrame.i
-
-# target to preprocess a source file
-GulliView/TransformFrame.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.i
-.PHONY : GulliView/TransformFrame.cpp.i
-
-GulliView/TransformFrame.s: GulliView/TransformFrame.cpp.s
-.PHONY : GulliView/TransformFrame.s
-
-# target to generate assembly for a file
-GulliView/TransformFrame.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s
-.PHONY : GulliView/TransformFrame.cpp.s
-
-TagFamily.o: TagFamily.cpp.o
-.PHONY : TagFamily.o
-
-# target to build an object file
-TagFamily.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/TagFamily.cpp.o
-.PHONY : TagFamily.cpp.o
-
-TagFamily.i: TagFamily.cpp.i
-.PHONY : TagFamily.i
-
-# target to preprocess a source file
-TagFamily.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/TagFamily.cpp.i
-.PHONY : TagFamily.cpp.i
-
-TagFamily.s: TagFamily.cpp.s
-.PHONY : TagFamily.s
-
-# target to generate assembly for a file
-TagFamily.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/TagFamily.cpp.s
-.PHONY : TagFamily.cpp.s
-
-Transmitter.o: Transmitter.cpp.o
-.PHONY : Transmitter.o
-
-# target to build an object file
-Transmitter.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/Transmitter.dir/build.make src/CMakeFiles/Transmitter.dir/Transmitter.cpp.o
-.PHONY : Transmitter.cpp.o
-
-Transmitter.i: Transmitter.cpp.i
-.PHONY : Transmitter.i
-
-# target to preprocess a source file
-Transmitter.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/Transmitter.dir/build.make src/CMakeFiles/Transmitter.dir/Transmitter.cpp.i
-.PHONY : Transmitter.cpp.i
-
-Transmitter.s: Transmitter.cpp.s
-.PHONY : Transmitter.s
-
-# target to generate assembly for a file
-Transmitter.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/Transmitter.dir/build.make src/CMakeFiles/Transmitter.dir/Transmitter.cpp.s
-.PHONY : Transmitter.cpp.s
 
 # Help Target
 help:
@@ -418,39 +152,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... GulliView"
 	@echo "... Transmitter"
-	@echo "... CameraUtil.o"
-	@echo "... CameraUtil.i"
-	@echo "... CameraUtil.s"
-	@echo "... GulliView/AccelerationTracker.o"
-	@echo "... GulliView/AccelerationTracker.i"
-	@echo "... GulliView/AccelerationTracker.s"
-	@echo "... GulliView/AngleTracker.o"
-	@echo "... GulliView/AngleTracker.i"
-	@echo "... GulliView/AngleTracker.s"
-	@echo "... GulliView/CalibrateCameras.o"
-	@echo "... GulliView/CalibrateCameras.i"
-	@echo "... GulliView/CalibrateCameras.s"
-	@echo "... GulliView/DebugLogger.o"
-	@echo "... GulliView/DebugLogger.i"
-	@echo "... GulliView/DebugLogger.s"
-	@echo "... GulliView/GUI.o"
-	@echo "... GulliView/GUI.i"
-	@echo "... GulliView/GUI.s"
-	@echo "... GulliView/GeneralSearchFunctions.o"
-	@echo "... GulliView/GeneralSearchFunctions.i"
-	@echo "... GulliView/GeneralSearchFunctions.s"
-	@echo "... GulliView/Main.o"
-	@echo "... GulliView/Main.i"
-	@echo "... GulliView/Main.s"
-	@echo "... GulliView/TransformFrame.o"
-	@echo "... GulliView/TransformFrame.i"
-	@echo "... GulliView/TransformFrame.s"
-	@echo "... TagFamily.o"
-	@echo "... TagFamily.i"
-	@echo "... TagFamily.s"
-	@echo "... Transmitter.o"
-	@echo "... Transmitter.i"
-	@echo "... Transmitter.s"
 .PHONY : help
 
 
@@ -462,6 +163,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/gulliview/advanced_mobility_model && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

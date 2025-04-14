@@ -365,19 +365,20 @@ void general_log(){
     }
     file_output << lenght << " timer total ms penalty: " << timer_ms.stop_ms() << " ms" << std::endl;
     file_output << "1 timer total ms penalty: " << timer_ms.stop_ns()/lenght << " ns" << std::endl;
-
+    
+    file_output.close();
     #endif
 }
 
 // Main function
 int main(int argc, char **argv) {
-
     // Parsing command line arguments
     GulliViewOptions opts = parse_options(argc, argv);
 
     // Output general settings to log
     general_log();
 
+    std::cout << "TEST: " << opts.device_num << std::endl;
     // Doing graceful shutdown, prevents Linux USB system from crashing
     if (opts.device_num == 4)
         signal(SIGINT, signal_handler);
