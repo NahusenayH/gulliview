@@ -378,7 +378,6 @@ int main(int argc, char **argv) {
     // Output general settings to log
     general_log();
 
-    std::cout << "TEST: " << opts.device_num << std::endl;
     // Doing graceful shutdown, prevents Linux USB system from crashing
     if (opts.device_num == 4)
         signal(SIGINT, signal_handler);

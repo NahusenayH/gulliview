@@ -49,10 +49,8 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     init_video_capture(camera_id, opts.frame_width, opts.frame_height, video_capture, frame);
 #else
     // Saved video
-    init_video_open(camera_id, opts.frame_width, opts.frame_height, video_capture, frame); // added 2025
+    init_video_open(camera_id, opts.frame_width, opts.frame_height, video_capture, frame);
 #endif
-
-    std::cout << "enter resolution" << std::endl;
 
     std::cout << "Set camera to resolution: "
             << video_capture.get(cv::CAP_PROP_FRAME_WIDTH) << "x"
