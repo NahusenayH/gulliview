@@ -264,78 +264,6 @@ GulliView/DebugLogger.cpp.s:
 	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s
 .PHONY : GulliView/DebugLogger.cpp.s
 
-GulliView/FastSearch.o: GulliView/FastSearch.cpp.o
-.PHONY : GulliView/FastSearch.o
-
-# target to build an object file
-GulliView/FastSearch.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o
-.PHONY : GulliView/FastSearch.cpp.o
-
-GulliView/FastSearch.i: GulliView/FastSearch.cpp.i
-.PHONY : GulliView/FastSearch.i
-
-# target to preprocess a source file
-GulliView/FastSearch.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.i
-.PHONY : GulliView/FastSearch.cpp.i
-
-GulliView/FastSearch.s: GulliView/FastSearch.cpp.s
-.PHONY : GulliView/FastSearch.s
-
-# target to generate assembly for a file
-GulliView/FastSearch.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.s
-.PHONY : GulliView/FastSearch.cpp.s
-
-GulliView/FastSearchFunctions.o: GulliView/FastSearchFunctions.cpp.o
-.PHONY : GulliView/FastSearchFunctions.o
-
-# target to build an object file
-GulliView/FastSearchFunctions.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o
-.PHONY : GulliView/FastSearchFunctions.cpp.o
-
-GulliView/FastSearchFunctions.i: GulliView/FastSearchFunctions.cpp.i
-.PHONY : GulliView/FastSearchFunctions.i
-
-# target to preprocess a source file
-GulliView/FastSearchFunctions.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.i
-.PHONY : GulliView/FastSearchFunctions.cpp.i
-
-GulliView/FastSearchFunctions.s: GulliView/FastSearchFunctions.cpp.s
-.PHONY : GulliView/FastSearchFunctions.s
-
-# target to generate assembly for a file
-GulliView/FastSearchFunctions.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.s
-.PHONY : GulliView/FastSearchFunctions.cpp.s
-
-GulliView/FastThread.o: GulliView/FastThread.cpp.o
-.PHONY : GulliView/FastThread.o
-
-# target to build an object file
-GulliView/FastThread.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o
-.PHONY : GulliView/FastThread.cpp.o
-
-GulliView/FastThread.i: GulliView/FastThread.cpp.i
-.PHONY : GulliView/FastThread.i
-
-# target to preprocess a source file
-GulliView/FastThread.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.i
-.PHONY : GulliView/FastThread.cpp.i
-
-GulliView/FastThread.s: GulliView/FastThread.cpp.s
-.PHONY : GulliView/FastThread.s
-
-# target to generate assembly for a file
-GulliView/FastThread.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.s
-.PHONY : GulliView/FastThread.cpp.s
-
 GulliView/GUI.o: GulliView/GUI.cpp.o
 .PHONY : GulliView/GUI.o
 
@@ -384,54 +312,6 @@ GulliView/GeneralSearchFunctions.cpp.s:
 	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.s
 .PHONY : GulliView/GeneralSearchFunctions.cpp.s
 
-GulliView/InitCameras.o: GulliView/InitCameras.cpp.o
-.PHONY : GulliView/InitCameras.o
-
-# target to build an object file
-GulliView/InitCameras.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o
-.PHONY : GulliView/InitCameras.cpp.o
-
-GulliView/InitCameras.i: GulliView/InitCameras.cpp.i
-.PHONY : GulliView/InitCameras.i
-
-# target to preprocess a source file
-GulliView/InitCameras.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.i
-.PHONY : GulliView/InitCameras.cpp.i
-
-GulliView/InitCameras.s: GulliView/InitCameras.cpp.s
-.PHONY : GulliView/InitCameras.s
-
-# target to generate assembly for a file
-GulliView/InitCameras.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.s
-.PHONY : GulliView/InitCameras.cpp.s
-
-GulliView/LogTime.o: GulliView/LogTime.cpp.o
-.PHONY : GulliView/LogTime.o
-
-# target to build an object file
-GulliView/LogTime.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o
-.PHONY : GulliView/LogTime.cpp.o
-
-GulliView/LogTime.i: GulliView/LogTime.cpp.i
-.PHONY : GulliView/LogTime.i
-
-# target to preprocess a source file
-GulliView/LogTime.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.i
-.PHONY : GulliView/LogTime.cpp.i
-
-GulliView/LogTime.s: GulliView/LogTime.cpp.s
-.PHONY : GulliView/LogTime.s
-
-# target to generate assembly for a file
-GulliView/LogTime.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.s
-.PHONY : GulliView/LogTime.cpp.s
-
 GulliView/Main.o: GulliView/Main.cpp.o
 .PHONY : GulliView/Main.o
 
@@ -455,78 +335,6 @@ GulliView/Main.s: GulliView/Main.cpp.s
 GulliView/Main.cpp.s:
 	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.s
 .PHONY : GulliView/Main.cpp.s
-
-GulliView/NiceThread.o: GulliView/NiceThread.cpp.o
-.PHONY : GulliView/NiceThread.o
-
-# target to build an object file
-GulliView/NiceThread.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o
-.PHONY : GulliView/NiceThread.cpp.o
-
-GulliView/NiceThread.i: GulliView/NiceThread.cpp.i
-.PHONY : GulliView/NiceThread.i
-
-# target to preprocess a source file
-GulliView/NiceThread.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.i
-.PHONY : GulliView/NiceThread.cpp.i
-
-GulliView/NiceThread.s: GulliView/NiceThread.cpp.s
-.PHONY : GulliView/NiceThread.s
-
-# target to generate assembly for a file
-GulliView/NiceThread.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.s
-.PHONY : GulliView/NiceThread.cpp.s
-
-GulliView/ProcessCamera.o: GulliView/ProcessCamera.cpp.o
-.PHONY : GulliView/ProcessCamera.o
-
-# target to build an object file
-GulliView/ProcessCamera.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o
-.PHONY : GulliView/ProcessCamera.cpp.o
-
-GulliView/ProcessCamera.i: GulliView/ProcessCamera.cpp.i
-.PHONY : GulliView/ProcessCamera.i
-
-# target to preprocess a source file
-GulliView/ProcessCamera.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.i
-.PHONY : GulliView/ProcessCamera.cpp.i
-
-GulliView/ProcessCamera.s: GulliView/ProcessCamera.cpp.s
-.PHONY : GulliView/ProcessCamera.s
-
-# target to generate assembly for a file
-GulliView/ProcessCamera.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.s
-.PHONY : GulliView/ProcessCamera.cpp.s
-
-GulliView/ProducerThread.o: GulliView/ProducerThread.cpp.o
-.PHONY : GulliView/ProducerThread.o
-
-# target to build an object file
-GulliView/ProducerThread.cpp.o:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o
-.PHONY : GulliView/ProducerThread.cpp.o
-
-GulliView/ProducerThread.i: GulliView/ProducerThread.cpp.i
-.PHONY : GulliView/ProducerThread.i
-
-# target to preprocess a source file
-GulliView/ProducerThread.cpp.i:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.i
-.PHONY : GulliView/ProducerThread.cpp.i
-
-GulliView/ProducerThread.s: GulliView/ProducerThread.cpp.s
-.PHONY : GulliView/ProducerThread.s
-
-# target to generate assembly for a file
-GulliView/ProducerThread.cpp.s:
-	cd /home/gulliview/advanced_mobility_model && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.s
-.PHONY : GulliView/ProducerThread.cpp.s
 
 GulliView/TransformFrame.o: GulliView/TransformFrame.cpp.o
 .PHONY : GulliView/TransformFrame.o
@@ -625,39 +433,15 @@ help:
 	@echo "... GulliView/DebugLogger.o"
 	@echo "... GulliView/DebugLogger.i"
 	@echo "... GulliView/DebugLogger.s"
-	@echo "... GulliView/FastSearch.o"
-	@echo "... GulliView/FastSearch.i"
-	@echo "... GulliView/FastSearch.s"
-	@echo "... GulliView/FastSearchFunctions.o"
-	@echo "... GulliView/FastSearchFunctions.i"
-	@echo "... GulliView/FastSearchFunctions.s"
-	@echo "... GulliView/FastThread.o"
-	@echo "... GulliView/FastThread.i"
-	@echo "... GulliView/FastThread.s"
 	@echo "... GulliView/GUI.o"
 	@echo "... GulliView/GUI.i"
 	@echo "... GulliView/GUI.s"
 	@echo "... GulliView/GeneralSearchFunctions.o"
 	@echo "... GulliView/GeneralSearchFunctions.i"
 	@echo "... GulliView/GeneralSearchFunctions.s"
-	@echo "... GulliView/InitCameras.o"
-	@echo "... GulliView/InitCameras.i"
-	@echo "... GulliView/InitCameras.s"
-	@echo "... GulliView/LogTime.o"
-	@echo "... GulliView/LogTime.i"
-	@echo "... GulliView/LogTime.s"
 	@echo "... GulliView/Main.o"
 	@echo "... GulliView/Main.i"
 	@echo "... GulliView/Main.s"
-	@echo "... GulliView/NiceThread.o"
-	@echo "... GulliView/NiceThread.i"
-	@echo "... GulliView/NiceThread.s"
-	@echo "... GulliView/ProcessCamera.o"
-	@echo "... GulliView/ProcessCamera.i"
-	@echo "... GulliView/ProcessCamera.s"
-	@echo "... GulliView/ProducerThread.o"
-	@echo "... GulliView/ProducerThread.i"
-	@echo "... GulliView/ProducerThread.s"
 	@echo "... GulliView/TransformFrame.o"
 	@echo "... GulliView/TransformFrame.i"
 	@echo "... GulliView/TransformFrame.s"

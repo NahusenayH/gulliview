@@ -111,24 +111,10 @@ src/CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.s"
 	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/AngleTracker.cpp -o CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.s
 
-src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
-src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o: src/GulliView/DebugLogger.cpp
-src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o"
-	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp
-
-src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.i"
-	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp > CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.i
-
-src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s"
-	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp -o CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s
-
 src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
 src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o: src/GulliView/CalibrateCameras.cpp
 src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o"
 	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/CalibrateCameras.cpp
 
 src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.i: cmake_force
@@ -139,24 +125,66 @@ src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.s"
 	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/CalibrateCameras.cpp -o CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.s
 
-src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
-src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o: src/GulliView/TransformFrame.cpp
-src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o"
-	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp
+src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o: src/GulliView/DebugLogger.cpp
+src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp
 
-src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.i"
-	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp > CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.i
+src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp > CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.i
 
-src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s"
-	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp -o CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s
+src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/DebugLogger.cpp -o CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.s
+
+src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o: src/GulliView/FastSearch.cpp
+src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/FastSearch.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/FastSearch.cpp > CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/FastSearch.cpp -o CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.s
+
+src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o: src/GulliView/FastSearchFunctions.cpp
+src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/FastSearchFunctions.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/FastSearchFunctions.cpp > CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/FastSearchFunctions.cpp -o CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.s
+
+src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o: src/GulliView/FastThread.cpp
+src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/FastThread.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/FastThread.cpp > CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/FastThread.cpp -o CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.s
 
 src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
 src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o: src/GulliView/GeneralSearchFunctions.cpp
 src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o"
 	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/GeneralSearchFunctions.cpp
 
 src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.i: cmake_force
@@ -170,7 +198,7 @@ src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.s: cmake_force
 src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
 src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o: src/GulliView/GUI.cpp
 src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o"
 	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/GUI.cpp
 
 src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.i: cmake_force
@@ -181,10 +209,94 @@ src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/GUI.cpp.s"
 	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/GUI.cpp -o CMakeFiles/GulliView.dir/GulliView/GUI.cpp.s
 
+src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o: src/GulliView/InitCameras.cpp
+src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/InitCameras.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/InitCameras.cpp > CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/InitCameras.cpp -o CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.s
+
+src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o: src/GulliView/LogTime.cpp
+src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/LogTime.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/LogTime.cpp > CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/LogTime.cpp -o CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.s
+
+src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o: src/GulliView/NiceThread.cpp
+src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/NiceThread.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/NiceThread.cpp > CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/NiceThread.cpp -o CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.s
+
+src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o: src/GulliView/ProcessCamera.cpp
+src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/ProcessCamera.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/ProcessCamera.cpp > CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/ProcessCamera.cpp -o CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.s
+
+src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o: src/GulliView/ProducerThread.cpp
+src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/ProducerThread.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/ProducerThread.cpp > CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/ProducerThread.cpp -o CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.s
+
+src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
+src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o: src/GulliView/TransformFrame.cpp
+src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o -MF CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o.d -o CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o -c /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp
+
+src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.i"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp > CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.i
+
+src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s"
+	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gulliview/advanced_mobility_model/src/GulliView/TransformFrame.cpp -o CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s
+
 src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
 src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o: src/CameraUtil.cpp
 src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o"
 	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o -MF CMakeFiles/GulliView.dir/CameraUtil.cpp.o.d -o CMakeFiles/GulliView.dir/CameraUtil.cpp.o -c /home/gulliview/advanced_mobility_model/src/CameraUtil.cpp
 
 src/CMakeFiles/GulliView.dir/CameraUtil.cpp.i: cmake_force
@@ -198,7 +310,7 @@ src/CMakeFiles/GulliView.dir/CameraUtil.cpp.s: cmake_force
 src/CMakeFiles/GulliView.dir/TagFamily.cpp.o: src/CMakeFiles/GulliView.dir/flags.make
 src/CMakeFiles/GulliView.dir/TagFamily.cpp.o: src/TagFamily.cpp
 src/CMakeFiles/GulliView.dir/TagFamily.cpp.o: src/CMakeFiles/GulliView.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/GulliView.dir/TagFamily.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/GulliView.dir/TagFamily.cpp.o"
 	cd /home/gulliview/advanced_mobility_model/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GulliView.dir/TagFamily.cpp.o -MF CMakeFiles/GulliView.dir/TagFamily.cpp.o.d -o CMakeFiles/GulliView.dir/TagFamily.cpp.o -c /home/gulliview/advanced_mobility_model/src/TagFamily.cpp
 
 src/CMakeFiles/GulliView.dir/TagFamily.cpp.i: cmake_force
@@ -214,11 +326,19 @@ GulliView_OBJECTS = \
 "CMakeFiles/GulliView.dir/GulliView/Main.cpp.o" \
 "CMakeFiles/GulliView.dir/GulliView/AccelerationTracker.cpp.o" \
 "CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.o" \
-"CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o" \
 "CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o" \
-"CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o" \
 "CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o" \
 "CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o" \
+"CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o" \
 "CMakeFiles/GulliView.dir/CameraUtil.cpp.o" \
 "CMakeFiles/GulliView.dir/TagFamily.cpp.o"
 
@@ -228,11 +348,19 @@ GulliView_EXTERNAL_OBJECTS =
 GulliView: src/CMakeFiles/GulliView.dir/GulliView/Main.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/GulliView/AccelerationTracker.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/GulliView/AngleTracker.cpp.o
-GulliView: src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/GulliView/CalibrateCameras.cpp.o
-GulliView: src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/DebugLogger.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/FastSearch.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/FastSearchFunctions.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/FastThread.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/NiceThread.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/ProcessCamera.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o
+GulliView: src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/CameraUtil.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/TagFamily.cpp.o
 GulliView: src/CMakeFiles/GulliView.dir/build.make
@@ -240,7 +368,7 @@ GulliView: /usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.74.0
 GulliView: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0
 GulliView: /usr/local/lib/libapriltag.so
 GulliView: src/CMakeFiles/GulliView.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable ../GulliView"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/gulliview/advanced_mobility_model/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Linking CXX executable ../GulliView"
 	cd /home/gulliview/advanced_mobility_model/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/GulliView.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
