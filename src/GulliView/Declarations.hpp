@@ -30,22 +30,31 @@
 #define TIME_PERIOD "VT25"
 #define VERSION "53"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT ""
+#define COMMENT "old core values"
 
 #define ENABLE_FAST_LOGS        true                    // Enables fast thread log output files
-#define ENABLE_NICE_LOGS        false                    // Enables nice thread log output files
-#define ENABLE_PRODUCER_LOGS    false                    // Enables producer thread log output files
+#define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
+#define ENABLE_PRODUCER_LOGS    true                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
 #define LIVE_FEED               false                   // If the cameras live feed or recordings from RECORDING_FOLDER are used
-#define RECORDING_FOLDER        "recordings_original"       // Folder to get recordings from
+#define RECORDING_FOLDER        "recordings_original"   // Folder to get recordings from
 
-#define FAST_THREAD_NUM         4                       // Start at here
-#define FAST_THREAD_COUNT       4                       // Count this many
-#define NICE_THREAD_NUM         0                       // Start at here
-#define NICE_THREAD_COUNT       4                       // Count this many
-#define PRODUCER_THREAD_NUM     8                      // Start at here
-#define PRODUCER_THREAD_COUNT   4                       // Count this many
+// Modified
+// #define FAST_THREAD_NUM         0    // Start at here
+// #define FAST_THREAD_COUNT       10   // Count this many
+// #define NICE_THREAD_NUM         10   // Start at here
+// #define NICE_THREAD_COUNT       2    // Count this many
+// #define PRODUCER_THREAD_NUM     12   // Start at here
+// #define PRODUCER_THREAD_COUNT   4    // Count this many
+
+// Standard
+#define FAST_THREAD_NUM         4    // Start at here
+#define FAST_THREAD_COUNT       4    // Count this many
+#define NICE_THREAD_NUM         0    // Start at here
+#define NICE_THREAD_COUNT       4    // Count this many
+#define PRODUCER_THREAD_NUM     8    // Start at here
+#define PRODUCER_THREAD_COUNT   4    // Count this many
 
 
 // Older defines
