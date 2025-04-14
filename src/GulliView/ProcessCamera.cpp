@@ -202,4 +202,5 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     nice_consumer.join();
     fast_consumer.join();
     producer.join();
+    return 0;
 }

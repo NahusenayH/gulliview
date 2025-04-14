@@ -372,7 +372,7 @@ int fast_consume_frame(int camera_id,
 
 #if PRINT_DEBUG_MSG
         // modified 2025
-        file_output <<"CAM#"<<CAM_NAME<<" "<< "PART SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
+        file_output <<"CAM#"<<CAM_NAME<<" PART SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
 #endif
 
         fast_thread_logger.log_operation(DebugLogger::PART_SEARCH_TIME, search_time, fast_consumer_counter[camera_id].load());
