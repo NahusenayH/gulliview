@@ -28,9 +28,9 @@
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "36"
+#define VERSION "37"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "Optimizing code"
+#define COMMENT "Logging in fast thread done"
 
 #define ENABLE_LOGS             true            // Enables log output files
 #define LIVE_FEED               false           // If the cameras live feed or recordings from RECORDING_FOLDER are used

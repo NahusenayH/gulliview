@@ -302,12 +302,10 @@ int fast_consume_frame(int camera_id,
 
 #if ENABLE_LOGS
         consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);
+        fast_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_wait_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
 
-        fast_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_wait_timer.stop_us(), fast_consumer_counter[camera_id].load());
-        
-
-        auto transform_start = std::chrono::high_resolution_clock::now();        
+        LogTime transform_frame_timer;
 
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
 
@@ -322,16 +320,12 @@ int fast_consume_frame(int camera_id,
                 gray.rows,
                 gray.cols,
                 gray.data
-        };
+        }; 
         
-        auto transform_end = std::chrono::high_resolution_clock::now();
-
-        // Calculation time (in microseconds)
-        auto transform_time = std::chrono::duration_cast<std::chrono::microseconds>(transform_end - transform_start).count();        
-        
-        // file_output << "Transform time: " << std::fixed << std::setprecision(2) << transform_time / 1000.0 << " ms" << endl;
-
-        fast_thread_logger.log_operation(DebugLogger::TRANSFORM_TIME, transform_time, fast_consumer_counter[camera_id].load());
+#if ENABLE_LOGS
+        transform_frame_timer.stop_ms("transform_frame", file_output);
+        fast_thread_logger.log_operation(DebugLogger::TRANSFORM_TIME, transform_frame_timer.stop_us(), fast_consumer_counter[camera_id].load());
+#endif
 
         // zarray_t *detections = apriltag_detector_detect(detector, &im);
         zarray_t *detections = zarray_create(sizeof(apriltag_detection_t*)); //2023: from FastSearch-code
@@ -360,7 +354,7 @@ int fast_consume_frame(int camera_id,
         fast_thread_logger.log_operation(DebugLogger::PART_SEARCH_TIME, fast_Search_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
 
-        auto process_start = std::chrono::high_resolution_clock::now();
+        LogTime process_timer;
 
         if (!use_exhaustive_search && zarray_size(detections) != 0) {
 
@@ -613,16 +607,10 @@ int fast_consume_frame(int camera_id,
             tag->is_detected = false; //clears variable for next search
         }
 
-
-        auto process_end = std::chrono::high_resolution_clock::now();
-
-        double process_duration = std::chrono::duration_cast<std::chrono::microseconds>(process_end - process_start).count();
-
-#if PRINT_DEBUG_MSG           
-        file_output << "Process time: " << std::fixed << std::setprecision(2) << process_duration / 1000.0 << " ms" << std::endl;
+#if ENABLE_LOGS           
+        process_timer.stop_ms("Process time", file_output);
+        fast_thread_logger.log_operation(DebugLogger::PROCESS_TIME, process_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
-
-    fast_thread_logger.log_operation(DebugLogger::PROCESS_TIME, process_duration, fast_consumer_counter[camera_id].load());
 
         bool have_exhaustive_searched = false;
 
