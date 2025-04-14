@@ -80,3 +80,7 @@ coverage/
 # System-specific files
 Thumbs.db
 .DS_Store
+
+# Compiled code
+build/Transmitter
+build/GulliView
