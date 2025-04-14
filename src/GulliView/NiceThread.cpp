@@ -78,7 +78,6 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     // file_output << "After setting, Thread priority: " << sched_param.sched_priority << std::endl;
 
     auto start = std::chrono::system_clock::now().time_since_epoch();
-    auto start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(start).count();
     std::queue<Message> messageQueue; // added 2024
 
 
@@ -101,12 +100,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     // detector->refine_edges = 0; // Turn off edge refinement
 
     uint32_t seq = 0;
-    int global_search_counter = 0;
     int loop_count = 0;
-    int hz_counter = 0;
-    int tot_hz = 0;
-    int avg_hz = 0;
-    int sum_hz = 0;
 
     while (true) {
 
@@ -137,18 +131,11 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // Start measurement
         auto loop_start = std::chrono::high_resolution_clock::now();
 
-
         float avg_time_gap = -1;
-        auto while_start = std::chrono::system_clock::now().time_since_epoch();
-        auto while_start_ms = std::chrono::duration_cast<std::chrono::milliseconds>(while_start).count();
-
-
-
 
         auto detectionTime = std::chrono::system_clock::now().time_since_epoch();
         uint64_t detectionTime_ms = std::chrono::duration_cast<std::chrono::milliseconds>(detectionTime).count();
 
-        boost::posix_time::ptime import_start = boost::posix_time::microsec_clock::universal_time();
 
 #if PRODUCE_FRAME_MODE == 1 || PRODUCE_FRAME_MODE == 3
 
@@ -231,26 +218,11 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         nice_thread_logger.log_operation(DebugLogger::TRANSFORM_TIME, transform_time, nice_consumer_counter[camera_id].load());
 
-        // ptime search_start = boost::posix_time::microsec_clock::universal_time();
-
-        // zarray_t *detections = apriltag_detector_detect(detector, &im);
         zarray_t *detections = zarray_create(sizeof(apriltag_detection_t*)); //2023: from FastSearch-code
-
-        // add 2025
-
-        // Start time measurement
-        // ptime search_start1 = boost::posix_time::microsec_clock::universal_time();
-
-        // Initialize frame count
-        uint32_t frame_count = 0;
-
-        // Before search
-        uint32_t frames_before_search = shared_frame_count.load();
 
         //Use exhaustive search
 
         loop_count = 1;
-        global_search_counter = 0;
         //Clear previous coordinates of all tags.
         for (Tag* tag = tags; tag < tags + MAX_TAG_ID; tag++) {
             reset_tag(im.width, im.height, tag);
@@ -259,8 +231,6 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         auto search_start = std::chrono::high_resolution_clock::now();
 
         boost::posix_time::ptime latest_frame = boost::posix_time::microsec_clock::universal_time();
-
-        uint32_t import_time = (latest_frame - import_start).total_milliseconds();
             
         detections = exhaustive_search(im, detector);
 
@@ -283,7 +253,6 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         if (zarray_size(detections) != 0) {
             // Get time of frame/detection----------------
 
-            size_t index = 0;
             Message buf {
                 htobe32(1) /* type */ ,
                 htobe32(2) /* subtype */,
@@ -316,7 +285,6 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
             
             static boost::posix_time::ptime epoch(boost::gregorian::date(1970,1,1));
-            uint64_t msecs = (import_start - epoch).total_milliseconds();
 
             buf.cam_id = htobe32(CAM_NAME);
             int n_detections = zarray_size(detections);
@@ -384,28 +352,6 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
                     throw std::invalid_argument("Unsupported device number");
                 }
 
-
-
-                // Then call estimate_tag_pose.
-                apriltag_pose_t pose;
-                double err = estimate_tag_pose(&info, &pose);
-                // Do something with pose.
-                
-                // Now, pose.t should contain the translation vector (x, y, z)
-                // if (pose.t) {
-                //     // Assuming pose.t is a pointer to a matd_t structure representing a 3x1 translation vector
-                //     double x = pose.t->data[0];  // The x-coordinate
-                //     double y = pose.t->data[1];  // The y-coordinate
-                //     double z = pose.t->data[2];  // The z-coordinate
-                    
-                //     // Print the coordinates
-
-                //     detection_data.tags[dd->id].space_coords = DetectionData::SpaceCoordinates{x, y, z};
-
-
-                // }
-
-
             }
 
             buf.length = htobe32(n_detections);
@@ -414,19 +360,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
         }
 
-
-        auto copy_start = std::chrono::high_resolution_clock::now();
-
         std::copy(std::begin(tags), std::end(tags), detection_data.tag_data);
-
-
-        // End measurement
-        auto copy_end = std::chrono::high_resolution_clock::now();
-
-        // Calculation time (in microseconds)
-        auto copy_duration = std::chrono::duration_cast<std::chrono::microseconds>(copy_end - copy_start).count();
-
-        // std::cout << "Execution time for the copy: " << copy_duration << " microseconds" << std::endl;
 
         auto start = std::chrono::high_resolution_clock::now();
 
