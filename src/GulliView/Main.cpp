@@ -286,7 +286,7 @@ std::unordered_map<int, int> cameraMap = {
 #include "LogTime.hpp"
 // Add general settings to log
 void general_log(){
-    #if ENABLE_LOGS
+#if ENABLE_ANY_LOGS
     std::ostringstream filename;
     filename << "output/general.log";
     std::ofstream file_output(filename.str(), std::ios::out);
@@ -323,7 +323,10 @@ void general_log(){
     file_output << "BUFFER_SIZE: "                  << BUFFER_SIZE                  << std::endl;
     file_output << "GLOBAL_SEARCH_MIN: "            << GLOBAL_SEARCH_MIN            << std::endl;
 
-    file_output << "ENABLE_LOGS: "                  << ENABLE_LOGS                  << std::endl;
+    file_output << "ENABLE_FAST_LOGS: "             << ENABLE_FAST_LOGS             << std::endl;
+    file_output << "ENABLE_NICE_LOGS: "             << ENABLE_NICE_LOGS             << std::endl;
+    file_output << "ENABLE_PRODUCER_LOGS: "         << ENABLE_PRODUCER_LOGS         << std::endl;
+
     file_output << "LIVE_FEED: "                    << LIVE_FEED                    << std::endl;
     
     #if !LIVE_FEED
@@ -367,7 +370,7 @@ void general_log(){
     file_output << "1 timer total ms penalty: " << timer_ms.stop_ns()/lenght << " ns" << std::endl;
     
     file_output.close();
-    #endif
+#endif
 }
 
 // Main function

@@ -177,7 +177,8 @@ int process_camera(int camera_id, GulliViewOptions opts) {
 
     std::thread fast_consumer(
         fast_consume_frame, 
-        CAM_NAME, 
+        CAM_NAME,
+        CAM_NAME,//thread_id,
         std::ref(sem), 
         std::ref(sem_1), 
         shared_memory, // Passing raw pointers is fine

@@ -33,6 +33,7 @@
 float get_uncertainty();
 
 int fast_consume_frame(int camera_id, 
+                        int thread_id, 
                         boost::interprocess::named_semaphore& sem, 
                         boost::interprocess::named_semaphore& sem_1, 
                         char* shared_memory, 

@@ -72,7 +72,8 @@ float get_uncertainty() {
     return t_max - t_min;
 }
 
-int fast_consume_frame(int camera_id, 
+int fast_consume_frame(int camera_id,
+                        int thread_id, 
                         boost::interprocess::named_semaphore& sem, 
                         boost::interprocess::named_semaphore& sem_1, 
                         char* shared_memory, 
@@ -91,7 +92,8 @@ int fast_consume_frame(int camera_id,
     CPU_ZERO(&cpuset);
 
     // bind the thread to the corresponding core
-    CPU_SET(camera_id + 4, &cpuset);
+    int thread_num = PRODUCER_THREAD_NUM + thread_id % PRODUCER_THREAD_COUNT;
+    CPU_SET(thread_num, &cpuset);
 
     // set the CPU affinity of the thread
     if (pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset) != 0) {
@@ -300,7 +302,7 @@ int fast_consume_frame(int camera_id,
         fast_consumer_counter[camera_id]=producer_counter[camera_id].load();
         frame = buffer[camera_id][fast_consumer_counter[camera_id].load()];
 
-#if ENABLE_LOGS
+#if ENABLE_FAST_LOGS
         consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);
         fast_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_wait_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
@@ -322,7 +324,7 @@ int fast_consume_frame(int camera_id,
                 gray.data
         }; 
         
-#if ENABLE_LOGS
+#if ENABLE_FAST_LOGS
         transform_frame_timer.stop_ms("transform_frame", file_output);
         fast_thread_logger.log_operation(DebugLogger::TRANSFORM_TIME, transform_frame_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
@@ -349,7 +351,7 @@ int fast_consume_frame(int camera_id,
         fast_search(im, latest_frame, v_max, a_max, alpha,
                         min_search_dim, CAM_NAME, time_uncertainty, detector,
                         detections, tags, use_exhaustive_search, file_output);
-#if ENABLE_LOGS
+#if ENABLE_FAST_LOGS
         fast_Search_timer.stop_ms("Fast search in fast thread", file_output);
         fast_thread_logger.log_operation(DebugLogger::PART_SEARCH_TIME, fast_Search_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
@@ -607,7 +609,7 @@ int fast_consume_frame(int camera_id,
             tag->is_detected = false; //clears variable for next search
         }
 
-#if ENABLE_LOGS           
+#if ENABLE_FAST_LOGS           
         process_timer.stop_ms("Process time", file_output);
         fast_thread_logger.log_operation(DebugLogger::PROCESS_TIME, process_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
@@ -645,7 +647,7 @@ int fast_consume_frame(int camera_id,
 
             std::copy(std::begin(detection_data.tag_data), std::end(detection_data.tag_data), tags);
 
-#if ENABLE_LOGS
+#if ENABLE_FAST_LOGS
             global_search_timer.stop_ms("Global search in fast thread", file_output);
             fast_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, global_search_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
@@ -738,7 +740,7 @@ int fast_consume_frame(int camera_id,
         if (hz_counter == 2*FPS) {
             avg_hz = 1 / (static_cast<float>(tot_hz)/(2*FPS*1000));
 
-#if ENABLE_LOGS
+#if ENABLE_FAST_LOGS
             file_output << "Frequency: " << avg_hz << " Hz"  << std::endl;
 #endif
             hz_counter = 0;
@@ -748,7 +750,7 @@ int fast_consume_frame(int camera_id,
 
         // End measurement
         int elapsed_time = timer.stop_us();
-#if ENABLE_LOGS
+#if ENABLE_FAST_LOGS
         file_output << "Loop: count=" << total_loop_count - 1 << ", trial=" << trial << ", Duration=" << timer.stop_us() << " us" << std::endl;;
 #endif
         // Maybe remove?

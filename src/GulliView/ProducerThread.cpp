@@ -24,7 +24,8 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
         CPU_ZERO(&cpuset);
     
         // bind the thread to the corresponding core
-        CPU_SET(camera_id + 8, &cpuset);
+        int thread_num = PRODUCER_THREAD_NUM + camera_id % PRODUCER_THREAD_COUNT;
+        CPU_SET(thread_num, &cpuset);
     
         // set the CPU affinity of the thread
         if (pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset) != 0) {
@@ -51,13 +52,14 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             std::cerr << "Error: Unable to get thread scheduling parameters" << std::endl;
             return;
         }
-    
+
         std::ostringstream filename;
-        filename << "output-producer/camera_" << camera_id << "_output-producer.log";
+        filename << "output/camera_" << camera_id << "_output-producer.log";
         std::ofstream file_output(filename.str(), std::ios::out);
     
         while (true)
         {
+            LogTime producer_timer;
     
             // Get the scheduling policy and priority of the current thread
             if (pthread_getschedparam(pthread_self(), &policy, &param) != 0) {
@@ -75,14 +77,13 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             // Find the core where the current thread is running
             for (int i = 0; i < CPU_SETSIZE; ++i) {
                 if (CPU_ISSET(i, &cpuset)) {
+#if ENABLE_PRODUCER_LOGS
                     file_output << "Core number: " << i << std::endl;
+#endif
                     break;
                 }
             }
     #endif
-    
-            // Start
-            auto start = std::chrono::high_resolution_clock::now();
     
             unsigned int next = (producer_counter[camera_id].load() + 1) % BUFFER_SIZE;
     
@@ -93,19 +94,10 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             *cap >> buffer[camera_id][next];
             producer_counter[camera_id] = next;
     
-            // End measurement
-            auto end = std::chrono::high_resolution_clock::now();
     
-            // Calculation time (in microseconds)
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
-    
-    #if PRINT_DEBUG_MSG
-            // printing time
-            file_output << "Execution time for the producer: " << std::fixed << std::setprecision(2) << duration << " ms" << std::endl;
-    #endif
-            // added 2025
-            // Increment the shared frame counter
-            // shared_frame_count++;
+#if ENABLE_PRODUCER_LOGS
+            producer_timer.stop_ms("Produce frame", file_output);
+#endif
         }
     
         file_output.close();

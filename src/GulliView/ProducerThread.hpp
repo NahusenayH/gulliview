@@ -25,6 +25,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 
 #include "Declarations.hpp"
+#include "LogTime.hpp"
 
 void produce_frame(int camera_id, cv::VideoCapture *cap);
 

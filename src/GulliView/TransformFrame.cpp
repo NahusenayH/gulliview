@@ -33,13 +33,13 @@ bool transform_frame(cv::Mat& frame,
 
     LogTime remap_timer;
     // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
-#if ENABLE_LOGS
+#if ENABLE_ANY_LOGS
     remap_timer.stop_ms("Remap", file_output);
 #endif
 
     LogTime color_timer;
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-#if ENABLE_LOGS
+#if ENABLE_ANY_LOGS
     color_timer.stop_ms("Transform color", file_output);
 #endif
 

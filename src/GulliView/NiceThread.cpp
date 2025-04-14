@@ -25,7 +25,7 @@ zarray* exhaustive_search(image_u8_t& im, apriltag_detector_t* detector) {
 int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem, boost::interprocess::named_semaphore& sem_1, char* shared_memory, SharedData *ptr, cv::Mat frame, cv::Mat gray, int CAM_NAME, cv::Mat map1, cv::Mat map2, GulliViewOptions opts, std::string win, DebugLogger& nice_thread_logger) {
 
     std::ostringstream filename;
-    filename << "output-nice/camera_" << camera_id << "_output-nice.log";
+    filename << "output/camera_" << camera_id << "_output-nice.log";
     std::ofstream file_output(filename.str(), std::ios::out);
 
     // pthread_t current_thread = pthread_self();
@@ -38,7 +38,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     CPU_ZERO(&cpuset);
 
     // Bind the thread to the corresponding core
-    CPU_SET(camera_id, &cpuset);
+    int thread_num = NICE_THREAD_NUM + (camera_id % NICE_THREAD_COUNT);
+    CPU_SET(thread_num, &cpuset);
 
     // Set the CPU affinity of the thread
     if (pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset) != 0) {
@@ -373,9 +374,6 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         search_buffer[camera_id][search_next] = detection_data;
         search_producer_counter[camera_id] = search_next;
 
-
-
-
         // End measurement
         auto end = std::chrono::high_resolution_clock::now();
 
@@ -384,7 +382,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
 #if PRINT_DEBUG_MSG
         // printing time
-        file_output << "Execution time for the producer: " << std::fixed << std::setprecision(2) << duration / 1000.0 << " ms" << std::endl;
+        file_output << "Nice thread waiting for producer: " << std::fixed << std::setprecision(2) << duration / 1000.0 << " ms" << std::endl;
 #endif
 
         nice_thread_logger.log_operation(DebugLogger::PROCESS_TIME, duration, nice_consumer_counter[camera_id].load());
