@@ -28,7 +28,7 @@
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "35"
+#define VERSION "36"
 // change this text to denote version, this is saved by log script to catagorize
 #define COMMENT "Optimizing code"
 

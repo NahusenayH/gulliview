@@ -16,6 +16,7 @@
 ********************************************************************/
 
 #include "FastThread.hpp"
+#include "LogTime.hpp"
 
 std::map<int, Eigen::Matrix4d> camera_to_world_matrices = {
     {0, (Eigen::Matrix4d() << 2270.416948, 0.0, 1997.865610, 0.0,
@@ -290,7 +291,7 @@ int fast_consume_frame(int camera_id,
         auto init_start = std::chrono::high_resolution_clock::now();
 
         // Start measurement
-        auto consumer_start = std::chrono::high_resolution_clock::now();
+        LogTime consumer_wait_timer;
 
         while(fast_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -299,21 +300,13 @@ int fast_consume_frame(int camera_id,
         fast_consumer_counter[camera_id]=producer_counter[camera_id].load();
         frame = buffer[camera_id][fast_consumer_counter[camera_id].load()];
 
-        // End measurement
-        auto consumer_end = std::chrono::high_resolution_clock::now();
-
-        // Calculation time (in microseconds)
-        auto consumer_duration = std::chrono::duration_cast<std::chrono::microseconds>(consumer_end - consumer_start).count();
-
-#if PRINT_DEBUG_MSG
-        // printing time
-        file_output << "Execution time for the consumer: " << std::fixed << std::setprecision(2) << consumer_duration / 1000.0 << " ms" << std::endl;
+#if ENABLE_LOGS
+        consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);
 #endif
 
-        fast_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_duration, fast_consumer_counter[camera_id].load());
-
-        // ptime transform_start = boost::posix_time::microsec_clock::universal_time();
+        fast_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_wait_timer.stop_us(), fast_consumer_counter[camera_id].load());
         
+
         auto transform_start = std::chrono::high_resolution_clock::now();        
 
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
@@ -356,26 +349,16 @@ int fast_consume_frame(int camera_id,
 
         fast_thread_logger.log_operation(DebugLogger::INITIALIZE_TIME, init_duration, fast_consumer_counter[camera_id].load());
 
-        auto search_start = std::chrono::high_resolution_clock::now();
-
+        LogTime fast_Search_timer;
         std::copy(std::begin(tags), std::end(tags), previous_tags);
-
         boost::posix_time::ptime latest_frame = boost::posix_time::microsec_clock::universal_time();
-
         fast_search(im, latest_frame, v_max, a_max, alpha,
                         min_search_dim, CAM_NAME, time_uncertainty, detector,
                         detections, tags, use_exhaustive_search, file_output);
-
-        auto search_end = std::chrono::high_resolution_clock::now();   // End measurement
-        double search_time = std::chrono::duration_cast<std::chrono::microseconds>(search_end - search_start).count();
-
-
-#if PRINT_DEBUG_MSG
-        // modified 2025
-        file_output <<"CAM#"<<CAM_NAME<<" PART SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
+#if ENABLE_LOGS
+        fast_Search_timer.stop_ms("Fast search in fast thread", file_output);
+        fast_thread_logger.log_operation(DebugLogger::PART_SEARCH_TIME, fast_Search_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
-
-        fast_thread_logger.log_operation(DebugLogger::PART_SEARCH_TIME, search_time, fast_consumer_counter[camera_id].load());
 
         auto process_start = std::chrono::high_resolution_clock::now();
 
@@ -647,7 +630,7 @@ int fast_consume_frame(int camera_id,
 
         if (use_exhaustive_search || global_search_counter == GLOBAL_SEARCH_MIN) {
 
-            search_start = std::chrono::high_resolution_clock::now();
+            LogTime global_search_timer;
 
 #if PRINT_DEBUG_MSG
             file_output <<"CAM#"<<CAM_NAME<<" " << "Using GLOBAL SEARCH ##############################################\n";
@@ -674,13 +657,10 @@ int fast_consume_frame(int camera_id,
 
             std::copy(std::begin(detection_data.tag_data), std::end(detection_data.tag_data), tags);
 
-            search_end = std::chrono::high_resolution_clock::now();
-            search_time = std::chrono::duration_cast<std::chrono::microseconds>(search_end - search_start).count();
-
-#if PRINT_DEBUG_MSG
-            file_output <<"CAM#"<<CAM_NAME<<" "<< "GLOBAL SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
+#if ENABLE_LOGS
+            global_search_timer.stop_ms("Global search in fast thread", file_output);
+            fast_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, global_search_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
-            fast_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, search_time, fast_consumer_counter[camera_id].load());
 
             float max_temp_alpha = 0.0f;
             float max_temp_a = 0.0f;
