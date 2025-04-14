@@ -8,7 +8,7 @@ OUTPUT_DIR="./recordings"
 mkdir -p "$OUTPUT_DIR"
 
 # set recording duration in seconds
-DURATION=
+DURATION=40
 
 # simultaneously record from all cameras
 for CAM in "${CAMERAS[@]}"; do
