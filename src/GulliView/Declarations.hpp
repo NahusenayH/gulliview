@@ -38,7 +38,7 @@
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
 #define LIVE_FEED               false                   // If the cameras live feed or recordings from RECORDING_FOLDER are used
-#define RECORDING_FOLDER        "recordings_original"   // Folder to get recordings from
+#define RECORDING_FOLDER        "recordings_2bot"       // Folder to get recordings from
 
 // Modified
 // #define FAST_THREAD_NUM         0    // Start at here

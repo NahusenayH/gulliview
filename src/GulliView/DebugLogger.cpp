@@ -42,7 +42,7 @@ void DebugLogger::write_to_file_if_needed(uint32_t loop_time, const std::string&
     if (loop_time > 100000) {
         std::ofstream file(file_name, std::ios::app);
         if (file.is_open()) {
-            file << "Thread: " << thread_name << ", Loop time exceeded: " << std::fixed << std::setprecision(2)<< loop_time / 1000.0 << "ms\n";
+            file << "Thread: " << thread_name << ", Loop time exceeded: " << std::fixed << std::setprecision(2)<< loop_time / 1000.0 << " ms\n";
             // size_t start_index = is_buffer_full ? write_index : 0;
             size_t end_index = is_buffer_full ? buffer_capacity : write_index;
 
