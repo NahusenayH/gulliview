@@ -15,6 +15,8 @@
 * Copyright (c) 2025 Elias Svensson <eliasve@chalmers.se>
 ********************************************************************/
 
+#include <filesystem>
+
 #include "ProcessCamera.hpp"
 
 // DEFINES GLOBAL VARIABLES
@@ -287,6 +289,9 @@ std::unordered_map<int, int> cameraMap = {
 // Add general settings to log
 void general_log(){
 #if ENABLE_ANY_LOGS
+    for (const auto& entry : std::filesystem::directory_iterator("output")) {
+        std::filesystem::remove(entry.path());
+    }
     std::ostringstream filename;
     filename << "output/general.log";
     std::ofstream file_output(filename.str(), std::ios::out);

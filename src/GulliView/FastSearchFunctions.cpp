@@ -100,7 +100,7 @@ void partial_search(const image_u8_t& im,
     LogTime timer;
     image_u8_t* im_part = get_partial_image(im, area);
 #if ENABLE_FAST_LOGS
-    timer.stop_us("get_partial_image", file_output);
+    timer.stop_ms("get_partial_image", file_output);
 #endif
  
     if (parent_timer->stop_us() > 17000)
@@ -111,7 +111,7 @@ void partial_search(const image_u8_t& im,
     //detect tags in part image
     zarray_t *detection = apriltag_detector_detect(detector, im_part);
 #if ENABLE_FAST_LOGS
-    apriltag_detector_detect_timer.stop_us("apriltag_detector_detect", file_output);
+    apriltag_detector_detect_timer.stop_ms("apriltag_detector_detect", file_output);
 #endif
  
     if (parent_timer->stop_us() > 17000)

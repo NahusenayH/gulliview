@@ -751,7 +751,7 @@ int fast_consume_frame(int camera_id,
         // End measurement
         int elapsed_time = timer.stop_us();
 #if ENABLE_FAST_LOGS
-        file_output << "Loop: count=" << total_loop_count - 1 << ", trial=" << trial << ", Duration=" << timer.stop_us() << " us" << std::endl;;
+        file_output << "Loop: count=" << total_loop_count - 1 << ", trial=" << trial << ", Duration=" << timer.stop_ms() << " ms" << std::endl;;
 #endif
         // Maybe remove?
         fast_thread_logger.log_operation(DebugLogger::LOOP_TIME, elapsed_time, fast_consumer_counter[camera_id].load());

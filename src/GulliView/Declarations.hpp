@@ -28,13 +28,13 @@
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "53"
+#define VERSION "55"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "old core values"
+#define COMMENT "cleaning log folder before start"
 
 #define ENABLE_FAST_LOGS        true                    // Enables fast thread log output files
 #define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
-#define ENABLE_PRODUCER_LOGS    true                   // Enables producer thread log output files
+#define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
 #define LIVE_FEED               false                   // If the cameras live feed or recordings from RECORDING_FOLDER are used
