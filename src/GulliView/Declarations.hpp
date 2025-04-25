@@ -34,7 +34,7 @@
 
 #define ENABLE_FAST_LOGS        true                    // Enables fast thread log output files
 #define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
-#define ENABLE_PRODUCER_LOGS    true                   // Enables producer thread log output files
+#define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
 #define LIVE_FEED               false                   // If the cameras live feed or recordings from RECORDING_FOLDER are used
