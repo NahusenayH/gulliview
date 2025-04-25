@@ -90,23 +90,23 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             while(next == fast_consumer_counter[camera_id].load() && next == nice_consumer_counter[camera_id].load()) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
-
             
-            cv::Mat frame;
-            *cap >> frame;
+            // Capture frame and save timestamp
+            cv::Mat raw_frame;
+            *cap >> raw_frame;
             LogTime frametime;
-
+            
+            // Create struct saving timestamp when frame was capured, used for latency evaluation
             FrameData frame_data;
             frame_data.frametime = frametime;
-            frame_data.frame = frame;
+            frame_data.frame = raw_frame.clone();
 
             // Store the frame data in the buffer
             buffer[camera_id][next] = frame_data;
+            producer_counter[camera_id].store(next, std::memory_order_release);
 
             // Update the producer counter to point to the next slot in the buffer
             producer_counter[camera_id] = next;
-
-    
     
 #if ENABLE_PRODUCER_LOGS
             producer_timer.stop_ms("Produce frame", file_output);
