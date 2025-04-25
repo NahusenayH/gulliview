@@ -84,3 +84,5 @@ Thumbs.db
 # Compiled code
 build/Transmitter
 build/GulliView
+
+GulliView noetic/

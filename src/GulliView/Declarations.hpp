@@ -40,15 +40,6 @@
 #define LIVE_FEED               false                   // If the cameras live feed or recordings from RECORDING_FOLDER are used
 #define RECORDING_FOLDER        "recordings_original"       // Folder to get recordings from
 
-// Modified
-// #define FAST_THREAD_NUM         0    // Start at here
-// #define FAST_THREAD_COUNT       10   // Count this many
-// #define NICE_THREAD_NUM         10   // Start at here
-// #define NICE_THREAD_COUNT       2    // Count this many
-// #define PRODUCER_THREAD_NUM     12   // Start at here
-// #define PRODUCER_THREAD_COUNT   4    // Count this many
-
-// Standard
 #define FAST_THREAD_NUM         4    // Start at here
 #define FAST_THREAD_COUNT       4    // Count this many
 #define NICE_THREAD_NUM         0    // Start at here
@@ -58,15 +49,15 @@
 
 
 // Older defines
-#define PRINT_DEBUG_MSG         false                    // Should soon be replaced by ENABLE_LOGS
+#define PRINT_DEBUG_MSG         false   // Should soon be replaced by ENABLE_LOGS
 #define FAST_SEARCH_ACC_TEST    false
 #define TIME_PROFILING          false
 
-#define USE_MEMORY_SHARING      false // added 2025
-#define USE_EWMA                true // added 2025
-#define BINDING_CPU_CORES       true // added 2025
+#define USE_MEMORY_SHARING      false
+#define USE_EWMA                true
+#define BINDING_CPU_CORES       true
 
-#define PRODUCE_FRAME_MODE      1 // added 2025
+#define PRODUCE_FRAME_MODE      1
 
 #define DEFAULT_TAG_FAMILY      "tag36h11" // tag36h11
 #define DEFAULT_IP              "127.0.0.1"
@@ -96,7 +87,13 @@ extern int nines;
 // Global shared frame counter (thread-safe)
 extern std::atomic<uint32_t> shared_frame_count;
 
-extern cv::Mat buffer[4][BUFFER_SIZE]; // modified 2025
+struct FrameData {
+    unsigned int frame_id;
+    std::chrono::high_resolution_clock::time_point timestamp;  // Use high_resolution_clock instead
+    cv::Mat frame;
+};
+
+extern FrameData buffer[4][BUFFER_SIZE]; // modified 2025
 
 typedef struct __attribute__ ((packed)) DetectionArea {
     int32_t x_start;
