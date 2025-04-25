@@ -153,7 +153,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         FrameData& frame_data = buffer[camera_id][fast_consumer_counter[camera_id].load()];
 
         // Extract the frame, frame ID, and timestamp
-        frame = frame_data.frame;
+        cv::Mat frame = frame_data.frame;
         LogTime frametime = frame_data.frametime;
 
         // End measurement
@@ -165,10 +165,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #if PRINT_DEBUG_MSG
         // printing time
         file_output << "Execution time for the consumer: " << std::fixed << std::setprecision(2) << consumer_duration / 1000.0 << " ms" << std::endl;
-#endif
-
         nice_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_duration, nice_consumer_counter[camera_id].load());
-
+#endif
 
         boost::posix_time::ptime transform_start = boost::posix_time::microsec_clock::universal_time();
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
