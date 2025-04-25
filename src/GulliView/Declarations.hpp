@@ -25,12 +25,14 @@
 
 #include "../Detections.h"
 
+#include "LogTime.hpp"
+
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "56"
+#define VERSION "57"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "remap added again"
+#define COMMENT "struct in frame buffers"
 
 #define ENABLE_FAST_LOGS        true                    // Enables fast thread log output files
 #define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
@@ -88,8 +90,7 @@ extern int nines;
 extern std::atomic<uint32_t> shared_frame_count;
 
 struct FrameData {
-    unsigned int frame_id;
-    std::chrono::high_resolution_clock::time_point timestamp;  // Use high_resolution_clock instead
+    LogTime frametime;  // Use high_resolution_clock instead
     cv::Mat frame;
 };
 

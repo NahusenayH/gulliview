@@ -91,14 +91,13 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
 
-            // Capture the next frame
+            
             cv::Mat frame;
             *cap >> frame;
+            LogTime frametime;
 
-            // Create a FrameData object
             FrameData frame_data;
-            frame_data.timestamp = std::chrono::high_resolution_clock::now();  // Using high_resolution_clock
-            frame_data.frame_id = producer_counter[camera_id].load();  
+            frame_data.frametime = frametime;
             frame_data.frame = frame;
 
             // Store the frame data in the buffer

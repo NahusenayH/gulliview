@@ -300,7 +300,13 @@ int fast_consume_frame(int camera_id,
         }
 
         fast_consumer_counter[camera_id]=producer_counter[camera_id].load();
-        frame = buffer[camera_id][fast_consumer_counter[camera_id].load()];
+
+        // Retrieve the FrameData object from the buffer using the fast consumer counter
+        FrameData& frame_data = buffer[camera_id][fast_consumer_counter[camera_id].load()];
+
+        // Extract the frame, frame ID, and timestamp
+        frame = frame_data.frame;
+        LogTime frametime = frame_data.frametime;
 
 #if ENABLE_FAST_LOGS
         consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);

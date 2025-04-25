@@ -39,7 +39,7 @@ std::vector<std::atomic<unsigned int>> search_producer_counter(4);
 std::vector<std::atomic<unsigned int>> search_consumer_counter(4);
 std::vector<std::atomic<unsigned int>> fast_consumer_counter(4);
 std::vector<std::atomic<unsigned int>> nice_consumer_counter(4);
-cv::Mat buffer[4][BUFFER_SIZE];
+FrameData buffer[4][BUFFER_SIZE];
 std::atomic<uint32_t> shared_frame_count(0);
 sig_atomic_t sig_stop = 0;
 
