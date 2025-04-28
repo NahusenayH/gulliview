@@ -17,6 +17,7 @@
 
 #include "FastThread.hpp"
 #include "LogTime.hpp"
+#include "Undistortion.hpp"
 
 std::map<int, Eigen::Matrix4d> camera_to_world_matrices = {
     {0, (Eigen::Matrix4d() << 2270.416948, 0.0, 1997.865610, 0.0,
@@ -375,6 +376,7 @@ int fast_consume_frame(int camera_id,
             // Camera coordinates for tag corners.
             std::vector<at::Point> camera_corner_detections(2*zarray_size(detections)); 
 
+            // is this one even relevant? elias2025
             for (int i = 0; i < zarray_size(detections); i++) {
                 apriltag_detection_t *dd;
                 zarray_get(detections, i, &dd);
@@ -383,6 +385,15 @@ int fast_consume_frame(int camera_id,
                 camera_corner_detections[2*i] = at::Point(dd->p[0][0], dd->p[0][1]);
                 camera_corner_detections[2*i+1] = at::Point(dd->p[3][0], dd->p[3][1]);
                 // Aron: Adjust for part image coordinates?
+
+                // elias2025 >>> ADD UNDISTORTION OF POINTS HERE
+
+
+
+                
+
+
+
                 camera_detections[i].x += tag->area.x_start;
                 camera_detections[i].y += tag->area.y_start;
 #if PRINT_DEBUG_MSG           
@@ -418,9 +429,24 @@ int fast_consume_frame(int camera_id,
 
                 Tag* previous_tag = previous_tags + dd->id;
 
+                // elias2025 >>> CONVERT TO GLOBAL COORDINATES HERE
+
+                cv::Mat distorted_points = (cv::Mat_<double>(4,2) << dd->p[3][0], dd->p[3][1],
+                                                                dd->p[2][0], dd->p[2][1],
+                                                                dd->p[1][0], dd->p[1][1],
+                                                                dd->p[0][0], dd->p[0][1]);
+                cv::Mat undistorted_points = undistort_points(distorted_points, camera_id);
+                std::cout << "distorted_points = " << distorted_points << " undistorted_points = " << undistorted_points << std::endl;
+                
+                // GLOBAL COORDINATION CALCULATION
+
+                cv::Mat world_position, world_rotation;
+                estimate_object_global_position(camera_id, undistorted_points, &world_position, &world_rotation);
+                std::cout << "world position = " << world_position << " world rotation = " << world_rotation << std::endl;
+
                 cv::Point2f* cornerDetection = 2*i + room_corner_detections.data();
                 cv::Point2f* detection = i + camera_detections.data();
-                update_tag(detection, cornerDetection, latest_frame, tag, file_output);
+                update_tag(detection, cornerDetection, latest_frame, tag, file_output); // change update tag so that it takes in the world position and rotation as well and stores it in the tag
                 detection = i + room_detections.data();
                 add_detection_to_msg(dd->id, detectionTime_ms, tag->x, tag->y, 
                                     tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
