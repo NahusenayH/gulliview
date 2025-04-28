@@ -241,6 +241,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             
         detections = exhaustive_search(im, detector);
 
+        file_output << detections << std::endl;
+
         auto search_end = std::chrono::high_resolution_clock::now();   // End measurement
         double search_time = std::chrono::duration_cast<std::chrono::microseconds>(search_end - search_start).count();
 
@@ -364,6 +366,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             buf.length = htobe32(n_detections);
 
             detection_data.storeMessage(buf);
+#if ENABLE_NICE_LOGS
+            frametime.stop_ms("Latency nice", file_output);
+#endif
 
         }
 

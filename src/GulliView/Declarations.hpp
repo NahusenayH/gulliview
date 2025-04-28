@@ -30,12 +30,12 @@
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "57"
+#define VERSION "59"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "struct in frame buffers"
+#define COMMENT "Added nice logs and change titles in logs"
 
 #define ENABLE_FAST_LOGS        true                    // Enables fast thread log output files
-#define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
+#define ENABLE_NICE_LOGS        true                   // Enables nice thread log output files
 #define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 

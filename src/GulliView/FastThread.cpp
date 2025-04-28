@@ -561,6 +561,10 @@ int fast_consume_frame(int camera_id,
             ptr->flag = 1;
             sem_1.post();
 
+#if ENABLE_FAST_LOGS
+            frametime.stop_ms("latency fast", file_output);
+#endif
+
         }
         // Producer: writes its own detection results to the neighbouring camera's buffer
         for (int i = 0; i < 2 && produce_buffers[i]; ++i) {
@@ -694,6 +698,7 @@ int fast_consume_frame(int camera_id,
 #endif
                 }
             }
+
 #if USE_EWMA
             if (!no_detected) {
                     alpha = angle_tracker.get_max_value(5);
@@ -716,6 +721,10 @@ int fast_consume_frame(int camera_id,
                 memcpy(&(ptr->msg), &detection_data.buf, sizeof(detection_data.buf));
                 ptr->flag = 1;
                 sem_1.post();
+
+#if ENABLE_FAST_LOGS
+                frametime.stop_ms("Latency fast/nice", file_output);
+#endif
 
                 detection_data.clearMessage();
             }
