@@ -431,19 +431,21 @@ int fast_consume_frame(int camera_id,
 
                 // elias2025 >>> CONVERT TO GLOBAL COORDINATES HERE
 
-                cv::Mat distorted_points = (cv::Mat_<double>(4,2) << dd->p[3][0], dd->p[3][1],
-                                                                dd->p[2][0], dd->p[2][1],
-                                                                dd->p[1][0], dd->p[1][1],
-                                                                dd->p[0][0], dd->p[0][1]);
+                int x_area_start = tag->area.x_start;
+                int y_area_start = tag->area.y_start;
+                cv::Mat distorted_points = (cv::Mat_<double>(4,2) << dd->p[3][0] + x_area_start, dd->p[3][1] + y_area_start,
+                                                                     dd->p[2][0] + x_area_start, dd->p[2][1] + y_area_start,
+                                                                     dd->p[1][0] + x_area_start, dd->p[1][1] + y_area_start,
+                                                                     dd->p[0][0] + x_area_start, dd->p[0][1]) + y_area_start;
                 cv::Mat undistorted_points = undistort_points(distorted_points, camera_id);
                 std::cout << "distorted_points = " << distorted_points << " undistorted_points = " << undistorted_points << std::endl;
                 
                 // GLOBAL COORDINATION CALCULATION
 
                 cv::Mat world_position, world_rotation;
-                estimate_object_global_position(camera_id, undistorted_points, &world_position, &world_rotation);
-                std::cout << "world position = " << world_position << " world rotation = " << world_rotation << std::endl;
-
+                world_position = estimate_object_global_position(camera_id, undistorted_points, &world_position, &world_rotation, frame);
+                std::cout << "world position = " << world_position << std::endl << std::endl << std::endl;//" world rotation = " << world_rotation << std::endl;
+                std::cout << "camera id = " << camera_id << std::endl;
                 cv::Point2f* cornerDetection = 2*i + room_corner_detections.data();
                 cv::Point2f* detection = i + camera_detections.data();
                 update_tag(detection, cornerDetection, latest_frame, tag, file_output); // change update tag so that it takes in the world position and rotation as well and stores it in the tag

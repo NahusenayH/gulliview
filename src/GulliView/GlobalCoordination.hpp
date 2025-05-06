@@ -1,4 +1,19 @@
-
+/*********************************************************************
+* This file is distributed as part of the C++ port of the APRIL tags
+* library. The code is licensed under GPLv2.
+*
+* Original author: Edwin Olson <ebolson@umich.edu>
+* C++ port and modifications: Matt Zucker <mzucker1@swarthmore.edu>
+* ----------------------- Modified ---------------------------------e
+* Code modified for project in Vision Based Localization for
+* Autonomous Vehicles at Chalmers University, Goteborg, Sweden
+* Modification Authors:
+* Copyright (c) 2013-2014 Andrew Soderberg-Rivkin <sandrew@student.chalmers.se>
+* Copyright (c) 2013-2014 Sanjana Hangal <sanjana@student.chalmers.se>
+* Copyright (c) 2014 Thomas Petig <petig@chalmers.se>
+* Copyright (c) 2025 Emil Nylander <emilnyla@chalmers.se>
+* Copyright (c) 2025 Elias Svensson <eliasve@chalmers.se>
+********************************************************************/
 
 
 #ifndef _GLOBALCOORDINATION_H_
@@ -29,7 +44,7 @@ cv::Mat average_mat(std::list<cv::Mat> mats);
 
 // Input: camera_id, obj2cam_rvec, obj2cam_tvec
 // Output: global position, global_rotation
-void estimate_object_global_position(int camera_id, cv::Mat points, cv::Mat* global_position, cv::Mat* global_rotation);
+cv::Mat estimate_object_global_position(int camera_id, cv::Mat points, cv::Mat* global_position, cv::Mat* global_rotation, cv::Mat image);
 
 
 #endif
