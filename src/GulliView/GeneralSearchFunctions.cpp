@@ -100,6 +100,8 @@ void add_detection_to_msg(const int id, uint64_t detectionTime_ms, const float r
 #endif
 }
 
+
+
 void reset_tag(const int image_width, const int image_height, Tag *tag) {
     tag->x = 0;
     tag->y = 0;
