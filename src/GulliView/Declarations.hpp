@@ -25,30 +25,23 @@
 
 #include "../Detections.h"
 
+#include "LogTime.hpp"
+
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
-#define TIME_PERIOD "VT25.Global"
-#define VERSION "56"
+#define TIME_PERIOD "VT25"
+#define VERSION "60"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "remap added again"
+#define COMMENT "Added nice logs and change titles in logs"
 
 #define ENABLE_FAST_LOGS        true                    // Enables fast thread log output files
-#define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
+#define ENABLE_NICE_LOGS        true                   // Enables nice thread log output files
 #define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
 #define LIVE_FEED               true                   // If the cameras live feed or recordings from RECORDING_FOLDER are used
 #define RECORDING_FOLDER        "recordings_original"       // Folder to get recordings from
 
-// Modified
-// #define FAST_THREAD_NUM         0    // Start at here
-// #define FAST_THREAD_COUNT       10   // Count this many
-// #define NICE_THREAD_NUM         10   // Start at here
-// #define NICE_THREAD_COUNT       2    // Count this many
-// #define PRODUCER_THREAD_NUM     12   // Start at here
-// #define PRODUCER_THREAD_COUNT   4    // Count this many
-
-// Standard
 #define FAST_THREAD_NUM         4    // Start at here
 #define FAST_THREAD_COUNT       4    // Count this many
 #define NICE_THREAD_NUM         0    // Start at here
@@ -58,15 +51,15 @@
 
 
 // Older defines
-#define PRINT_DEBUG_MSG         false                    // Should soon be replaced by ENABLE_LOGS
+#define PRINT_DEBUG_MSG         false   // Should soon be replaced by ENABLE_LOGS
 #define FAST_SEARCH_ACC_TEST    false
 #define TIME_PROFILING          false
 
-#define USE_MEMORY_SHARING      false // added 2025
-#define USE_EWMA                true // added 2025
-#define BINDING_CPU_CORES       true // added 2025
+#define USE_MEMORY_SHARING      false
+#define USE_EWMA                true
+#define BINDING_CPU_CORES       true
 
-#define PRODUCE_FRAME_MODE      1 // added 2025
+#define PRODUCE_FRAME_MODE      1
 
 #define DEFAULT_TAG_FAMILY      "tag36h11" // tag36h11
 #define DEFAULT_IP              "127.0.0.1"
@@ -96,7 +89,12 @@ extern int nines;
 // Global shared frame counter (thread-safe)
 extern std::atomic<uint32_t> shared_frame_count;
 
-extern cv::Mat buffer[4][BUFFER_SIZE]; // modified 2025
+struct FrameData {
+    LogTime frametime;  // Use high_resolution_clock instead
+    cv::Mat frame;
+};
+
+extern FrameData buffer[4][BUFFER_SIZE]; // modified 2025
 
 typedef struct __attribute__ ((packed)) DetectionArea {
     int32_t x_start;

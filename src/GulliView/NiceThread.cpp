@@ -148,7 +148,15 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         }
 
         nice_consumer_counter[camera_id]=producer_counter[camera_id].load();
-        frame = buffer[camera_id][nice_consumer_counter[camera_id].load()];
+        
+        // Retrieve the FrameData object from the buffer using the fast consumer counter
+        int index = producer_counter[camera_id].load(std::memory_order_acquire);
+        FrameData& frame_data = buffer[camera_id][index];
+        // FrameData& frame_data = buffer[camera_id][fast_consumer_counter[camera_id].load()];
+
+        // Extract the frame, frame ID, and timestamp
+        cv::Mat frame = frame_data.frame;
+        LogTime frametime = frame_data.frametime;
 
         // End measurement
         auto consumer_end = std::chrono::high_resolution_clock::now();
@@ -159,10 +167,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #if PRINT_DEBUG_MSG
         // printing time
         file_output << "Execution time for the consumer: " << std::fixed << std::setprecision(2) << consumer_duration / 1000.0 << " ms" << std::endl;
-#endif
-
         nice_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_duration, nice_consumer_counter[camera_id].load());
-
+#endif
 
         boost::posix_time::ptime transform_start = boost::posix_time::microsec_clock::universal_time();
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
@@ -234,6 +240,8 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         boost::posix_time::ptime latest_frame = boost::posix_time::microsec_clock::universal_time();
             
         detections = exhaustive_search(im, detector);
+
+        file_output << detections << std::endl;
 
         auto search_end = std::chrono::high_resolution_clock::now();   // End measurement
         double search_time = std::chrono::duration_cast<std::chrono::microseconds>(search_end - search_start).count();
@@ -358,6 +366,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             buf.length = htobe32(n_detections);
 
             detection_data.storeMessage(buf);
+#if ENABLE_NICE_LOGS
+            frametime.stop_ms("Latency nice", file_output);
+#endif
 
         }
 

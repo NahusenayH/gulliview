@@ -301,7 +301,15 @@ int fast_consume_frame(int camera_id,
         }
 
         fast_consumer_counter[camera_id]=producer_counter[camera_id].load();
-        frame = buffer[camera_id][fast_consumer_counter[camera_id].load()];
+
+        // Retrieve the FrameData object from the buffer using the fast consumer counter
+        int index = producer_counter[camera_id].load(std::memory_order_acquire);
+        FrameData& frame_data = buffer[camera_id][index];
+        // FrameData& frame_data = buffer[camera_id][fast_consumer_counter[camera_id].load()];
+
+        // Extract the frame, frame ID, and timestamp
+        cv::Mat frame = frame_data.frame;
+        LogTime frametime = frame_data.frametime;
 
 #if ENABLE_FAST_LOGS
         consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);
@@ -581,6 +589,10 @@ int fast_consume_frame(int camera_id,
             ptr->flag = 1;
             sem_1.post();
 
+#if ENABLE_FAST_LOGS
+            frametime.stop_ms("latency fast", file_output);
+#endif
+
         }
         // Producer: writes its own detection results to the neighbouring camera's buffer
         for (int i = 0; i < 2 && produce_buffers[i]; ++i) {
@@ -714,6 +726,7 @@ int fast_consume_frame(int camera_id,
 #endif
                 }
             }
+
 #if USE_EWMA
             if (!no_detected) {
                     alpha = angle_tracker.get_max_value(5);
@@ -736,6 +749,10 @@ int fast_consume_frame(int camera_id,
                 memcpy(&(ptr->msg), &detection_data.buf, sizeof(detection_data.buf));
                 ptr->flag = 1;
                 sem_1.post();
+
+#if ENABLE_FAST_LOGS
+                frametime.stop_ms("Latency fast/nice", file_output);
+#endif
 
                 detection_data.clearMessage();
             }
