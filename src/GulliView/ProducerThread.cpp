@@ -91,9 +91,20 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
             
-            // Capture frame and save timestamp
+            // Init frame
             cv::Mat raw_frame;
-            *cap >> raw_frame;
+
+            // try to capture a frame from the camera until one is caught or the timeout is reached.
+            for (int i = 0; raw_frame.empty(); i++) {
+                *cap >> raw_frame;
+
+                if (i >= 1) {
+                    std::cerr << "Frame capture timeout after " << i << " tries on camera " << camera_id << std::endl;
+                    return;
+                }
+            }
+
+            // Get timestamp of the frame
             LogTime frametime;
             
             // Create struct saving timestamp when frame was capured, used for latency evaluation

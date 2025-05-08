@@ -35,6 +35,8 @@ private:
     std::string name;
 public:
     LogTime();
+    void restart();
+    
     // Stop clock and print to log file
     void stop_ns(const std::string& name, std::ofstream& file){
         file << name << ": " << stop_ns() << " ns" << std::endl;
