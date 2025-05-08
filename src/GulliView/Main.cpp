@@ -288,10 +288,17 @@ std::unordered_map<int, int> cameraMap = {
 #include "LogTime.hpp"
 // Add general settings to log
 void general_log(){
-#if ENABLE_ANY_LOGS
+
+    // Check if the output directory exists, if not create it
+    if (!std::filesystem::exists("output")) {
+        std::filesystem::create_directory("output");
+    }
+
+    // Clear the output directory
     for (const auto& entry : std::filesystem::directory_iterator("output")) {
         std::filesystem::remove(entry.path());
     }
+
     std::ostringstream filename;
     filename << "output/general.log";
     std::ofstream file_output(filename.str(), std::ios::out);
@@ -375,7 +382,7 @@ void general_log(){
     file_output << "1 timer total ms penalty: " << timer_ms.stop_ns()/lenght << " ns" << std::endl;
     
     file_output.close();
-#endif
+
 }
 
 // Main function
@@ -383,8 +390,16 @@ int main(int argc, char **argv) {
     // Parsing command line arguments
     GulliViewOptions opts = parse_options(argc, argv);
 
+#if ENABLE_ANY_LOGS
     // Output general settings to log
     general_log();
+    
+    // Init main log file
+    std::ostringstream filename;
+    filename << "output/main.log";
+    std::ofstream file_output(filename.str(), std::ios::out);
+    LogTime main_timer;
+#endif
 
     // Doing graceful shutdown, prevents Linux USB system from crashing
     if (opts.device_num == 4)
@@ -417,11 +432,19 @@ int main(int argc, char **argv) {
         for (auto& t : threads) {
             t.join();
         }
+        std::cout << "All threads joined" << std::endl;
     }
     else {
         std::cerr << "Unsupported device_num: " << opts.device_num << std::endl;
         return 1; // Deal with unexpected situations
     }
+
+#if ENABLE_ANY_LOGS
+    main_timer.stop_s("Total time", file_output);
+#endif
+
+    file_output.close();
+    std::cout << "Exiting" << std::endl;
 
     return 0;
 }

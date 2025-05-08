@@ -141,11 +141,16 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #if PRODUCE_FRAME_MODE == 1 || PRODUCE_FRAME_MODE == 3
 
         // Start measurement
-        auto consumer_start = std::chrono::high_resolution_clock::now();
-
-        while(nice_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
+        LogTime consumer_wait_timer;
+        
+        // Wait for the producer to produce a frame
+        while (nice_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
+
+#if ENABLE_NICE_LOGS
+        consumer_wait_timer.stop_ms("Nice thread waiting for producer", file_output);
+#endif
 
         nice_consumer_counter[camera_id]=producer_counter[camera_id].load();
         
@@ -158,17 +163,11 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         cv::Mat frame = frame_data.frame;
         LogTime frametime = frame_data.frametime;
 
-        // End measurement
-        auto consumer_end = std::chrono::high_resolution_clock::now();
-
-        // Calculation time (in microseconds)
-        auto consumer_duration = std::chrono::duration_cast<std::chrono::microseconds>(consumer_end - consumer_start).count();
-
-#if PRINT_DEBUG_MSG
-        // printing time
-        file_output << "Execution time for the consumer: " << std::fixed << std::setprecision(2) << consumer_duration / 1000.0 << " ms" << std::endl;
-        nice_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_duration, nice_consumer_counter[camera_id].load());
-#endif
+        // Check if the frame is empty
+        if (frame.empty()) {
+            std::cout << "No frame recieved in nice thread, camera " << camera_id << std::endl;
+            break;
+        }
 
         boost::posix_time::ptime transform_start = boost::posix_time::microsec_clock::universal_time();
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
@@ -425,11 +424,10 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
     }
 
-    // tagStandard41h12_destroy(tf);
-
     apriltag_detector_destroy(detector);
-
     file_output.close();
+
+    std::cout << "Camera " << camera_id << " nice exiting" << std::endl;
 
     return 0;
 }

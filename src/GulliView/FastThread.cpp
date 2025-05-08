@@ -295,10 +295,15 @@ int fast_consume_frame(int camera_id,
 
         // Start measurement
         LogTime consumer_wait_timer;
-
-        while(fast_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
+        
+        // Wait for the producer to produce a frame
+        while (fast_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
+
+#if ENABLE_FAST_LOGS
+        consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);
+#endif
 
         fast_consumer_counter[camera_id]=producer_counter[camera_id].load();
 
@@ -311,10 +316,11 @@ int fast_consume_frame(int camera_id,
         cv::Mat frame = frame_data.frame;
         LogTime frametime = frame_data.frametime;
 
-#if ENABLE_FAST_LOGS
-        consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);
-        fast_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_wait_timer.stop_us(), fast_consumer_counter[camera_id].load());
-#endif
+        // Check if the frame is empty
+        if (frame.empty()) {
+            std::cout << "No frame recieved in fast thread, camera " << camera_id << std::endl;
+            break;
+        }
 
         LogTime transform_frame_timer;
 
@@ -808,8 +814,10 @@ int fast_consume_frame(int camera_id,
         fast_thread_logger.write_to_file_if_needed(elapsed_time, "fast-producer", filename.str());
         }
     }
-    // tagStandard41h12_destroy(tf);
     apriltag_detector_destroy(detector);
     file_output.close();
+
+    std::cout << "Camera " << camera_id << "fast exiting" << std::endl;
+
     return 0;
 }

@@ -94,19 +94,18 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             // Init frame
             cv::Mat raw_frame;
 
-            // try to capture a frame from the camera until one is caught or the timeout is reached.
-            for (int i = 0; raw_frame.empty(); i++) {
-                *cap >> raw_frame;
-
-                if (i >= 1) {
-                    std::cerr << "Frame capture timeout after " << i << " tries on camera " << camera_id << std::endl;
-                    return;
-                }
-            }
-
-            // Get timestamp of the frame
-            LogTime frametime;
+                
+            // Time for frame capture
+            LogTime get_frame_timer;
             
+            // Capture the frame from the camera and get timestamp
+            // *cap >> raw_frame;
+            LogTime frametime;
+
+#if ENABLE_PRODUCER_LOGS
+            get_frame_timer.stop_ms("Get frame", file_output);
+#endif
+
             // Create struct saving timestamp when frame was capured, used for latency evaluation
             FrameData frame_data;
             frame_data.frametime = frametime;
@@ -122,9 +121,14 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
 #if ENABLE_PRODUCER_LOGS
             producer_timer.stop_ms("Produce frame", file_output);
 #endif
+            // Check if the frame is empty
+            if (raw_frame.empty()) {
+                std::cout << "No frame captured on camera " << camera_id << std::endl;
+                break;
+            }
         }
     
         file_output.close();
-    
+        std::cout << "Camera " << camera_id << " producer exiting" << std::endl;
 }
     

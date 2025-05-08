@@ -201,5 +201,6 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     nice_consumer.join();
     fast_consumer.join();
     producer.join();
+    std::cout << "All threads joined camera " << camera_id << std::endl;
     return 0;
 }

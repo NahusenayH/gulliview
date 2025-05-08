@@ -21,10 +21,6 @@
 LogTime::LogTime() {
     start_time = std::chrono::high_resolution_clock::now();
 }
-// restart the clock
-void LogTime::restart() {
-    start_time = std::chrono::high_resolution_clock::now();
-}
 
 // Stop clock and return
 double LogTime::stop_ns(){
