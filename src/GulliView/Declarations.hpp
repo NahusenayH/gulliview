@@ -30,9 +30,9 @@
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "60"
+#define VERSION "63"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "Added nice logs and change titles in logs"
+#define COMMENT "4kkkkkkkk"
 
 #define ENABLE_FAST_LOGS        true                    // Enables fast thread log output files
 #define ENABLE_NICE_LOGS        true                   // Enables nice thread log output files
@@ -74,7 +74,7 @@
 #define DEFAULT_ACCELERATION_MAX 8
 #define DEFAULT_LIMIT_MAX 17000
 
-#define FPS 60
+#define FPS 30
 #define BUFFER_SIZE 128
 #define PARALLELL_FRAME_COUNT 2
 #define GLOBAL_SEARCH_MIN 16

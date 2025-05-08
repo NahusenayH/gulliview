@@ -62,8 +62,9 @@ float calc_velocity(const int old_x, const int old_y,
 void add_detection_to_msg(const int id, uint64_t detectionTime_ms, const float room_x, const float room_y, 
                         const float theta, const size_t index, 
                         const int CAM_NAME, Message& buf) {
-    int32_t x_coord = (int32_t) (room_x * 1000.0);
-    int32_t y_coord = (int32_t) (room_y * 1000.0);
+    int32_t x_coord = (int32_t) (room_x * 1000.0); // ELIAS2025 uncommented this
+    int32_t y_coord = (int32_t) (room_y * 1000.0); // ELIAS2025 uncommented this
+
     union {
         float        f;
         unsigned int i;

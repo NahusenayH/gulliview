@@ -458,7 +458,12 @@ int fast_consume_frame(int camera_id,
                 cv::Point2f* detection = i + camera_detections.data();
                 update_tag(detection, cornerDetection, latest_frame, tag, file_output); // change update tag so that it takes in the world position and rotation as well and stores it in the tag
                 detection = i + room_detections.data();
-                add_detection_to_msg(dd->id, detectionTime_ms, tag->x, tag->y, 
+                // ELIAS2025
+                float global_x_mm = float (world_position.at<double>(0)); // gets millimeter coordinates of x axis
+                float global_y_mm = float (world_position.at<double>(1)); // gets millimeter coordinates of y axis
+                // ELIAS2025 implement z axis as well and then rotation
+                
+                add_detection_to_msg(dd->id, detectionTime_ms, global_x_mm, global_y_mm, //tag->x, tag->y
                                     tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
                 
                 max_temp_alpha = std::max(max_temp_alpha, std::abs(tag->theta));
@@ -590,7 +595,7 @@ int fast_consume_frame(int camera_id,
             sem_1.post();
 
 #if ENABLE_FAST_LOGS
-            frametime.stop_ms("latency fast", file_output);
+            frametime.stop_ms("Latency fast", file_output);
 #endif
 
         }
