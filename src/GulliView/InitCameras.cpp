@@ -65,6 +65,8 @@ void init_video_capture(const int32_t device_number,
     std::cout << "Camera " << device_number << " init" << std::endl;
 
     video_capture = cv::VideoCapture(2*device_number, cv::CAP_V4L2);
+    video_capture.set(cv::CAP_PROP_AUTOFOCUS, 0); // Turn off autofocus
+    video_capture.set(cv::CAP_PROP_FOCUS, 100); // Set focus to manual value
     video_capture.set(cv::CAP_PROP_BUFFERSIZE, 1);
 
     /* set output codec and FPS */

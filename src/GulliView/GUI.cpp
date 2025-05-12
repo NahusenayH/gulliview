@@ -19,7 +19,7 @@
 
 void update_gui(const zarray_t* detections, Tag* tags_start, cv::Mat& frame, float avg_hz, std::ofstream& file_output) {
 
-    float scaling_f = 0.125; // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit 
+    float scaling_f = GUI_SCALE;
 
     std::ostringstream ss;
     ss << avg_hz;
@@ -90,7 +90,7 @@ void update_gui(const zarray_t* detections, Tag* tags_start, cv::Mat& frame, flo
 
 void update_exhaustive_gui(DetectionData detection_data, Tag* tags_start, cv::Mat& frame, float avg_hz) {
 
-    float scaling_f = 0.125; // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit 
+    float scaling_f = GUI_SCALE;
 
     std:: ostringstream ss;
     ss << avg_hz;

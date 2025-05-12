@@ -38,7 +38,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     CPU_ZERO(&cpuset);
 
     // Bind the thread to the corresponding core
-    int thread_num = NICE_THREAD_NUM + (camera_id % NICE_THREAD_COUNT);
+    int thread_num = NICE_THREAD_NUM + camera_id % NICE_THREAD_COUNT * NICE_THREAD_COUNT / 4;
     CPU_SET(thread_num, &cpuset);
 
     // Set the CPU affinity of the thread

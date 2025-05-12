@@ -93,7 +93,7 @@ int fast_consume_frame(int camera_id,
     CPU_ZERO(&cpuset);
 
     // bind the thread to the corresponding core
-    int thread_num = FAST_THREAD_NUM + thread_id % FAST_THREAD_COUNT;
+    int thread_num = FAST_THREAD_NUM + thread_id % FAST_THREAD_COUNT * FAST_THREAD_COUNT / 4;
     CPU_SET(thread_num, &cpuset);
 
     // set the CPU affinity of the thread

@@ -24,7 +24,7 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
         CPU_ZERO(&cpuset);
     
         // bind the thread to the corresponding core
-        int thread_num = PRODUCER_THREAD_NUM + camera_id % PRODUCER_THREAD_COUNT;
+        int thread_num = PRODUCER_THREAD_NUM + camera_id % PRODUCER_THREAD_COUNT * PRODUCER_THREAD_COUNT / 4;
         CPU_SET(thread_num, &cpuset);
     
         // set the CPU affinity of the thread
@@ -99,8 +99,11 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             LogTime get_frame_timer;
             
             // Capture the frame from the camera and get timestamp
-            // *cap >> raw_frame;
+            *cap >> raw_frame;
             LogTime frametime;
+# if RUN_ONLY_PRODUCER
+            continue;
+# endif
 
 #if ENABLE_PRODUCER_LOGS
             get_frame_timer.stop_ms("Get frame", file_output);
