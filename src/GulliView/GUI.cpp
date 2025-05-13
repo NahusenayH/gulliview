@@ -74,7 +74,7 @@ void update_gui(const zarray_t* detections, Tag* tags_start, cv::Mat& frame, flo
         double search_area_size = search_area_width * search_area_height;
 
         // Calculate the ratio of search area size to AprilTag size
-        double ratio = search_area_size / apriltag_size;
+        // double ratio = search_area_size / apriltag_size;
 
         // Print out the ratio and related information
 

@@ -44,20 +44,20 @@
 #define GUI_SCALE               0.2                    // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit
 
 // Old values
-// #define FAST_THREAD_NUM         4    // Start at here
-// #define FAST_THREAD_COUNT       4    // Count this many
-// #define NICE_THREAD_NUM         0    // Start at here
-// #define NICE_THREAD_COUNT       4    // Count this many
-// #define PRODUCER_THREAD_NUM     8    // Start at here
-// #define PRODUCER_THREAD_COUNT   4    // Count this many
+#define FAST_THREAD_NUM         4    // Start at here
+#define FAST_THREAD_COUNT       4    // Count this many
+#define NICE_THREAD_NUM         0    // Start at here
+#define NICE_THREAD_COUNT       4    // Count this many
+#define PRODUCER_THREAD_NUM     8    // Start at here
+#define PRODUCER_THREAD_COUNT   4    // Count this many
 
 // New values
-#define FAST_THREAD_NUM         8    // Start at here
-#define FAST_THREAD_COUNT       4    // Count this many
-#define NICE_THREAD_NUM         12    // Start at here
-#define NICE_THREAD_COUNT       4    // Count this many
-#define PRODUCER_THREAD_NUM     0    // Start at here
-#define PRODUCER_THREAD_COUNT   8    // Count this many
+// #define FAST_THREAD_NUM         8    // Start at here
+// #define FAST_THREAD_COUNT       4    // Count this many
+// #define NICE_THREAD_NUM         12    // Start at here
+// #define NICE_THREAD_COUNT       4    // Count this many
+// #define PRODUCER_THREAD_NUM     0    // Start at here
+// #define PRODUCER_THREAD_COUNT   8    // Count this many
 
 
 // Older defines
@@ -65,7 +65,7 @@
 #define FAST_SEARCH_ACC_TEST    false
 #define TIME_PROFILING          false
 
-#define RUN_ONLY_PRODUCER       true
+#define RUN_ONLY_PRODUCER       false    // Only starts producer thread, used for debugging camera stability
 
 #define USE_MEMORY_SHARING      false
 #define USE_EWMA                true
@@ -86,7 +86,7 @@
 #define DEFAULT_ACCELERATION_MAX 8
 #define DEFAULT_LIMIT_MAX 17000
 
-#define FPS 60
+#define FPS 30
 #define BUFFER_SIZE 128
 #define PARALLELL_FRAME_COUNT 2
 #define GLOBAL_SEARCH_MIN 16
