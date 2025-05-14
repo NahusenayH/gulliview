@@ -373,6 +373,9 @@ int fast_consume_frame(int camera_id,
 
         LogTime process_timer;
 
+        // std::cout << !use_exhaustive_search << zarray_size(detections) << 
+        // (!use_exhaustive_search && zarray_size(detections) != 0) << std::endl;
+
         if (!use_exhaustive_search && zarray_size(detections) != 0) {
 
             // Get time of frame/detection----------------
@@ -450,26 +453,30 @@ int fast_consume_frame(int camera_id,
                 cv::Mat distorted_points = (cv::Mat_<double>(4,2) << dd->p[3][0] + x_area_start, dd->p[3][1] + y_area_start,
                                                                      dd->p[2][0] + x_area_start, dd->p[2][1] + y_area_start,
                                                                      dd->p[1][0] + x_area_start, dd->p[1][1] + y_area_start,
-                                                                     dd->p[0][0] + x_area_start, dd->p[0][1]) + y_area_start;
+                                                                     dd->p[0][0] + x_area_start, dd->p[0][1] + y_area_start);
                 cv::Mat undistorted_points = undistort_points(distorted_points, camera_id);
+#if ELIAS_PRINT
                 std::cout << "distorted_points = " << distorted_points << " undistorted_points = " << undistorted_points << std::endl;
-                
+#endif
                 // GLOBAL COORDINATION CALCULATION
 
                 cv::Mat world_position, world_rotation;
                 world_position = estimate_object_global_position(camera_id, undistorted_points, &world_position, &world_rotation, frame);
+#if ELIAS_PRINT
                 std::cout << "world position = " << world_position << std::endl << std::endl << std::endl;//" world rotation = " << world_rotation << std::endl;
                 std::cout << "camera id = " << camera_id << std::endl;
+#endif
                 cv::Point2f* cornerDetection = 2*i + room_corner_detections.data();
                 cv::Point2f* detection = i + camera_detections.data();
                 update_tag(detection, cornerDetection, latest_frame, tag, file_output); // change update tag so that it takes in the world position and rotation as well and stores it in the tag
                 detection = i + room_detections.data();
                 // ELIAS2025
-                float global_x_mm = float (world_position.at<double>(0)); // gets millimeter coordinates of x axis
-                float global_y_mm = float (world_position.at<double>(1)); // gets millimeter coordinates of y axis
+                float global_x_m = float (world_position.at<double>(0)); // gets meter coordinates of x axis
+                float global_y_m = float (world_position.at<double>(1)); // gets meter coordinates of y axis
+                float global_z_m = float (world_position.at<double>(1)); // gets meter coordinates of z axis
                 // ELIAS2025 implement z axis as well and then rotation
                 
-                add_detection_to_msg(dd->id, detectionTime_ms, global_x_mm, global_y_mm, //tag->x, tag->y
+                add_detection_to_msg(dd->id, detectionTime_ms, global_x_m, global_y_m, global_z_m, //tag->x, tag->y
                                     tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
                 
                 max_temp_alpha = std::max(max_temp_alpha, std::abs(tag->theta));
@@ -538,41 +545,7 @@ int fast_consume_frame(int camera_id,
 
 
 
-                // Then call estimate_tag_pose.
-                apriltag_pose_t pose;
-                estimate_tag_pose(&info, &pose);
-
-                // change to Eigen format
-                Eigen::Matrix4d T_tag_to_camera = Eigen::Matrix4d::Identity();
-                for (int r = 0; r < 3; r++) {
-                    for (int c = 0; c < 3; c++) {
-                        T_tag_to_camera(r, c) = MATD_EL(pose.R, r, c);
-                    }
-                    T_tag_to_camera(r, 3) = MATD_EL(pose.t, r, 0);
-                }
-
-                Eigen::Matrix4d camera_to_world = camera_to_world_matrices[camera_id];
-
-
-                // Calculate the position of the label in the world coordinate system
-                Eigen::Matrix4d T_tag_to_world = camera_to_world * T_tag_to_camera;
-
-                // Extract the world coordinate direction of the label
-                Eigen::Matrix3d rotation = T_tag_to_world.block<3, 3>(0, 0);
-                Eigen::Quaterniond orientation(rotation);
-
-                // Cleaning up resources
-                matd_destroy(pose.R);
-                matd_destroy(pose.t);
-
-                // Calculate the size of the AprilTag in pixels
-                double apriltag_size = 0.0;
-                for (int j = 0; j < 4; j++) {
-                    int next = (j + 1) % 4;
-                    double dx = dd->p[next][0] - dd->p[j][0];
-                    double dy = dd->p[next][1] - dd->p[j][1];
-                    apriltag_size += sqrt(dx * dx + dy * dy); // Sum edge lengths
-                }
+                
             }
 
             // added 2025
@@ -605,6 +578,10 @@ int fast_consume_frame(int camera_id,
 #endif
 
         }
+
+        //ELIAS2025 add in so that it shares the position of the vehicle when inside the area between two cameras 
+        // and add into the consume_buffers so that it reads the position and does fast search on that area
+
         // Producer: writes its own detection results to the neighbouring camera's buffer
         for (int i = 0; i < 2 && produce_buffers[i]; ++i) {
             for (int id = 0; id < MAX_TAG_ID; ++id) {
@@ -764,7 +741,6 @@ int fast_consume_frame(int camera_id,
 #if ENABLE_FAST_LOGS
                 frametime.stop_ms("Latency fast/nice", file_output);
 #endif
-
                 detection_data.clearMessage();
             }
 #endif

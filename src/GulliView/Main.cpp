@@ -393,12 +393,6 @@ int main(int argc, char **argv) {
 #if ENABLE_ANY_LOGS
     // Output general settings to log
     general_log();
-    
-    // Init main log file
-    std::ostringstream filename;
-    filename << "output/main.log";
-    std::ofstream file_output(filename.str(), std::ios::out);
-    LogTime main_timer;
 #endif
 
     // Doing graceful shutdown, prevents Linux USB system from crashing
@@ -406,14 +400,14 @@ int main(int argc, char **argv) {
         signal(SIGINT, signal_handler);
     else signal(SIGINT, signal_handler);
     
-    // // Single-threaded if device_num is 0 to 3
-    // if (opts.device_num >= 0 && opts.device_num <= 3) {
-    //         GulliViewOptions camera_opts = opts;
+    // Single-threaded if device_num is 0 to 3
+    if (opts.device_num >= 0 && opts.device_num <= 3) {
+            GulliViewOptions camera_opts = opts;
 
-    //     process_camera(opts.device_num, camera_opts);  // Calling individual camera handler functions directly
-    // }
-    // // If device_num is 5, start multithreading
-    // else if (opts.device_num == 4) {
+        process_camera(opts.device_num, camera_opts);  // Calling individual camera handler functions directly
+    }
+    // If device_num is 5, start multithreading
+    else if (opts.device_num == 4) {
         std::vector<std::thread> threads;
 
         GulliViewOptions camera_opts[4];
@@ -433,17 +427,12 @@ int main(int argc, char **argv) {
             t.join();
         }
         std::cout << "All threads joined" << std::endl;
-    // }
-    // else {
-    //     std::cerr << "Unsupported device_num: " << opts.device_num << std::endl;
-    //     return 1; // Deal with unexpected situations
-    // }
+    }
+    else {
+        std::cerr << "Unsupported device_num: " << opts.device_num << std::endl;
+        return 1; // Deal with unexpected situations
+    }
 
-#if ENABLE_ANY_LOGS
-    main_timer.stop_s("Total time", file_output);
-#endif
-
-    file_output.close();
     std::cout << "Exiting" << std::endl;
 
     return 0;

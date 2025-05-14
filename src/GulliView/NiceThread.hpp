@@ -30,7 +30,9 @@
 
 #include "DebugLogger.hpp"
 #include "GeneralSearchFunctions.hpp"
+#include "GlobalCoordination.hpp"
 #include "TransformFrame.hpp"
+#include "Undistortion.hpp"
 
 zarray* exhaustive_search(image_u8_t& im, 
                           apriltag_detector_t* detector);

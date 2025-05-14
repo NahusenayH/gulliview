@@ -18,6 +18,7 @@
  * copies or substantial portions of the Software.
  ********************************************************************/
 
+#include "array.hpp"
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -73,6 +74,34 @@ void updateMessage(Message& sharedMsg, Message& updatedMsg) {
         
     }
 }
+
+void printMessage(const Message& msg) {
+    // std::cout << "Message to be sent:" << std::endl;
+    // std::cout << "Type: " << be32toh(msg.type) << std::endl;
+    // std::cout << "Subtype: " << be32toh(msg.subtype) << std::endl;
+    // std::cout << "Sequence: " << be32toh(msg.seq) << std::endl;
+    // std::cout << "Time (ms): " << be64toh(msg.time_msec) << std::endl;
+    // std::cout << "Average Time Gap: " << be64toh(msg.avg_time_gap) << std::endl;
+    // std::cout << "Camera ID: " << be32toh(msg.cam_id) << std::endl;
+    // std::cout << "Message Length: " << be32toh(msg.length) << std::endl;
+
+    // for (int i = 0; i < 11; ++i) {
+    //     std::cout << "Detection " << i << ":" << std::endl;
+    //     std::cout << "  ID: " << be32toh(msg.detections[i].id) << std::endl;
+    //     std::cout << "  Time: " << be64toh(msg.detections[i].time_msec) << std::endl;
+    //     std::cout << "  X: " << be32toh(msg.detections[i].x) << std::endl;
+    //     std::cout << "  Y: " << be32toh(msg.detections[i].y) << std::endl;
+    //     std::cout << "  Theta: " << msg.detections[i].theta << std::endl;
+    //     std::cout << "  Speed: " << msg.detections[i].speed << std::endl;
+    //     std::cout << "  Camera ID: " << be32toh(msg.detections[i].camera_id) << std::endl;
+    // }
+    // std::cout << std::endl;
+
+
+    std::cout << "  X: " << be32toh(msg.detections[8].x) << 
+    "  Y: " << be32toh(msg.detections[8].y) << std::endl;
+}
+
 
 const char *semNames[] = {"my_semaphore1", "my_semaphore2", "my_semaphore3", "my_semaphore4"};
 
@@ -199,6 +228,7 @@ int main() {
                     continue;
                 }
             }
+            
             if(new_message){
                     seq++;
                     auto send_time = std::chrono::system_clock::now().time_since_epoch();
@@ -213,6 +243,10 @@ int main() {
                     //std::cout << "firrst id: " << htobe32(updated_message.detections[1].id) << std::endl;
 
                     //std::cout << "reader_avg: " << htobe64(updated_message.avg_time_gap) << std::endl;
+
+                    // Print the message data before sending
+                    // printMessage(updated_message);
+
                     socket.send_to(boost::asio::buffer((uint8_t*) &(updated_message), 256), receiver_endpoint);
                     //std::cout << "seq " << htobe32(updated_message.seq)<< std::endl;
                     new_message =false;

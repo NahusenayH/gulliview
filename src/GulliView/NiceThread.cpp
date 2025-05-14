@@ -303,13 +303,28 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
                 zarray_get(detections, i, &dd);
                 Tag* tag = tags + dd->id;
 
+                int x_area_start = tag->area.x_start;
+                int y_area_start = tag->area.y_start;
+                cv::Mat distorted_points = (cv::Mat_<double>(4,2) << dd->p[3][0] + x_area_start, dd->p[3][1] + y_area_start,
+                                                                     dd->p[2][0] + x_area_start, dd->p[2][1] + y_area_start,
+                                                                     dd->p[1][0] + x_area_start, dd->p[1][1] + y_area_start,
+                                                                     dd->p[0][0] + x_area_start, dd->p[0][1] + y_area_start);
+                cv::Mat undistorted_points = undistort_points(distorted_points, camera_id);
+
+                cv::Mat world_position, world_rotation;
+                world_position = estimate_object_global_position(camera_id, undistorted_points, &world_position, &world_rotation, frame);
+
                 cv::Point2f* cornerDetection = 2*i + room_corner_detections.data();
                 cv::Point2f* detection = i + camera_detections.data();
                 update_tag(detection, cornerDetection, latest_frame, tag, file_output);
                 detection = i + room_detections.data();
-                add_detection_to_msg(dd->id, detectionTime_ms, tag->x, tag->y, 
-                                    tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
 
+                float global_x_m = float (world_position.at<double>(0)); // gets meter coordinates of x axis
+                float global_y_m = float (world_position.at<double>(1)); // gets meter coordinates of y axis
+                float global_z_m = float (world_position.at<double>(1)); // gets meter coordinates of z axis
+
+                add_detection_to_msg(dd->id, detectionTime_ms, global_x_m, global_y_m, global_z_m, //tag->x, tag->y
+                    tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
 
                 detection_data.tags[dd->id].found = true;
                 // detection_data.tags[dd->id].area = tag->area;
