@@ -267,11 +267,11 @@ cv::Mat estimate_object_global_position(int camera_id, cv::Mat undistorted_point
         case 0: cam2tag_rvec_list = camera0_rvec_list;
                 cam2tag_tvec_list = camera0_tvec_list;
                 break;
-        case 1: cam2tag_rvec_list = camera2_rvec_list; 
-                cam2tag_tvec_list = camera2_tvec_list;
-                break;
         case 2: cam2tag_rvec_list = camera1_rvec_list;
                 cam2tag_tvec_list = camera1_tvec_list;
+                break;
+        case 1: cam2tag_rvec_list = camera2_rvec_list; 
+                cam2tag_tvec_list = camera2_tvec_list;
                 break;
         case 3: cam2tag_rvec_list = camera3_rvec_list;
                 cam2tag_tvec_list = camera3_tvec_list;

@@ -321,9 +321,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 
                 float global_x_m = float (world_position.at<double>(0)); // gets meter coordinates of x axis
                 float global_y_m = float (world_position.at<double>(1)); // gets meter coordinates of y axis
-                float global_z_m = float (world_position.at<double>(1)); // gets meter coordinates of z axis
+                float global_z_m = float (world_position.at<double>(2)); // gets meter coordinates of z axis
 
-                add_detection_to_msg(dd->id, detectionTime_ms, global_x_m, global_y_m, global_z_m, //tag->x, tag->y
+                add_detection_to_msg(dd->id, frametime.timestamp(), global_x_m, global_y_m, global_z_m, //tag->x, tag->y
                     tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
 
                 detection_data.tags[dd->id].found = true;

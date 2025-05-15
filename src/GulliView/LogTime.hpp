@@ -33,9 +33,15 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
     std::chrono::time_point<std::chrono::high_resolution_clock> end_time;
     std::string name;
+    uint64_t time;
+
 public:
     LogTime();
-    
+
+    uint64_t timestamp(){
+        return time;
+    }
+
     // Stop clock and print to log file
     void stop_ns(const std::string& name, std::ofstream& file){
         file << name << ": " << stop_ns() << " ns" << std::endl;

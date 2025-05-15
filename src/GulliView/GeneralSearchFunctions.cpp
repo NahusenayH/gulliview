@@ -63,9 +63,9 @@ void add_detection_to_msg(const int id, uint64_t detectionTime_ms,
                         const float room_x, const float room_y, const float room_z, 
                         const float theta, const size_t index, 
                         const int CAM_NAME, Message& buf) {
-    // int32_t x_coord = (int32_t) (room_x * 1000.0); // ELIAS2025 uncommented this
-    // int32_t y_coord = (int32_t) (room_y * 1000.0); // ELIAS2025 uncommented this
-    // int32_t z_coord = (int32_t) (room_z * 1000.0); // EMIL2025 added this
+    int32_t x_coord = (int32_t) (room_x * 1000.0); // ELIAS2025 uncommented this
+    int32_t y_coord = (int32_t) (room_y * 1000.0); // ELIAS2025 uncommented this
+    int32_t z_coord = (int32_t) (room_z * 1000.0); // EMIL2025 added this
 
     union {
         float        f;
@@ -88,20 +88,20 @@ void add_detection_to_msg(const int id, uint64_t detectionTime_ms,
     buf.detections[index] = {      
         htobe32(id),  /* id */
         htobe64(detectionTime_ms),   /* added 2024*/
-        htobe32(room_x), /* x */
-        htobe32(room_y), /* y */
-        //htobe32(room_z), /* z */
+        htobe32(x_coord), /* x */
+        htobe32(y_coord), /* y */
+        htobe32(z_coord), /* z */
         angle.f,          /* angle theta */
         speed_f.f,        /* speed */
         htobe32(CAM_NAME) /* camera_id */
     };
 
-#if ENABLE_ANY_LOGS
-    std::cout << "[*] Camera: " << CAM_NAME << " Tag: " << id 
-        << " X: " << room_x << " Y: " << room_y << " Z: " << room_z << " Theta: " 
-        << theta << " Speed: " << speed << " Time: " 
-        << detectionTime_ms << std::endl;
-#endif
+// #if ENABLE_ANY_LOGS
+//     std::cout << "[*] Camera: " << CAM_NAME << " Tag: " << id 
+//         << " X: " << room_x << " Y: " << room_y << " Z: " << room_z << " Theta: " 
+//         << theta << " Speed: " << speed << " Time: " 
+//         << detectionTime_ms << std::endl;
+// #endif
 }
 
 

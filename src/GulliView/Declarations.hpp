@@ -79,7 +79,6 @@
 #define DEFAULT_PORT            "2121"
 
 #define MAX_TAG_ID                      10
-#define FORCE_GLOBAL_SEARCH_LOOP_NUM    10
 
 #define ROOM_WIDTH_METER  5.035f
 
@@ -121,8 +120,8 @@ typedef struct __attribute__ ((packed)) DetectionArea {
 typedef struct Tag {
     int32_t x = 0;
     int32_t y = 0;
-    cv::Mat world_position; // used for global coordination
-    cv::Mat world_rotation; // used for global coordination
+    cv::Mat world_position = cv::Mat::zeros(1,3,CV_64F); // used for global coordination
+    cv::Mat world_rotation = cv::Mat::zeros(3,3,CV_64F); // used for global coordination
     bool is_detected = 0;
     float velocity = 0;
     bool valid_velocity = false;
@@ -136,6 +135,7 @@ typedef struct __attribute__ ((packed)) DetectionMessage {
     uint64_t time_msec;    //added 2024
     uint32_t x;
     uint32_t y;
+    uint32_t z;
     float theta;
     float speed;
     uint32_t camera_id;
@@ -282,6 +282,8 @@ struct BufferData {
 // Overlapping data structure
 struct OverlapTagInfo {
     int tag_id;
+    float x; // x coordinate in the world in meters
+    float y; // y coordinate in the world in meters
     float a_max;
     float alpha;
     boost::posix_time::ptime timestamp;         // Timestamp indicating the time of inspection at the time of production
@@ -302,6 +304,18 @@ const OverlapRange overlap_ranges[4][2] = {
     {{1580, 2160}, {0, 460}}, // buffer_21, buffer_23
     // Camera 3's overlap area
     {{1700, 2160}, {0, 0}} // buffer_32
+};
+
+// Table of overlapping ranges in 1080p
+const OverlapRange overlap_ranges_1080p[4][2] = {
+    // Overlap range for camera 0
+    {{0, 250}, {0, 0}}, // buffer_01
+    // Camera 1's overlap range
+    {{830, 1080}, {0, 290}}, // buffer_10, buffer_12
+    // Camera 2's overlap area
+    {{790, 1080}, {0, 230}}, // buffer_21, buffer_23
+    // Camera 3's overlap area
+    {{850, 1080}, {0, 0}} // buffer_32
 };
 
 // std::atomic<unsigned int> producer_counter(0);

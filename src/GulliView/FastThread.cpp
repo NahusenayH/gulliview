@@ -466,6 +466,7 @@ int fast_consume_frame(int camera_id,
                 std::cout << "world position = " << world_position << std::endl << std::endl << std::endl;//" world rotation = " << world_rotation << std::endl;
                 std::cout << "camera id = " << camera_id << std::endl;
 #endif
+                //tag->world_position = world_position;
                 cv::Point2f* cornerDetection = 2*i + room_corner_detections.data();
                 cv::Point2f* detection = i + camera_detections.data();
                 update_tag(detection, cornerDetection, latest_frame, tag, file_output); // change update tag so that it takes in the world position and rotation as well and stores it in the tag
@@ -473,10 +474,10 @@ int fast_consume_frame(int camera_id,
                 // ELIAS2025
                 float global_x_m = float (world_position.at<double>(0)); // gets meter coordinates of x axis
                 float global_y_m = float (world_position.at<double>(1)); // gets meter coordinates of y axis
-                float global_z_m = float (world_position.at<double>(1)); // gets meter coordinates of z axis
+                float global_z_m = float (world_position.at<double>(2)); // gets meter coordinates of z axis
                 // ELIAS2025 implement z axis as well and then rotation
                 
-                add_detection_to_msg(dd->id, detectionTime_ms, global_x_m, global_y_m, global_z_m, //tag->x, tag->y
+                add_detection_to_msg(dd->id, frametime.timestamp(), global_x_m, global_y_m, global_z_m, //tag->x, tag->y
                                     tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
                 
                 max_temp_alpha = std::max(max_temp_alpha, std::abs(tag->theta));
@@ -587,12 +588,14 @@ int fast_consume_frame(int camera_id,
             for (int id = 0; id < MAX_TAG_ID; ++id) {
                 if (tags[id].is_detected) {  // Tag is detected
                     int y = tags[id].y;
+                    float world_x = (float) (tags[id].world_position.at<double>(0)); 
+                    float world_y = (float) (tags[id].world_position.at<double>(1)); 
 
                     // file_output << "Tag#" << id << ": x=" << tags[id].x << ", y=" << tags[id].y << endl;
 
                     // Check if y is in the overlap area
                     if (y >= overlap_ranges[camera_id][i].min_y && y <= overlap_ranges[camera_id][i].max_y) {
-                        OverlapTagInfo info{id, a_max, alpha, tags[id].latest_detection};
+                        OverlapTagInfo info{id, 0, 0, a_max, alpha, tags[id].latest_detection};
 
 #if PRINT_DEBUG_MSG           
                         file_output << "Tag#" << id << " detected in the overlapping area. Time frame: " << tags[id].latest_detection << std::endl;

@@ -323,7 +323,6 @@ void general_log(){
     file_output << "DEFAULT_PORT: "                 << DEFAULT_PORT                 << std::endl;
 
     file_output << "MAX_TAG_ID: "                   << MAX_TAG_ID                   << std::endl;
-    file_output << "FORCE_GLOBAL_SEARCH_LOOP_NUM: " << FORCE_GLOBAL_SEARCH_LOOP_NUM << std::endl;
 
     file_output << "ROOM_WIDTH_METER: "             << ROOM_WIDTH_METER             << std::endl;
 
