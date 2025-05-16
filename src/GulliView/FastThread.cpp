@@ -680,7 +680,7 @@ int fast_consume_frame(int camera_id,
 
 #if ENABLE_FAST_LOGS
             global_search_timer.stop_ms("Global search in fast thread", file_output);
-            fast_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, global_search_timer.stop_us(), fast_consumer_counter[camera_id].load());
+            // fast_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, global_search_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
 
             float max_temp_alpha = 0.0f;
@@ -742,7 +742,7 @@ int fast_consume_frame(int camera_id,
                 sem_1.post();
 
 #if ENABLE_FAST_LOGS
-                frametime.stop_ms("Latency fast/nice", file_output);
+                frametime.stop_ms("Latency exhaustive", file_output);
 #endif
                 detection_data.clearMessage();
             }
@@ -796,7 +796,7 @@ int fast_consume_frame(int camera_id,
     apriltag_detector_destroy(detector);
     file_output.close();
 
-    std::cout << "Camera " << camera_id << "fast exiting" << std::endl;
+    std::cout << "Camera " << camera_id << " fast exiting" << std::endl;
 
     return 0;
 }
