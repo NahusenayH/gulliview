@@ -305,14 +305,12 @@ int fast_consume_frame(int camera_id,
         consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);
 #endif
 
-        fast_consumer_counter[camera_id]=producer_counter[camera_id].load();
-
-        // Retrieve the FrameData object from the buffer using the fast consumer counter
+        // Atomically load the published index with memory synchronization
         int index = producer_counter[camera_id].load(std::memory_order_acquire);
-        FrameData& frame_data = buffer[camera_id][index];
-        // FrameData& frame_data = buffer[camera_id][fast_consumer_counter[camera_id].load()];
 
-        // Extract the frame, frame ID, and timestamp
+        fast_consumer_counter[camera_id] = index;
+
+        FrameData& frame_data = buffer[camera_id][index];
         cv::Mat frame = frame_data.frame;
         LogTime frametime = frame_data.frametime;
 

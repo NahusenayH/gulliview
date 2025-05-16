@@ -116,10 +116,9 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
 
             // Store the frame data in the buffer
             buffer[camera_id][next] = frame_data;
-            producer_counter[camera_id].store(next, std::memory_order_release);
 
-            // Update the producer counter to point to the next slot in the buffer
-            producer_counter[camera_id] = next;
+            // Atomically publish the index, ensuring memory is fully visible
+            producer_counter[camera_id].store(next, std::memory_order_release);
     
 #if ENABLE_PRODUCER_LOGS
             producer_timer.stop_ms("Produce frame", file_output);
