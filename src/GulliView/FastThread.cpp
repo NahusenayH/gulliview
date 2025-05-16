@@ -210,7 +210,9 @@ int fast_consume_frame(int camera_id,
         // Find the core where the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
+#if ENABLE_FAST_LOGS
                 file_output << "Core number: " << i << std::endl;
+#endif
                 break;
             }
         }

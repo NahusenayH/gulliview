@@ -123,7 +123,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // Find the core on which the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
+#if ENABLE_NICE_LOGS
                 file_output << "Core number: " << i << std::endl;
+#endif
                 break;
             }
         }
@@ -238,7 +240,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             
         detections = exhaustive_search(im, detector);
 
+#if ENABLE_NICE_LOGS
         file_output << detections << std::endl;
+#endif
 
         auto search_end = std::chrono::high_resolution_clock::now();   // End measurement
         double search_time = std::chrono::duration_cast<std::chrono::microseconds>(search_end - search_start).count();

@@ -30,19 +30,21 @@
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "66"
+#define VERSION "67"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "Producer exit"
+#define COMMENT "Latency test with pixel remap"
 
 #define ENABLE_FAST_LOGS        true                   // Enables fast thread log output files
-#define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
+#define ENABLE_NICE_LOGS        true                   // Enables nice thread log output files
 #define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
 #define LIVE_FEED               true                    // If the cameras live feed or recordings from RECORDING_FOLDER are used
 #define RECORDING_FOLDER        "recordings_original"   // Folder to get recordings from
+
 #define GUI_SCALE               0.2                     // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit
 #define ELIAS_PRINT             false                   // Elias prints global coordination
+#define RUN_ONLY_PRODUCER       false    // Only starts producer thread, used for debugging camera stability
 
 // Old values
 #define FAST_THREAD_NUM         4    // Start at here
@@ -66,8 +68,6 @@
 #define FAST_SEARCH_ACC_TEST    false
 #define TIME_PROFILING          false
 
-#define RUN_ONLY_PRODUCER       false    // Only starts producer thread, used for debugging camera stability
-
 #define USE_MEMORY_SHARING      false
 #define USE_EWMA                true
 #define BINDING_CPU_CORES       true
@@ -86,7 +86,7 @@
 #define DEFAULT_ACCELERATION_MAX 8
 #define DEFAULT_LIMIT_MAX 17000
 
-#define FPS 30
+#define FPS 60
 #define BUFFER_SIZE 128
 #define PARALLELL_FRAME_COUNT 2
 #define GLOBAL_SEARCH_MIN 16
