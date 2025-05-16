@@ -34,8 +34,8 @@
 // change this text to denote version, this is saved by log script to catagorize
 #define COMMENT "Latency test with pixel remap"
 
-#define ENABLE_FAST_LOGS        true                   // Enables fast thread log output files
-#define ENABLE_NICE_LOGS        true                   // Enables nice thread log output files
+#define ENABLE_FAST_LOGS        false                   // Enables fast thread log output files
+#define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
 #define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
@@ -282,8 +282,7 @@ struct BufferData {
 // Overlapping data structure
 struct OverlapTagInfo {
     int tag_id;
-    float x; // x coordinate in the world in meters
-    float y; // y coordinate in the world in meters
+    Tag tag;
     float a_max;
     float alpha;
     boost::posix_time::ptime timestamp;         // Timestamp indicating the time of inspection at the time of production

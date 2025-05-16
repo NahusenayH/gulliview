@@ -46,5 +46,6 @@ cv::Mat average_mat(std::list<cv::Mat> mats);
 // Output: global position, global_rotation
 cv::Mat estimate_object_global_position(int camera_id, cv::Mat points, cv::Mat* global_position, cv::Mat* global_rotation, cv::Mat image);
 
+cv::Mat global_to_pixel(int camera_id, cv::Mat global_position, cv::Mat image);
 
 #endif

@@ -21,6 +21,7 @@
 ********************************************************************/
 
 #include "GlobalCoordination.hpp"
+#include "opencv2/calib3d.hpp"
 
 
 
@@ -318,4 +319,16 @@ cv::Mat estimate_object_global_position(int camera_id, cv::Mat undistorted_point
 
     // results_global_position.insert({camera_id, average_global_positions});
     return average_global_positions;
+}
+
+cv::Mat global_to_pixel(int camera_id, cv::Mat global_position, cv::Mat image) {
+    cv::Mat distorted_points;
+    cv::Mat K = camera_K_matrices[camera_id];
+    if (image.rows == 1080) {
+        K = camera_K_matrices_1080p[camera_id]; 
+    }
+    cv::Mat distortion_coeffs = camera_global_distortion_coefficients[camera_id];
+    
+    cv::projectPoints(global_position, cv::Vec3d(0,0,0), cv::Vec3d(0,0,0), K, cv::Mat(), distorted_points);
+    return distorted_points;
 }

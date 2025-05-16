@@ -16,6 +16,7 @@
 ********************************************************************/
 
 #include "FastThread.hpp"
+#include "GlobalCoordination.hpp"
 #include "LogTime.hpp"
 #include "Undistortion.hpp"
 
@@ -466,7 +467,7 @@ int fast_consume_frame(int camera_id,
                 std::cout << "world position = " << world_position << std::endl << std::endl << std::endl;//" world rotation = " << world_rotation << std::endl;
                 std::cout << "camera id = " << camera_id << std::endl;
 #endif
-                //tag->world_position = world_position;
+                tag->world_position = world_position;
                 cv::Point2f* cornerDetection = 2*i + room_corner_detections.data();
                 cv::Point2f* detection = i + camera_detections.data();
                 update_tag(detection, cornerDetection, latest_frame, tag, file_output); // change update tag so that it takes in the world position and rotation as well and stores it in the tag
@@ -590,12 +591,14 @@ int fast_consume_frame(int camera_id,
                     int y = tags[id].y;
                     float world_x = (float) (tags[id].world_position.at<double>(0)); 
                     float world_y = (float) (tags[id].world_position.at<double>(1)); 
+                    // std::cout << "world_x " << tags[id].world_position << " world_y" << world_y << std::endl;
 
                     // file_output << "Tag#" << id << ": x=" << tags[id].x << ", y=" << tags[id].y << endl;
 
                     // Check if y is in the overlap area
-                    if (y >= overlap_ranges[camera_id][i].min_y && y <= overlap_ranges[camera_id][i].max_y) {
-                        OverlapTagInfo info{id, 0, 0, a_max, alpha, tags[id].latest_detection};
+                    if (y >= overlap_ranges_1080p[camera_id][i].min_y && y <= overlap_ranges_1080p[camera_id][i].max_y) {
+                        // std::cout << "has sent message" << std::endl;
+                        OverlapTagInfo info{id, tags[id], a_max, alpha, tags[id].latest_detection};
 
 #if PRINT_DEBUG_MSG           
                         file_output << "Tag#" << id << " detected in the overlapping area. Time frame: " << tags[id].latest_detection << std::endl;
@@ -614,12 +617,19 @@ int fast_consume_frame(int camera_id,
                 boost::posix_time::ptime current_frame = boost::posix_time::microsec_clock::universal_time();
                 boost::posix_time::time_duration frame_duration = current_frame - incoming.timestamp; // 两个ptime相减
                 long frame_duration_ms = frame_duration.total_milliseconds(); // 转换为毫秒
-
+                
                 // detect time difference and Tag status
-                if (frame_duration_ms <= 5 && !tags[incoming.tag_id].is_detected) {
+                if (frame_duration_ms <= 5 && !tags[incoming.tag_id].is_detected) { // 
+                    // std::cout << "has gotten message with tag with position " << std::endl; //<< new_tag.world_position
                     use_exhaustive_search = true;
                     a_max = incoming.a_max;
                     alpha = incoming.alpha;
+                    // Tag new_tag = incoming.tag;
+                    // cv::Mat incoming_distorted_points = global_to_pixel(camera_id, new_tag.world_position, frame);
+                    // new_tag.x = (float) incoming_distorted_points.at<double>(0);
+                    // new_tag.y = (float) incoming_distorted_points.at<double>(1);
+                    // tags[incoming.tag_id] = new_tag;
+                    // std::cout << "New tag added for camera " << camera_id << " at world position " << new_tag.world_position << " at pixel values x " << new_tag.x << " y " << new_tag.y << std::endl;
 #if PRINT_DEBUG_MSG           
                     file_output << "Missing detection of Tag#" << incoming.tag_id << " in the overlapping area. Frame duration time: " << frame_duration_ms << std::endl;
 #endif
