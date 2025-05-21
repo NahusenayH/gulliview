@@ -39,8 +39,9 @@
 #define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
-#define LIVE_FEED               true                    // If the cameras live feed or recordings from RECORDING_FOLDER are used
-#define RECORDING_FOLDER        "recordings_original"   // Folder to get recordings from
+#define LIVE_FEED               false                    // If the cameras live feed or recordings from RECORDING_FOLDER are used
+#define LOOP_RECORDING          true
+#define RECORDING_FOLDER        "recordings_1bot_0.7"   // Folder to get recordings from
 
 #define GUI_SCALE               0.2                     // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit
 #define ELIAS_PRINT             false                   // Elias prints global coordination

@@ -309,35 +309,6 @@ void general_log(){
     file_output << "VERSION: "                      << TIME_PERIOD<<"."<<VERSION    << std::endl; 
     file_output << "COMMENT: "                      << COMMENT                      << std::endl;
 
-    file_output << "PRINT_DEBUG_MSG: "              << PRINT_DEBUG_MSG              << std::endl;
-    file_output << "FAST_SEARCH_ACC_TEST: "         << FAST_SEARCH_ACC_TEST         << std::endl;
-    file_output << "TIME_PROFILING: "               << TIME_PROFILING               << std::endl;
-
-    file_output << "USE_MEMORY_SHARING: "           << USE_MEMORY_SHARING           << std::endl;
-    file_output << "USE_EWMA: "                     << USE_EWMA                     << std::endl;
-    file_output << "BINDING_CPU_CORES: "            << BINDING_CPU_CORES            << std::endl;
-
-    file_output << "PRODUCE_FRAME_MODE: "           << PRODUCE_FRAME_MODE           << std::endl;
-    file_output << "DEFAULT_TAG_FAMILY: "           << DEFAULT_TAG_FAMILY           << std::endl;
-    file_output << "DEFAULT_IP: "                   << DEFAULT_IP                   << std::endl;
-    file_output << "DEFAULT_PORT: "                 << DEFAULT_PORT                 << std::endl;
-
-    file_output << "MAX_TAG_ID: "                   << MAX_TAG_ID                   << std::endl;
-
-    file_output << "ROOM_WIDTH_METER: "             << ROOM_WIDTH_METER             << std::endl;
-
-    file_output << "DEFAULT_VELOCITY_MAX: "         << DEFAULT_VELOCITY_MAX         << std::endl;
-    file_output << "DEFAULT_ACCELERATION_MAX: "     << DEFAULT_ACCELERATION_MAX     << std::endl;
-    file_output << "DEFAULT_LIMIT_MAX: "            << DEFAULT_LIMIT_MAX            << std::endl;
-
-    file_output << "FPS: "                          << FPS                          << std::endl;
-    file_output << "BUFFER_SIZE: "                  << BUFFER_SIZE                  << std::endl;
-    file_output << "GLOBAL_SEARCH_MIN: "            << GLOBAL_SEARCH_MIN            << std::endl;
-
-    file_output << "ENABLE_FAST_LOGS: "             << ENABLE_FAST_LOGS             << std::endl;
-    file_output << "ENABLE_NICE_LOGS: "             << ENABLE_NICE_LOGS             << std::endl;
-    file_output << "ENABLE_PRODUCER_LOGS: "         << ENABLE_PRODUCER_LOGS         << std::endl;
-
     file_output << "LIVE_FEED: "                    << LIVE_FEED                    << std::endl;
     
     #if !LIVE_FEED

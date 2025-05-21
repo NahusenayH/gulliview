@@ -93,7 +93,6 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             
             // Init frame
             cv::Mat raw_frame;
-
                 
             // Time for frame capture
             LogTime get_frame_timer;
@@ -101,6 +100,12 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             // Capture the frame from the camera and get timestamp
             *cap >> raw_frame;
             LogTime frametime;
+# if LOOP_RECORDING
+            if (raw_frame.empty()) {
+                cap->set(cv::CAP_PROP_POS_FRAMES, 0);
+                continue;
+            }
+# endif
 # if RUN_ONLY_PRODUCER
             continue;
 # endif

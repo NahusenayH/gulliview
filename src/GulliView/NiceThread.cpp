@@ -221,9 +221,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #else
     #error "Unsupported mode"
 #endif
-
+#if PRINT_DEBUG_MSG
         nice_thread_logger.log_operation(DebugLogger::TRANSFORM_TIME, transform_time, nice_consumer_counter[camera_id].load());
-
+# endif
         zarray_t *detections = zarray_create(sizeof(apriltag_detection_t*)); //2023: from FastSearch-code
 
         //Use exhaustive search
@@ -255,11 +255,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // modified 2025
        file_output <<"CAM#"<<CAM_NAME<< " GLOBAL SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
 
-#endif
-
         nice_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, search_time, nice_consumer_counter[camera_id].load());
 
-
+#endif
         if (zarray_size(detections) != 0) {
             // Get time of frame/detection----------------
 
@@ -410,10 +408,10 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #if PRINT_DEBUG_MSG
         // printing time
         file_output << "Nice thread waiting for producer: " << std::fixed << std::setprecision(2) << duration / 1000.0 << " ms" << std::endl;
-#endif
+
 
         nice_thread_logger.log_operation(DebugLogger::PROCESS_TIME, duration, nice_consumer_counter[camera_id].load());
-
+#endif
         //If there are tags missing, use exhaustive search next time
 
         if (sig_stop) {
@@ -432,12 +430,12 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #if PRINT_DEBUG_MSG
     // printing time
     file_output << "Execution time for one loop: " << std::fixed << std::setprecision(2) << loop_duration / 1000.0 << " ms" << std::endl;
-#endif
+
 
     nice_thread_logger.log_operation(DebugLogger::LOOP_TIME, loop_duration, nice_consumer_counter[camera_id].load());
 
     nice_thread_logger.write_to_file_if_needed(loop_duration, "nice_thread", filename.str());
-
+#endif
 
     }
 
