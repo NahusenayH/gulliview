@@ -38,7 +38,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     CPU_ZERO(&cpuset);
 
     // Bind the thread to the corresponding core
-    int thread_num = NICE_THREAD_NUM + (camera_id % NICE_THREAD_COUNT);
+    int thread_num = NICE_THREAD_NUM + camera_id % NICE_THREAD_COUNT * NICE_THREAD_COUNT / 4;
     CPU_SET(thread_num, &cpuset);
 
     // Set the CPU affinity of the thread
@@ -123,7 +123,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // Find the core on which the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
+#if ENABLE_NICE_LOGS
                 file_output << "Core number: " << i << std::endl;
+#endif
                 break;
             }
         }
@@ -141,28 +143,31 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #if PRODUCE_FRAME_MODE == 1 || PRODUCE_FRAME_MODE == 3
 
         // Start measurement
-        auto consumer_start = std::chrono::high_resolution_clock::now();
-
-        while(nice_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
+        LogTime consumer_wait_timer;
+        
+        // Wait for the producer to produce a frame
+        while (nice_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
 
-        nice_consumer_counter[camera_id]=producer_counter[camera_id].load();
-        frame = buffer[camera_id][nice_consumer_counter[camera_id].load()];
-
-        // End measurement
-        auto consumer_end = std::chrono::high_resolution_clock::now();
-
-        // Calculation time (in microseconds)
-        auto consumer_duration = std::chrono::duration_cast<std::chrono::microseconds>(consumer_end - consumer_start).count();
-
-#if PRINT_DEBUG_MSG
-        // printing time
-        file_output << "Execution time for the consumer: " << std::fixed << std::setprecision(2) << consumer_duration / 1000.0 << " ms" << std::endl;
+#if ENABLE_NICE_LOGS
+        consumer_wait_timer.stop_ms("Nice thread waiting for producer", file_output);
 #endif
 
-        nice_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_duration, nice_consumer_counter[camera_id].load());
+        // Atomically load the published index with memory synchronization
+        int index = producer_counter[camera_id].load(std::memory_order_acquire);
 
+        nice_consumer_counter[camera_id] = index;
+
+        FrameData& frame_data = buffer[camera_id][index];
+        cv::Mat frame = frame_data.frame;
+        LogTime frametime = frame_data.frametime;
+
+        // Check if the frame is empty
+        if (frame.empty()) {
+            std::cout << "No frame recieved in nice thread, camera " << camera_id << std::endl;
+            break;
+        }
 
         boost::posix_time::ptime transform_start = boost::posix_time::microsec_clock::universal_time();
         bool frame_captured = transform_frame(frame, gray, map1, map2, file_output);
@@ -216,9 +221,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #else
     #error "Unsupported mode"
 #endif
-
+#if PRINT_DEBUG_MSG
         nice_thread_logger.log_operation(DebugLogger::TRANSFORM_TIME, transform_time, nice_consumer_counter[camera_id].load());
-
+# endif
         zarray_t *detections = zarray_create(sizeof(apriltag_detection_t*)); //2023: from FastSearch-code
 
         //Use exhaustive search
@@ -235,6 +240,10 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             
         detections = exhaustive_search(im, detector);
 
+#if ENABLE_NICE_LOGS
+        file_output << detections << std::endl;
+#endif
+
         auto search_end = std::chrono::high_resolution_clock::now();   // End measurement
         double search_time = std::chrono::duration_cast<std::chrono::microseconds>(search_end - search_start).count();
 
@@ -246,11 +255,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         // modified 2025
        file_output <<"CAM#"<<CAM_NAME<< " GLOBAL SEARCH time: " << std::fixed << std::setprecision(2) << search_time / 1000.0 << " ms\n";
 
-#endif
-
         nice_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, search_time, nice_consumer_counter[camera_id].load());
 
-
+#endif
         if (zarray_size(detections) != 0) {
             // Get time of frame/detection----------------
 
@@ -296,13 +303,28 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
                 zarray_get(detections, i, &dd);
                 Tag* tag = tags + dd->id;
 
+                int x_area_start = tag->area.x_start;
+                int y_area_start = tag->area.y_start;
+                cv::Mat distorted_points = (cv::Mat_<double>(4,2) << dd->p[3][0] + x_area_start, dd->p[3][1] + y_area_start,
+                                                                     dd->p[2][0] + x_area_start, dd->p[2][1] + y_area_start,
+                                                                     dd->p[1][0] + x_area_start, dd->p[1][1] + y_area_start,
+                                                                     dd->p[0][0] + x_area_start, dd->p[0][1] + y_area_start);
+                cv::Mat undistorted_points = undistort_points(distorted_points, camera_id);
+
+                cv::Mat world_position, world_rotation;
+                world_position = estimate_object_global_position(camera_id, undistorted_points, &world_position, &world_rotation, frame);
+
                 cv::Point2f* cornerDetection = 2*i + room_corner_detections.data();
                 cv::Point2f* detection = i + camera_detections.data();
                 update_tag(detection, cornerDetection, latest_frame, tag, file_output);
                 detection = i + room_detections.data();
-                add_detection_to_msg(dd->id, detectionTime_ms, tag->x, tag->y, 
-                                    tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
 
+                float global_x_m = float (world_position.at<double>(0)); // gets meter coordinates of x axis
+                float global_y_m = float (world_position.at<double>(1)); // gets meter coordinates of y axis
+                float global_z_m = float (world_position.at<double>(2)); // gets meter coordinates of z axis
+
+                add_detection_to_msg(dd->id, frametime.timestamp(), global_x_m, global_y_m, global_z_m, //tag->x, tag->y
+                    tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
 
                 detection_data.tags[dd->id].found = true;
                 // detection_data.tags[dd->id].area = tag->area;
@@ -358,6 +380,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
             buf.length = htobe32(n_detections);
 
             detection_data.storeMessage(buf);
+#if ENABLE_NICE_LOGS
+            frametime.stop_ms("Latency nice", file_output);
+#endif
 
         }
 
@@ -383,10 +408,10 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #if PRINT_DEBUG_MSG
         // printing time
         file_output << "Nice thread waiting for producer: " << std::fixed << std::setprecision(2) << duration / 1000.0 << " ms" << std::endl;
-#endif
+
 
         nice_thread_logger.log_operation(DebugLogger::PROCESS_TIME, duration, nice_consumer_counter[camera_id].load());
-
+#endif
         //If there are tags missing, use exhaustive search next time
 
         if (sig_stop) {
@@ -405,20 +430,19 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #if PRINT_DEBUG_MSG
     // printing time
     file_output << "Execution time for one loop: " << std::fixed << std::setprecision(2) << loop_duration / 1000.0 << " ms" << std::endl;
-#endif
+
 
     nice_thread_logger.log_operation(DebugLogger::LOOP_TIME, loop_duration, nice_consumer_counter[camera_id].load());
 
     nice_thread_logger.write_to_file_if_needed(loop_duration, "nice_thread", filename.str());
-
+#endif
 
     }
 
-    // tagStandard41h12_destroy(tf);
-
     apriltag_detector_destroy(detector);
-
     file_output.close();
+
+    std::cout << "Camera " << camera_id << " nice exiting" << std::endl;
 
     return 0;
 }

@@ -15,6 +15,8 @@
 * Copyright (c) 2025 Elias Svensson <eliasve@chalmers.se>
 ********************************************************************/
 
+#include <filesystem>
+
 #include "ProcessCamera.hpp"
 
 // DEFINES GLOBAL VARIABLES
@@ -37,7 +39,7 @@ std::vector<std::atomic<unsigned int>> search_producer_counter(4);
 std::vector<std::atomic<unsigned int>> search_consumer_counter(4);
 std::vector<std::atomic<unsigned int>> fast_consumer_counter(4);
 std::vector<std::atomic<unsigned int>> nice_consumer_counter(4);
-cv::Mat buffer[4][BUFFER_SIZE];
+FrameData buffer[4][BUFFER_SIZE];
 std::atomic<uint32_t> shared_frame_count(0);
 sig_atomic_t sig_stop = 0;
 
@@ -286,7 +288,17 @@ std::unordered_map<int, int> cameraMap = {
 #include "LogTime.hpp"
 // Add general settings to log
 void general_log(){
-#if ENABLE_ANY_LOGS
+
+    // Check if the output directory exists, if not create it
+    if (!std::filesystem::exists("output")) {
+        std::filesystem::create_directory("output");
+    }
+
+    // Clear the output directory
+    for (const auto& entry : std::filesystem::directory_iterator("output")) {
+        std::filesystem::remove(entry.path());
+    }
+
     std::ostringstream filename;
     filename << "output/general.log";
     std::ofstream file_output(filename.str(), std::ios::out);
@@ -296,36 +308,6 @@ void general_log(){
     file_output << "TIME: " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S")              << std::endl;
     file_output << "VERSION: "                      << TIME_PERIOD<<"."<<VERSION    << std::endl; 
     file_output << "COMMENT: "                      << COMMENT                      << std::endl;
-
-    file_output << "PRINT_DEBUG_MSG: "              << PRINT_DEBUG_MSG              << std::endl;
-    file_output << "FAST_SEARCH_ACC_TEST: "         << FAST_SEARCH_ACC_TEST         << std::endl;
-    file_output << "TIME_PROFILING: "               << TIME_PROFILING               << std::endl;
-
-    file_output << "USE_MEMORY_SHARING: "           << USE_MEMORY_SHARING           << std::endl;
-    file_output << "USE_EWMA: "                     << USE_EWMA                     << std::endl;
-    file_output << "BINDING_CPU_CORES: "            << BINDING_CPU_CORES            << std::endl;
-
-    file_output << "PRODUCE_FRAME_MODE: "           << PRODUCE_FRAME_MODE           << std::endl;
-    file_output << "DEFAULT_TAG_FAMILY: "           << DEFAULT_TAG_FAMILY           << std::endl;
-    file_output << "DEFAULT_IP: "                   << DEFAULT_IP                   << std::endl;
-    file_output << "DEFAULT_PORT: "                 << DEFAULT_PORT                 << std::endl;
-
-    file_output << "MAX_TAG_ID: "                   << MAX_TAG_ID                   << std::endl;
-    file_output << "FORCE_GLOBAL_SEARCH_LOOP_NUM: " << FORCE_GLOBAL_SEARCH_LOOP_NUM << std::endl;
-
-    file_output << "ROOM_WIDTH_METER: "             << ROOM_WIDTH_METER             << std::endl;
-
-    file_output << "DEFAULT_VELOCITY_MAX: "         << DEFAULT_VELOCITY_MAX         << std::endl;
-    file_output << "DEFAULT_ACCELERATION_MAX: "     << DEFAULT_ACCELERATION_MAX     << std::endl;
-    file_output << "DEFAULT_LIMIT_MAX: "            << DEFAULT_LIMIT_MAX            << std::endl;
-
-    file_output << "FPS: "                          << FPS                          << std::endl;
-    file_output << "BUFFER_SIZE: "                  << BUFFER_SIZE                  << std::endl;
-    file_output << "GLOBAL_SEARCH_MIN: "            << GLOBAL_SEARCH_MIN            << std::endl;
-
-    file_output << "ENABLE_FAST_LOGS: "             << ENABLE_FAST_LOGS             << std::endl;
-    file_output << "ENABLE_NICE_LOGS: "             << ENABLE_NICE_LOGS             << std::endl;
-    file_output << "ENABLE_PRODUCER_LOGS: "         << ENABLE_PRODUCER_LOGS         << std::endl;
 
     file_output << "LIVE_FEED: "                    << LIVE_FEED                    << std::endl;
     
@@ -370,7 +352,7 @@ void general_log(){
     file_output << "1 timer total ms penalty: " << timer_ms.stop_ns()/lenght << " ns" << std::endl;
     
     file_output.close();
-#endif
+
 }
 
 // Main function
@@ -378,8 +360,10 @@ int main(int argc, char **argv) {
     // Parsing command line arguments
     GulliViewOptions opts = parse_options(argc, argv);
 
+#if ENABLE_ANY_LOGS
     // Output general settings to log
     general_log();
+#endif
 
     // Doing graceful shutdown, prevents Linux USB system from crashing
     if (opts.device_num == 4)
@@ -399,7 +383,7 @@ int main(int argc, char **argv) {
         GulliViewOptions camera_opts[4];
 
         // Start four threads for each of the four cameras
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < opts.device_num; ++i) {
             camera_opts[i] = opts;
 
             camera_opts[i].shared_semaphore = "my_semaphore" + std::to_string(i+1);  // Create different semaphores for each camera
@@ -412,11 +396,14 @@ int main(int argc, char **argv) {
         for (auto& t : threads) {
             t.join();
         }
+        std::cout << "All threads joined" << std::endl;
     }
     else {
         std::cerr << "Unsupported device_num: " << opts.device_num << std::endl;
         return 1; // Deal with unexpected situations
     }
+
+    std::cout << "Exiting" << std::endl;
 
     return 0;
 }

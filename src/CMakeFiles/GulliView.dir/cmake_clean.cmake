@@ -21,6 +21,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/GulliView.dir/GulliView/GUI.cpp.o.d"
   "CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o"
   "CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.o.d"
+  "CMakeFiles/GulliView.dir/GulliView/GlobalCoordination.cpp.o"
+  "CMakeFiles/GulliView.dir/GulliView/GlobalCoordination.cpp.o.d"
   "CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o"
   "CMakeFiles/GulliView.dir/GulliView/InitCameras.cpp.o.d"
   "CMakeFiles/GulliView.dir/GulliView/LogTime.cpp.o"
@@ -35,6 +37,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/GulliView.dir/GulliView/ProducerThread.cpp.o.d"
   "CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o"
   "CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.o.d"
+  "CMakeFiles/GulliView.dir/GulliView/Undistortion.cpp.o"
+  "CMakeFiles/GulliView.dir/GulliView/Undistortion.cpp.o.d"
   "CMakeFiles/GulliView.dir/TagFamily.cpp.o"
   "CMakeFiles/GulliView.dir/TagFamily.cpp.o.d"
 )

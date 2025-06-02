@@ -25,30 +25,29 @@
 
 #include "../Detections.h"
 
+#include "LogTime.hpp"
+
 // This is for visualize_GulliView_logs
 // Version string, adds to time period ex VT25.2
 #define TIME_PERIOD "VT25"
-#define VERSION "53"
+#define VERSION "67"
 // change this text to denote version, this is saved by log script to catagorize
-#define COMMENT "old core values"
+#define COMMENT "Latency test with pixel remap"
 
-#define ENABLE_FAST_LOGS        true                    // Enables fast thread log output files
+#define ENABLE_FAST_LOGS        false                   // Enables fast thread log output files
 #define ENABLE_NICE_LOGS        false                   // Enables nice thread log output files
 #define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
-#define LIVE_FEED               false                   // If the cameras live feed or recordings from RECORDING_FOLDER are used
-#define RECORDING_FOLDER        "recordings_2bot"       // Folder to get recordings from
+#define LIVE_FEED               false                    // If the cameras live feed or recordings from RECORDING_FOLDER are used
+#define LOOP_RECORDING          true
+#define RECORDING_FOLDER        "recordings_1bot_0.7"   // Folder to get recordings from
 
-// Modified
-// #define FAST_THREAD_NUM         0    // Start at here
-// #define FAST_THREAD_COUNT       10   // Count this many
-// #define NICE_THREAD_NUM         10   // Start at here
-// #define NICE_THREAD_COUNT       2    // Count this many
-// #define PRODUCER_THREAD_NUM     12   // Start at here
-// #define PRODUCER_THREAD_COUNT   4    // Count this many
+#define GUI_SCALE               0.2                     // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit
+#define ELIAS_PRINT             false                   // Elias prints global coordination
+#define RUN_ONLY_PRODUCER       false    // Only starts producer thread, used for debugging camera stability
 
-// Standard
+// Old values
 #define FAST_THREAD_NUM         4    // Start at here
 #define FAST_THREAD_COUNT       4    // Count this many
 #define NICE_THREAD_NUM         0    // Start at here
@@ -56,24 +55,31 @@
 #define PRODUCER_THREAD_NUM     8    // Start at here
 #define PRODUCER_THREAD_COUNT   4    // Count this many
 
+// New values
+// #define FAST_THREAD_NUM         8    // Start at here
+// #define FAST_THREAD_COUNT       4    // Count this many
+// #define NICE_THREAD_NUM         12    // Start at here
+// #define NICE_THREAD_COUNT       4    // Count this many
+// #define PRODUCER_THREAD_NUM     0    // Start at here
+// #define PRODUCER_THREAD_COUNT   8    // Count this many
+
 
 // Older defines
-#define PRINT_DEBUG_MSG         false                    // Should soon be replaced by ENABLE_LOGS
+#define PRINT_DEBUG_MSG         false   // Should soon be replaced by ENABLE_LOGS
 #define FAST_SEARCH_ACC_TEST    false
 #define TIME_PROFILING          false
 
-#define USE_MEMORY_SHARING      false // added 2025
-#define USE_EWMA                true // added 2025
-#define BINDING_CPU_CORES       true // added 2025
+#define USE_MEMORY_SHARING      false
+#define USE_EWMA                true
+#define BINDING_CPU_CORES       true
 
-#define PRODUCE_FRAME_MODE      1 // added 2025
+#define PRODUCE_FRAME_MODE      1
 
 #define DEFAULT_TAG_FAMILY      "tag36h11" // tag36h11
 #define DEFAULT_IP              "127.0.0.1"
 #define DEFAULT_PORT            "2121"
 
 #define MAX_TAG_ID                      10
-#define FORCE_GLOBAL_SEARCH_LOOP_NUM    10
 
 #define ROOM_WIDTH_METER  5.035f
 
@@ -96,7 +102,12 @@ extern int nines;
 // Global shared frame counter (thread-safe)
 extern std::atomic<uint32_t> shared_frame_count;
 
-extern cv::Mat buffer[4][BUFFER_SIZE]; // modified 2025
+struct FrameData {
+    LogTime frametime;  // Use high_resolution_clock instead
+    cv::Mat frame;
+};
+
+extern FrameData buffer[4][BUFFER_SIZE]; // modified 2025
 
 typedef struct __attribute__ ((packed)) DetectionArea {
     int32_t x_start;
@@ -110,8 +121,8 @@ typedef struct __attribute__ ((packed)) DetectionArea {
 typedef struct Tag {
     int32_t x = 0;
     int32_t y = 0;
-    float world_x = 0; // used for global coordination
-    float world_y = 0; // used for global coordination
+    cv::Mat world_position = cv::Mat::zeros(1,3,CV_64F); // used for global coordination
+    cv::Mat world_rotation = cv::Mat::zeros(3,3,CV_64F); // used for global coordination
     bool is_detected = 0;
     float velocity = 0;
     bool valid_velocity = false;
@@ -125,6 +136,7 @@ typedef struct __attribute__ ((packed)) DetectionMessage {
     uint64_t time_msec;    //added 2024
     uint32_t x;
     uint32_t y;
+    uint32_t z;
     float theta;
     float speed;
     uint32_t camera_id;
@@ -271,6 +283,7 @@ struct BufferData {
 // Overlapping data structure
 struct OverlapTagInfo {
     int tag_id;
+    Tag tag;
     float a_max;
     float alpha;
     boost::posix_time::ptime timestamp;         // Timestamp indicating the time of inspection at the time of production
@@ -291,6 +304,18 @@ const OverlapRange overlap_ranges[4][2] = {
     {{1580, 2160}, {0, 460}}, // buffer_21, buffer_23
     // Camera 3's overlap area
     {{1700, 2160}, {0, 0}} // buffer_32
+};
+
+// Table of overlapping ranges in 1080p
+const OverlapRange overlap_ranges_1080p[4][2] = {
+    // Overlap range for camera 0
+    {{0, 250}, {0, 0}}, // buffer_01
+    // Camera 1's overlap range
+    {{830, 1080}, {0, 290}}, // buffer_10, buffer_12
+    // Camera 2's overlap area
+    {{790, 1080}, {0, 230}}, // buffer_21, buffer_23
+    // Camera 3's overlap area
+    {{850, 1080}, {0, 0}} // buffer_32
 };
 
 // std::atomic<unsigned int> producer_counter(0);

@@ -16,7 +16,9 @@
 ********************************************************************/
 
 #include "FastThread.hpp"
+#include "GlobalCoordination.hpp"
 #include "LogTime.hpp"
+#include "Undistortion.hpp"
 
 std::map<int, Eigen::Matrix4d> camera_to_world_matrices = {
     {0, (Eigen::Matrix4d() << 2270.416948, 0.0, 1997.865610, 0.0,
@@ -92,7 +94,7 @@ int fast_consume_frame(int camera_id,
     CPU_ZERO(&cpuset);
 
     // bind the thread to the corresponding core
-    int thread_num = FAST_THREAD_NUM + thread_id % FAST_THREAD_COUNT;
+    int thread_num = FAST_THREAD_NUM + thread_id % FAST_THREAD_COUNT * FAST_THREAD_COUNT / 4;
     CPU_SET(thread_num, &cpuset);
 
     // set the CPU affinity of the thread
@@ -209,7 +211,9 @@ int fast_consume_frame(int camera_id,
         // Find the core where the current thread is running
         for (int i = 0; i < CPU_SETSIZE; ++i) {
             if (CPU_ISSET(i, &cpuset)) {
+#if ENABLE_FAST_LOGS
                 file_output << "Core number: " << i << std::endl;
+#endif
                 break;
             }
         }
@@ -294,18 +298,30 @@ int fast_consume_frame(int camera_id,
 
         // Start measurement
         LogTime consumer_wait_timer;
-
-        while(fast_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
+        
+        // Wait for the producer to produce a frame
+        while (fast_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
 
-        fast_consumer_counter[camera_id]=producer_counter[camera_id].load();
-        frame = buffer[camera_id][fast_consumer_counter[camera_id].load()];
-
 #if ENABLE_FAST_LOGS
         consumer_wait_timer.stop_ms("Fast thread waiting for producer", file_output);
-        fast_thread_logger.log_operation(DebugLogger::CONSUMER_TIME, consumer_wait_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
+
+        // Atomically load the published index with memory synchronization
+        int index = producer_counter[camera_id].load(std::memory_order_acquire);
+
+        fast_consumer_counter[camera_id] = index;
+
+        FrameData& frame_data = buffer[camera_id][index];
+        cv::Mat frame = frame_data.frame;
+        LogTime frametime = frame_data.frametime;
+
+        // Check if the frame is empty
+        if (frame.empty()) {
+            std::cout << "No frame recieved in fast thread, camera " << camera_id << std::endl;
+            break;
+        }
 
         LogTime transform_frame_timer;
 
@@ -358,6 +374,9 @@ int fast_consume_frame(int camera_id,
 
         LogTime process_timer;
 
+        // std::cout << !use_exhaustive_search << zarray_size(detections) << 
+        // (!use_exhaustive_search && zarray_size(detections) != 0) << std::endl;
+
         if (!use_exhaustive_search && zarray_size(detections) != 0) {
 
             // Get time of frame/detection----------------
@@ -375,6 +394,7 @@ int fast_consume_frame(int camera_id,
             // Camera coordinates for tag corners.
             std::vector<at::Point> camera_corner_detections(2*zarray_size(detections)); 
 
+            // is this one even relevant? elias2025
             for (int i = 0; i < zarray_size(detections); i++) {
                 apriltag_detection_t *dd;
                 zarray_get(detections, i, &dd);
@@ -383,6 +403,15 @@ int fast_consume_frame(int camera_id,
                 camera_corner_detections[2*i] = at::Point(dd->p[0][0], dd->p[0][1]);
                 camera_corner_detections[2*i+1] = at::Point(dd->p[3][0], dd->p[3][1]);
                 // Aron: Adjust for part image coordinates?
+
+                // elias2025 >>> ADD UNDISTORTION OF POINTS HERE
+
+
+
+                
+
+
+
                 camera_detections[i].x += tag->area.x_start;
                 camera_detections[i].y += tag->area.y_start;
 #if PRINT_DEBUG_MSG           
@@ -418,11 +447,38 @@ int fast_consume_frame(int camera_id,
 
                 Tag* previous_tag = previous_tags + dd->id;
 
+                // elias2025 >>> CONVERT TO GLOBAL COORDINATES HERE
+
+                int x_area_start = tag->area.x_start;
+                int y_area_start = tag->area.y_start;
+                cv::Mat distorted_points = (cv::Mat_<double>(4,2) << dd->p[3][0] + x_area_start, dd->p[3][1] + y_area_start,
+                                                                     dd->p[2][0] + x_area_start, dd->p[2][1] + y_area_start,
+                                                                     dd->p[1][0] + x_area_start, dd->p[1][1] + y_area_start,
+                                                                     dd->p[0][0] + x_area_start, dd->p[0][1] + y_area_start);
+                cv::Mat undistorted_points = undistort_points(distorted_points, camera_id);
+#if ELIAS_PRINT
+                std::cout << "distorted_points = " << distorted_points << " undistorted_points = " << undistorted_points << std::endl;
+#endif
+                // GLOBAL COORDINATION CALCULATION
+
+                cv::Mat world_position, world_rotation;
+                world_position = estimate_object_global_position(camera_id, undistorted_points, &world_position, &world_rotation, frame);
+#if ELIAS_PRINT
+                std::cout << "world position = " << world_position << std::endl << std::endl << std::endl;//" world rotation = " << world_rotation << std::endl;
+                std::cout << "camera id = " << camera_id << std::endl;
+#endif
+                tag->world_position = world_position;
                 cv::Point2f* cornerDetection = 2*i + room_corner_detections.data();
                 cv::Point2f* detection = i + camera_detections.data();
-                update_tag(detection, cornerDetection, latest_frame, tag, file_output);
+                update_tag(detection, cornerDetection, latest_frame, tag, file_output); // change update tag so that it takes in the world position and rotation as well and stores it in the tag
                 detection = i + room_detections.data();
-                add_detection_to_msg(dd->id, detectionTime_ms, tag->x, tag->y, 
+                // ELIAS2025
+                float global_x_m = float (world_position.at<double>(0)); // gets meter coordinates of x axis
+                float global_y_m = float (world_position.at<double>(1)); // gets meter coordinates of y axis
+                float global_z_m = float (world_position.at<double>(2)); // gets meter coordinates of z axis
+                // ELIAS2025 implement z axis as well and then rotation
+                
+                add_detection_to_msg(dd->id, frametime.timestamp(), global_x_m, global_y_m, global_z_m, //tag->x, tag->y
                                     tag->theta, i, CAM_NAME, buf);   // added 2024, "detectionTime_ms" added
                 
                 max_temp_alpha = std::max(max_temp_alpha, std::abs(tag->theta));
@@ -491,41 +547,7 @@ int fast_consume_frame(int camera_id,
 
 
 
-                // Then call estimate_tag_pose.
-                apriltag_pose_t pose;
-                estimate_tag_pose(&info, &pose);
-
-                // change to Eigen format
-                Eigen::Matrix4d T_tag_to_camera = Eigen::Matrix4d::Identity();
-                for (int r = 0; r < 3; r++) {
-                    for (int c = 0; c < 3; c++) {
-                        T_tag_to_camera(r, c) = MATD_EL(pose.R, r, c);
-                    }
-                    T_tag_to_camera(r, 3) = MATD_EL(pose.t, r, 0);
-                }
-
-                Eigen::Matrix4d camera_to_world = camera_to_world_matrices[camera_id];
-
-
-                // Calculate the position of the label in the world coordinate system
-                Eigen::Matrix4d T_tag_to_world = camera_to_world * T_tag_to_camera;
-
-                // Extract the world coordinate direction of the label
-                Eigen::Matrix3d rotation = T_tag_to_world.block<3, 3>(0, 0);
-                Eigen::Quaterniond orientation(rotation);
-
-                // Cleaning up resources
-                matd_destroy(pose.R);
-                matd_destroy(pose.t);
-
-                // Calculate the size of the AprilTag in pixels
-                double apriltag_size = 0.0;
-                for (int j = 0; j < 4; j++) {
-                    int next = (j + 1) % 4;
-                    double dx = dd->p[next][0] - dd->p[j][0];
-                    double dy = dd->p[next][1] - dd->p[j][1];
-                    apriltag_size += sqrt(dx * dx + dy * dy); // Sum edge lengths
-                }
+                
             }
 
             // added 2025
@@ -553,18 +575,30 @@ int fast_consume_frame(int camera_id,
             ptr->flag = 1;
             sem_1.post();
 
+#if ENABLE_FAST_LOGS
+            frametime.stop_ms("Latency fast", file_output);
+#endif
+
         }
+
+        //ELIAS2025 add in so that it shares the position of the vehicle when inside the area between two cameras 
+        // and add into the consume_buffers so that it reads the position and does fast search on that area
+
         // Producer: writes its own detection results to the neighbouring camera's buffer
         for (int i = 0; i < 2 && produce_buffers[i]; ++i) {
             for (int id = 0; id < MAX_TAG_ID; ++id) {
                 if (tags[id].is_detected) {  // Tag is detected
                     int y = tags[id].y;
+                    float world_x = (float) (tags[id].world_position.at<double>(0)); 
+                    float world_y = (float) (tags[id].world_position.at<double>(1)); 
+                    // std::cout << "world_x " << tags[id].world_position << " world_y" << world_y << std::endl;
 
                     // file_output << "Tag#" << id << ": x=" << tags[id].x << ", y=" << tags[id].y << endl;
 
                     // Check if y is in the overlap area
-                    if (y >= overlap_ranges[camera_id][i].min_y && y <= overlap_ranges[camera_id][i].max_y) {
-                        OverlapTagInfo info{id, a_max, alpha, tags[id].latest_detection};
+                    if (y >= overlap_ranges_1080p[camera_id][i].min_y && y <= overlap_ranges_1080p[camera_id][i].max_y) {
+                        // std::cout << "has sent message" << std::endl;
+                        OverlapTagInfo info{id, tags[id], a_max, alpha, tags[id].latest_detection};
 
 #if PRINT_DEBUG_MSG           
                         file_output << "Tag#" << id << " detected in the overlapping area. Time frame: " << tags[id].latest_detection << std::endl;
@@ -583,12 +617,19 @@ int fast_consume_frame(int camera_id,
                 boost::posix_time::ptime current_frame = boost::posix_time::microsec_clock::universal_time();
                 boost::posix_time::time_duration frame_duration = current_frame - incoming.timestamp; // 两个ptime相减
                 long frame_duration_ms = frame_duration.total_milliseconds(); // 转换为毫秒
-
+                
                 // detect time difference and Tag status
-                if (frame_duration_ms <= 5 && !tags[incoming.tag_id].is_detected) {
+                if (frame_duration_ms <= 5 && !tags[incoming.tag_id].is_detected) { // 
+                    // std::cout << "has gotten message with tag with position " << std::endl; //<< new_tag.world_position
                     use_exhaustive_search = true;
                     a_max = incoming.a_max;
                     alpha = incoming.alpha;
+                    // Tag new_tag = incoming.tag;
+                    // cv::Mat incoming_distorted_points = global_to_pixel(camera_id, new_tag.world_position, frame);
+                    // new_tag.x = (float) incoming_distorted_points.at<double>(0);
+                    // new_tag.y = (float) incoming_distorted_points.at<double>(1);
+                    // tags[incoming.tag_id] = new_tag;
+                    // std::cout << "New tag added for camera " << camera_id << " at world position " << new_tag.world_position << " at pixel values x " << new_tag.x << " y " << new_tag.y << std::endl;
 #if PRINT_DEBUG_MSG           
                     file_output << "Missing detection of Tag#" << incoming.tag_id << " in the overlapping area. Frame duration time: " << frame_duration_ms << std::endl;
 #endif
@@ -649,7 +690,7 @@ int fast_consume_frame(int camera_id,
 
 #if ENABLE_FAST_LOGS
             global_search_timer.stop_ms("Global search in fast thread", file_output);
-            fast_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, global_search_timer.stop_us(), fast_consumer_counter[camera_id].load());
+            // fast_thread_logger.log_operation(DebugLogger::GLOBAL_SEARCH_TIME, global_search_timer.stop_us(), fast_consumer_counter[camera_id].load());
 #endif
 
             float max_temp_alpha = 0.0f;
@@ -686,6 +727,7 @@ int fast_consume_frame(int camera_id,
 #endif
                 }
             }
+
 #if USE_EWMA
             if (!no_detected) {
                     alpha = angle_tracker.get_max_value(5);
@@ -709,6 +751,9 @@ int fast_consume_frame(int camera_id,
                 ptr->flag = 1;
                 sem_1.post();
 
+#if ENABLE_FAST_LOGS
+                frametime.stop_ms("Latency exhaustive", file_output);
+#endif
                 detection_data.clearMessage();
             }
 #endif
@@ -751,15 +796,18 @@ int fast_consume_frame(int camera_id,
         // End measurement
         int elapsed_time = timer.stop_us();
 #if ENABLE_FAST_LOGS
-        file_output << "Loop: count=" << total_loop_count - 1 << ", trial=" << trial << ", Duration=" << timer.stop_us() << " us" << std::endl;;
-#endif
+        file_output << "Loop: count=" << total_loop_count - 1 << ", trial=" << trial << ", Duration=" << timer.stop_ms() << " ms" << std::endl;;
+
         // Maybe remove?
         fast_thread_logger.log_operation(DebugLogger::LOOP_TIME, elapsed_time, fast_consumer_counter[camera_id].load());
         fast_thread_logger.write_to_file_if_needed(elapsed_time, "fast-producer", filename.str());
+#endif
         }
     }
-    // tagStandard41h12_destroy(tf);
     apriltag_detector_destroy(detector);
     file_output.close();
+
+    std::cout << "Camera " << camera_id << " fast exiting" << std::endl;
+
     return 0;
 }

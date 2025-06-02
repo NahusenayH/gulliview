@@ -25,10 +25,12 @@
 #include "CalibrateCameras.hpp"
 #include "Declarations.hpp"
 #include "FastSearch.hpp"
+#include "GlobalCoordination.hpp"
 #include "GUI.hpp"
 #include "InitCameras.hpp"
 #include "LogTime.hpp"
 #include "NiceThread.hpp"
+#include "Undistortion.hpp"
 
 float get_uncertainty();
 

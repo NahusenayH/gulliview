@@ -18,6 +18,7 @@
  * copies or substantial portions of the Software.
  ********************************************************************/
 
+#include "array.hpp"
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -41,6 +42,7 @@ typedef struct __attribute__ ((packed)) DetectionMessage {
     uint64_t time_msec;    
     uint32_t x;
     uint32_t y;
+    uint32_t z;
     float theta;
     float speed;
     uint32_t camera_id; // Thread ID added here
@@ -159,6 +161,7 @@ int main() {
         updated_message.detections[i].time_msec = htobe64(0);
         updated_message.detections[i].x = htobe32(-1);
         updated_message.detections[i].y = htobe32(-1);
+        updated_message.detections[i].z = htobe32(-1);
         updated_message.detections[i].theta = -1;
         updated_message.detections[i].speed = -1;
         updated_message.detections[i].camera_id = htobe32(-1);
@@ -174,6 +177,7 @@ int main() {
                     new_message = true;
                     sems[i]->wait();
                     Message msg = ptrs[i]->msg;
+                    //std::cout << msg.detections[0].x << std::endl;
                     ptrs[i]->flag = 0;
                     sems[i]->post();
                     updateMessage(msg, updated_message);
@@ -199,6 +203,7 @@ int main() {
                     continue;
                 }
             }
+            
             if(new_message){
                     seq++;
                     auto send_time = std::chrono::system_clock::now().time_since_epoch();

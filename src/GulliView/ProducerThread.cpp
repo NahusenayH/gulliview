@@ -24,7 +24,7 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
         CPU_ZERO(&cpuset);
     
         // bind the thread to the corresponding core
-        int thread_num = PRODUCER_THREAD_NUM + camera_id % PRODUCER_THREAD_COUNT;
+        int thread_num = PRODUCER_THREAD_NUM + camera_id % PRODUCER_THREAD_COUNT * PRODUCER_THREAD_COUNT / 4;
         CPU_SET(thread_num, &cpuset);
     
         // set the CPU affinity of the thread
@@ -90,17 +90,52 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             while(next == fast_consumer_counter[camera_id].load() && next == nice_consumer_counter[camera_id].load()) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
-    
-            *cap >> buffer[camera_id][next];
-            producer_counter[camera_id] = next;
-    
+            
+            // Init frame
+            cv::Mat raw_frame;
+                
+            // Time for frame capture
+            LogTime get_frame_timer;
+            
+            // Capture the frame from the camera and get timestamp
+            *cap >> raw_frame;
+            LogTime frametime;
+# if LOOP_RECORDING
+            if (raw_frame.empty()) {
+                cap->set(cv::CAP_PROP_POS_FRAMES, 0);
+                continue;
+            }
+# endif
+# if RUN_ONLY_PRODUCER
+            continue;
+# endif
+
+#if ENABLE_PRODUCER_LOGS
+            get_frame_timer.stop_ms("Get frame", file_output);
+#endif
+
+            // Create struct saving timestamp when frame was capured, used for latency evaluation
+            FrameData frame_data;
+            frame_data.frametime = frametime;
+            frame_data.frame = raw_frame.clone();
+
+            // Store the frame data in the buffer
+            buffer[camera_id][next] = frame_data;
+
+            // Atomically publish the index, ensuring memory is fully visible
+            producer_counter[camera_id].store(next, std::memory_order_release);
     
 #if ENABLE_PRODUCER_LOGS
             producer_timer.stop_ms("Produce frame", file_output);
 #endif
+            // Check if the frame is empty
+            if (raw_frame.empty()) {
+                std::cout << "No frame captured on camera " << camera_id << std::endl;
+                break;
+            }
         }
     
         file_output.close();
-    
+        std::cout << "Camera " << camera_id << " producer exiting" << std::endl;
 }
     

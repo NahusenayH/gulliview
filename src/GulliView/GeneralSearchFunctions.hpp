@@ -18,6 +18,8 @@
 #ifndef _GENERALSEARCHFUNCTIONS_H_
 #define _GENERALSEARCHFUNCTIONS_H_
 
+
+#include <iostream>
 #include <fstream>
 #include <optional>
 #include <opencv2/highgui/highgui.hpp>
@@ -34,7 +36,8 @@ float calc_velocity(const int old_x, const int old_y,
                     const boost::posix_time::ptime old_frame,
                     const boost::posix_time::ptime new_frame);
 
-void add_detection_to_msg(const int id, uint64_t detectionTime_ms, const float room_x, const float room_y, 
+void add_detection_to_msg(const int id, uint64_t detectionTime_ms, 
+                        const float room_x, const float room_y, const float room_z, 
                         const float theta, const size_t index, 
                         const int CAM_NAME, Message& buf);
 

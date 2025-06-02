@@ -31,11 +31,11 @@ bool transform_frame(cv::Mat& frame,
         return false;
     }
 
-    LogTime remap_timer;
-    // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
-#if ENABLE_ANY_LOGS
-    remap_timer.stop_ms("Remap", file_output);
-#endif
+//     LogTime remap_timer;
+//     cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
+// #if ENABLE_ANY_LOGS
+//     remap_timer.stop_ms("Remap", file_output);
+// #endif
 
     LogTime color_timer;
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);

@@ -384,6 +384,30 @@ GulliView/GeneralSearchFunctions.cpp.s:
 	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GeneralSearchFunctions.cpp.s
 .PHONY : GulliView/GeneralSearchFunctions.cpp.s
 
+GulliView/GlobalCoordination.o: GulliView/GlobalCoordination.cpp.o
+.PHONY : GulliView/GlobalCoordination.o
+
+# target to build an object file
+GulliView/GlobalCoordination.cpp.o:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GlobalCoordination.cpp.o
+.PHONY : GulliView/GlobalCoordination.cpp.o
+
+GulliView/GlobalCoordination.i: GulliView/GlobalCoordination.cpp.i
+.PHONY : GulliView/GlobalCoordination.i
+
+# target to preprocess a source file
+GulliView/GlobalCoordination.cpp.i:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GlobalCoordination.cpp.i
+.PHONY : GulliView/GlobalCoordination.cpp.i
+
+GulliView/GlobalCoordination.s: GulliView/GlobalCoordination.cpp.s
+.PHONY : GulliView/GlobalCoordination.s
+
+# target to generate assembly for a file
+GulliView/GlobalCoordination.cpp.s:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/GlobalCoordination.cpp.s
+.PHONY : GulliView/GlobalCoordination.cpp.s
+
 GulliView/InitCameras.o: GulliView/InitCameras.cpp.o
 .PHONY : GulliView/InitCameras.o
 
@@ -552,6 +576,30 @@ GulliView/TransformFrame.cpp.s:
 	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/TransformFrame.cpp.s
 .PHONY : GulliView/TransformFrame.cpp.s
 
+GulliView/Undistortion.o: GulliView/Undistortion.cpp.o
+.PHONY : GulliView/Undistortion.o
+
+# target to build an object file
+GulliView/Undistortion.cpp.o:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Undistortion.cpp.o
+.PHONY : GulliView/Undistortion.cpp.o
+
+GulliView/Undistortion.i: GulliView/Undistortion.cpp.i
+.PHONY : GulliView/Undistortion.i
+
+# target to preprocess a source file
+GulliView/Undistortion.cpp.i:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Undistortion.cpp.i
+.PHONY : GulliView/Undistortion.cpp.i
+
+GulliView/Undistortion.s: GulliView/Undistortion.cpp.s
+.PHONY : GulliView/Undistortion.s
+
+# target to generate assembly for a file
+GulliView/Undistortion.cpp.s:
+	cd /home/gulliview/advanced_mobility_model/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GulliView.dir/build.make src/CMakeFiles/GulliView.dir/GulliView/Undistortion.cpp.s
+.PHONY : GulliView/Undistortion.cpp.s
+
 TagFamily.o: TagFamily.cpp.o
 .PHONY : TagFamily.o
 
@@ -640,6 +688,9 @@ help:
 	@echo "... GulliView/GeneralSearchFunctions.o"
 	@echo "... GulliView/GeneralSearchFunctions.i"
 	@echo "... GulliView/GeneralSearchFunctions.s"
+	@echo "... GulliView/GlobalCoordination.o"
+	@echo "... GulliView/GlobalCoordination.i"
+	@echo "... GulliView/GlobalCoordination.s"
 	@echo "... GulliView/InitCameras.o"
 	@echo "... GulliView/InitCameras.i"
 	@echo "... GulliView/InitCameras.s"
@@ -661,6 +712,9 @@ help:
 	@echo "... GulliView/TransformFrame.o"
 	@echo "... GulliView/TransformFrame.i"
 	@echo "... GulliView/TransformFrame.s"
+	@echo "... GulliView/Undistortion.o"
+	@echo "... GulliView/Undistortion.i"
+	@echo "... GulliView/Undistortion.s"
 	@echo "... TagFamily.o"
 	@echo "... TagFamily.i"
 	@echo "... TagFamily.s"

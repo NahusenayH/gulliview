@@ -19,7 +19,7 @@
 
 void update_gui(const zarray_t* detections, Tag* tags_start, cv::Mat& frame, float avg_hz, std::ofstream& file_output) {
 
-    float scaling_f = 0.125; // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit 
+    float scaling_f = GUI_SCALE;
 
     std::ostringstream ss;
     ss << avg_hz;
@@ -74,7 +74,7 @@ void update_gui(const zarray_t* detections, Tag* tags_start, cv::Mat& frame, flo
         double search_area_size = search_area_width * search_area_height;
 
         // Calculate the ratio of search area size to AprilTag size
-        double ratio = search_area_size / apriltag_size;
+        // double ratio = search_area_size / apriltag_size;
 
         // Print out the ratio and related information
 
@@ -90,7 +90,7 @@ void update_gui(const zarray_t* detections, Tag* tags_start, cv::Mat& frame, flo
 
 void update_exhaustive_gui(DetectionData detection_data, Tag* tags_start, cv::Mat& frame, float avg_hz) {
 
-    float scaling_f = 0.125; // Scales GUI to fit monitor, higher res needs smaller factor. Use values of 0.5^k as fit 
+    float scaling_f = GUI_SCALE;
 
     std:: ostringstream ss;
     ss << avg_hz;

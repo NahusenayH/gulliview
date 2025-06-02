@@ -155,7 +155,7 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     //********************************************** Shared memory for sending msg to Sender (added 2024) **********************************************
 
 
-
+# if ! RUN_ONLY_PRODUCER
     std::thread nice_consumer(
         nice_consume_frame, 
         CAM_NAME, 
@@ -194,12 +194,16 @@ int process_camera(int camera_id, GulliViewOptions opts) {
         win,
         std::ref(fast_thread_logger)
     );
+# endif
 
     std::thread producer(produce_frame, camera_id, &video_capture);
 
-
+# if ! RUN_ONLY_PRODUCER
     nice_consumer.join();
     fast_consumer.join();
+# endif
+    
     producer.join();
+    std::cout << "All threads joined camera " << camera_id << std::endl;
     return 0;
 }
