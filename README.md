@@ -20,7 +20,19 @@ Vehicles in the Gulliver Project at Chalmers University, Sweden
 
 Modification Authors:  
 Bayson Xie <beichen@chalmers.se>
+Emil Nylander <emilnyla@chalmers.se>
+Elias Svensson <eliasve@chalmers.se>
 
+
+***
+Code has been modified in the 2025 B.sc. project
+at Chalmers University of Technology,
+code has been split into files, pixel undistorsion and global coordination 
+has been implemented as well as the GulliView logs program has been created
+
+Modification Authors: 
+Emil Nylander <emilnyla@chalmers.se>
+Elias Svensson <eliasve@chalmers.se>
 
 ***
 
