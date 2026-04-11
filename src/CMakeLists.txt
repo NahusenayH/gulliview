@@ -11,7 +11,7 @@ target_link_libraries(Transmitter ${APRILTAGS_LDFLAGS})
 
 if (GLUT_LIBRARY)
 
-  add_executable(gltest gltest.cpp)
-  target_link_libraries(gltest ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${AT_LIBS})
+  #add_executable(gltest gltest.cpp)
+  #target_link_libraries(gltest ${GLUT_LIBRARY} ${OPENGL_LIBRARY} ${AT_LIBS})
 
 endif()
