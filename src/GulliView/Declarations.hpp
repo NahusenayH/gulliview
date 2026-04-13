@@ -48,11 +48,11 @@
 #define RUN_ONLY_PRODUCER       false    // Only starts producer thread, used for debugging camera stability
 
 // Old values
-#define FAST_THREAD_NUM         4    // Start at here
+#define FAST_THREAD_NUM         0//4    // Start at here
 #define FAST_THREAD_COUNT       4    // Count this many
-#define NICE_THREAD_NUM         0    // Start at here
+#define NICE_THREAD_NUM         2//0    // Start at here
 #define NICE_THREAD_COUNT       4    // Count this many
-#define PRODUCER_THREAD_NUM     8    // Start at here
+#define PRODUCER_THREAD_NUM     4//8    // Start at here
 #define PRODUCER_THREAD_COUNT   4    // Count this many
 
 // New values
