@@ -35,4 +35,10 @@ void init_video_capture(const int32_t device_number,
                         const int32_t frame_height,
                         cv::VideoCapture& video_capture,
                         cv::Mat& frame);
+                        
+//added to handle empty frames
+bool open_camera_device(const int32_t device_number,
+                        const int32_t frame_width,
+                        const int32_t frame_height,
+                        cv::VideoCapture& video_capture);
 #endif

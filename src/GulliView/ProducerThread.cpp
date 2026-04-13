@@ -17,8 +17,8 @@
 
 #include "ProducerThread.hpp"
 
-void produce_frame(int camera_id, cv::VideoCapture *cap) {
-
+// void produce_frame(int camera_id, cv::VideoCapture *cap) {
+void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int frame_height) {
     #if BINDING_CPU_CORES
         cpu_set_t cpuset;
         CPU_ZERO(&cpuset);
@@ -52,7 +52,13 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             std::cerr << "Error: Unable to get thread scheduling parameters" << std::endl;
             return;
         }
-
+        
+        //recovery variables for handling empty frames
+        constexpr auto kMaxEmptyGap = std::chrono::milliseconds(100);
+        constexpr int kMaxReopenAttempts = 5;
+        int reopen_failures = 0;
+        auto last_success_time = std::chrono::steady_clock::now();
+        
         std::ostringstream filename;
         filename << "output/camera_" << camera_id << "_output-producer.log";
         std::ofstream file_output(filename.str(), std::ios::out);
@@ -99,7 +105,50 @@ void produce_frame(int camera_id, cv::VideoCapture *cap) {
             
             // Capture the frame from the camera and get timestamp
             *cap >> raw_frame;
-            LogTime frametime;
+            
+            //handle empty frames
+            if (raw_frame.empty()) {
+            # if LOOP_RECORDING
+                cap->set(cv::CAP_PROP_POS_FRAMES, 0);
+                continue;
+            # else
+                auto now = std::chrono::steady_clock::now();
+                if (now - last_success_time <= kMaxEmptyGap) {
+                    std::cerr << "Camera " << camera_id << " empty frame detected, skipping" << std::endl;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(2));
+                    continue;
+                }
+
+    
+            ++reopen_failures;
+            std::cerr << "Camera "  << camera_id << " no frames for "
+                                    << std::chrono::duration_cast<std::chrono::milliseconds>(now - last_success_time).count()
+                                    << " ms, reopening (attempt "
+                                    << reopen_failures << " of " << kMaxReopenAttempts << ")" << std::endl;
+
+            cap->release();
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+            if (!open_camera_device(camera_id, frame_width, frame_height, *cap)) {
+                if (reopen_failures >= kMaxReopenAttempts) {
+                    std::cerr << "Camera " << camera_id << " failed to recover after "
+                              << kMaxReopenAttempts << " reopen attempts" << std::endl;
+                    break;
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                continue;
+            }
+
+            std::cout << "Camera " << camera_id << " stream reopened" << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            continue;
+# endif
+}
+reopen_failures = 0;
+last_success_time = std::chrono::steady_clock::now();
+
+
+LogTime frametime;
 # if LOOP_RECORDING
             if (raw_frame.empty()) {
                 cap->set(cv::CAP_PROP_POS_FRAMES, 0);

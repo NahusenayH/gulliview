@@ -164,9 +164,21 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         LogTime frametime = frame_data.frametime;
 
         // Check if the frame is empty
+        // if (frame.empty()) {
+        //     std::cout << "No frame recieved in nice thread, camera " << camera_id << std::endl;
+        //     break;
+        // }
+
+        //handle empty frames 
         if (frame.empty()) {
-            std::cout << "No frame recieved in nice thread, camera " << camera_id << std::endl;
-            break;
+            thread_local std::chrono::steady_clock::time_point last_log_time = std::chrono::steady_clock::time_point::min();
+            auto now = std::chrono::steady_clock::now();
+            if (now - last_log_time > std::chrono::seconds(1)) {
+                std::cout << "No frame recieved in nice thread, camera " << camera_id << std::endl;
+                last_log_time = now;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+            continue;
         }
 
         boost::posix_time::ptime transform_start = boost::posix_time::microsec_clock::universal_time();

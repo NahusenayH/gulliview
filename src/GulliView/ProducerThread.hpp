@@ -26,7 +26,10 @@
 
 #include "Declarations.hpp"
 #include "LogTime.hpp"
+#include "InitCameras.hpp"
 
-void produce_frame(int camera_id, cv::VideoCapture *cap);
+// void produce_frame(int camera_id, cv::VideoCapture *cap);
+//edited to handle empty frames
+void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int frame_height);
 
 #endif

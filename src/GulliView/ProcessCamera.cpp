@@ -196,8 +196,9 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     );
 # endif
 
-    std::thread producer(produce_frame, camera_id, &video_capture);
-
+    // std::thread producer(produce_frame, camera_id, &video_capture);
+    //edited to handle empty frames
+    std::thread producer(produce_frame, camera_id, &video_capture, opts.frame_width, opts.frame_height);
 # if ! RUN_ONLY_PRODUCER
     nice_consumer.join();
     fast_consumer.join();
