@@ -53,6 +53,11 @@ bool transform_frame(cv::Mat& frame,
     // TODO save timestamp (maybe return the timestamp instead of bool)
     // cv::remap(frame, frame, map1, map2, cv::INTER_LINEAR);
 
+    // Resize to 1080p if frame is 4K
+    // if (frame.cols == 3840 && frame.rows == 2160) {
+    //     cv::resize(frame, frame, cv::Size(1920, 1080), 0, 0, cv::INTER_LINEAR);
+    // }
+    
     cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
 
     return !frame.empty();

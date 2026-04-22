@@ -14,7 +14,7 @@
 * Copyright (c) 2025 Emil Nylander <emilnyla@chalmers.se>
 * Copyright (c) 2025 Elias Svensson <eliasve@chalmers.se>
 ********************************************************************/
-
+#include <opencv2/imgproc.hpp>
 #include "ProducerThread.hpp"
 
 // void produce_frame(int camera_id, cv::VideoCapture *cap) {
@@ -73,24 +73,24 @@ void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int fr
                 break;
             }
     
-    #if BINDING_CPU_CORES
-            // Get the CPU affinity of the current thread
-            if (pthread_getaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset) != 0) {
-                std::cerr << "Error: Unable to get CPU affinity for thread" << std::endl;
-                break;
-            }
-    
-            // Find the core where the current thread is running
-            for (int i = 0; i < CPU_SETSIZE; ++i) {
-                if (CPU_ISSET(i, &cpuset)) {
-#if ENABLE_PRODUCER_LOGS
-                    file_output << "Core number: " << i << std::endl;
-#endif
-                    break;
-                }
-            }
-    #endif
-    
+                #if BINDING_CPU_CORES
+                        // Get the CPU affinity of the current thread
+                        if (pthread_getaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset) != 0) {
+                            std::cerr << "Error: Unable to get CPU affinity for thread" << std::endl;
+                            break;
+                        }
+                
+                        // Find the core where the current thread is running
+                        for (int i = 0; i < CPU_SETSIZE; ++i) {
+                            if (CPU_ISSET(i, &cpuset)) {
+            #if ENABLE_PRODUCER_LOGS
+                                file_output << "Core number: " << i << std::endl;
+            #endif
+                                break;
+                            }
+                        }
+                #endif
+                
             unsigned int next = (producer_counter[camera_id].load() + 1) % BUFFER_SIZE;
     
             while(next == fast_consumer_counter[camera_id].load() && next == nice_consumer_counter[camera_id].load()) {
@@ -105,7 +105,54 @@ void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int fr
             
             // Capture the frame from the camera and get timestamp
             *cap >> raw_frame;
+
+
+
+
+
+            // BENCHMARK CONTROLS - change these to switch test cases
+            #define BENCHMARK_RESIZE    false   // true = 1080p, false = 4K
+            #define BENCHMARK_30FPS     false   // true = 30fps, false = 60fps
+
+            #if BENCHMARK_RESIZE
+            if (!raw_frame.empty() && raw_frame.cols == 3840 && raw_frame.rows == 2160) {
+                cv::resize(raw_frame, raw_frame, cv::Size(1920, 1080), 0, 0, cv::INTER_LINEAR);
+            }
+            #endif
+
+            #if BENCHMARK_30FPS
+            static int skip_counter = 0;
+            if (++skip_counter % 2 == 0) {
+                continue;
+            }
+            #endif
+
+
+
+
+
+
+            // // Temporary test: force empty frame every 200 frames
+            // static int frame_counter = 0;
+            // if (++frame_counter % 200 == 0) {
+            //     std::cout << "frame_counter " << frame_counter << " stream reopened" << std::endl;
+            //     raw_frame = cv::Mat(); // force empty
+            // }
             
+
+
+            // Downscale 4K to 1080p to reduce memory usage
+            // if (!raw_frame.empty() && raw_frame.cols == 3840 && raw_frame.rows == 2160) {
+            //     cv::resize(raw_frame, raw_frame, cv::Size(1920, 1080), 0, 0, cv::INTER_LINEAR);
+            // }
+
+            // Temporary: confirm resize is working
+            static bool printed = false;
+            if (!printed && !raw_frame.empty()) {
+                std::cout << "Frame size after resize: " << raw_frame.cols << "x" << raw_frame.rows << std::endl;
+                printed = true;
+            }
+
             //handle empty frames
             if (raw_frame.empty()) {
             # if LOOP_RECORDING
@@ -159,6 +206,26 @@ LogTime frametime;
             continue;
 # endif
 
+
+
+// Print RSS every 30 seconds
+static auto last_print = std::chrono::steady_clock::now();
+auto now_time = std::chrono::steady_clock::now();
+if (camera_id == 0 && std::chrono::duration_cast<std::chrono::seconds>(now_time - last_print).count() >= 30) {
+    std::ifstream status("/proc/self/status");
+    std::string line;
+    while (std::getline(status, line)) {
+        if (line.find("VmRSS") != std::string::npos || 
+            line.find("VmSize") != std::string::npos) {
+            std::cout << "[BENCHMARK] " << line << std::endl;
+        }
+    }
+    last_print = now_time;
+}
+
+
+
+
 #if ENABLE_PRODUCER_LOGS
             get_frame_timer.stop_ms("Get frame", file_output);
 #endif
@@ -167,6 +234,8 @@ LogTime frametime;
             FrameData frame_data;
             frame_data.frametime = frametime;
             frame_data.frame = raw_frame.clone();
+
+            // frame_data.frame = cv::Mat();
 
             // Store the frame data in the buffer
             buffer[camera_id][next] = frame_data;

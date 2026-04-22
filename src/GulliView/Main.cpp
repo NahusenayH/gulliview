@@ -357,6 +357,13 @@ void general_log(){
 
 // Main function
 int main(int argc, char **argv) {
+    std::cout << "sizeof FrameData: " << sizeof(FrameData) << " bytes" << std::endl;
+    std::cout << "Total frame buffer: " << (sizeof(FrameData) * 4 * BUFFER_SIZE) / (1024*1024) << " MB" << std::endl;
+    std::cout << "sizeof DetectionData: " << sizeof(DetectionData) << " bytes" << std::endl;
+    std::cout << "Total search buffer: " << (sizeof(DetectionData) * 4 * BUFFER_SIZE) / (1024*1024) << " MB" << std::endl;
+    
+    // std::cout << "Sleeping 10 seconds - check RSS now..." << std::endl;
+    // std::this_thread::sleep_for(std::chrono::seconds(10));
     // Parsing command line arguments
     GulliViewOptions opts = parse_options(argc, argv);
 
