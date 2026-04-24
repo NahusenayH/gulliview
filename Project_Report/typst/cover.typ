@@ -1,2 +1,0 @@
-#align(center+horizon, text(size: 24pt, [*Stabilizing GulliView\ Analysis and Recommendations*]))
-#align(center, text(size: 12pt, [DAT 295 Autonomous and Cooperative Driving Vehicle  \ Lukas Klapproth: lukas.m.klapproth\@campus.tu-berlin.de\ Supervisor:\ Xiuqi Zhang: xiuqiz\@chalmers.se\ Course led by:\ Prof. Ellad Schiller: elad.schiller\@chalmers.se]))

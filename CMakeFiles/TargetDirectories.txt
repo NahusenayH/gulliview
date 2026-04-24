@@ -1,6 +1,0 @@
-/home/gulliview/advanced_mobility_model/CMakeFiles/edit_cache.dir
-/home/gulliview/advanced_mobility_model/CMakeFiles/rebuild_cache.dir
-/home/gulliview/advanced_mobility_model/src/CMakeFiles/GulliView.dir
-/home/gulliview/advanced_mobility_model/src/CMakeFiles/Transmitter.dir
-/home/gulliview/advanced_mobility_model/src/CMakeFiles/edit_cache.dir
-/home/gulliview/advanced_mobility_model/src/CMakeFiles/rebuild_cache.dir
