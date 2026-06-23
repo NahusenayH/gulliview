@@ -16,8 +16,13 @@
 ********************************************************************/
 
 #include <filesystem>
-
+//#include <X11/Xlib.h>
 #include "ProcessCamera.hpp"
+
+
+//extern "C" int XInitThreads(void);
+#define XInitThreads___ // placeholder
+
 
 // DEFINES GLOBAL VARIABLES
 int nines = 0;
@@ -398,6 +403,44 @@ int main(int argc, char **argv) {
 
             threads.push_back(std::thread(process_camera, i, std::cref(camera_opts[i])));
         }
+        
+        
+        
+        
+        
+        //GC thread
+//         threads.push_back(std::thread([]() {
+//     while (!sig_stop) {
+//         for (int cam = 0; cam < 4; ++cam) {
+//             unsigned int fast_idx = fast_consumer_counter[cam].load(std::memory_order_acquire);
+//             unsigned int nice_idx = nice_consumer_counter[cam].load(std::memory_order_acquire);
+//             unsigned int prod_idx = producer_counter[cam].load(std::memory_order_acquire);
+
+//             // Release all slots that BOTH consumers have passed
+//             unsigned int slow = (fast_idx < nice_idx) ? fast_idx : nice_idx;
+
+//             // Walk from producer's oldest unreleased slot up to slow
+//             for (unsigned int f = 0; f < BUFFER_SIZE; ++f) {
+//                 if (used_flag[cam][f].load(std::memory_order_acquire)>=2) {
+//                     // Only release if this slot is behind both consumers
+//                     // i.e. not between slow and prod_idx in the ring
+//                     buffer[cam][f].frame.release();
+//                     used_flag[cam][f].store(0, std::memory_order_release);
+//                 }
+//             }
+//         }
+//         std::this_thread::sleep_for(std::chrono::milliseconds(1));
+//     }
+// }));
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         // Wait for all threads to complete
         for (auto& t : threads) {

@@ -33,12 +33,21 @@ int process_camera(int camera_id, GulliViewOptions opts) {
         nice_consumer_counter[i] = 0;
     }
 
+
+//memory unsafe pointer initialization
+//#if PRODUCE_FRAME_MODE == 2
+//
+//    LockFreeBuffer* lock_buffer = new LockFreeBuffer();  // Initializing pointers
+//    LockFreeSearchBuffer* lock_search_buffer = new LockFreeSearchBuffer();
+//
+//#endif
+// memory safe pointer initialization
 #if PRODUCE_FRAME_MODE == 2
-
-    LockFreeBuffer* lock_buffer = new LockFreeBuffer();  // Initializing pointers
-    LockFreeSearchBuffer* lock_search_buffer = new LockFreeSearchBuffer();
-
+    std::unique_ptr<LockFreeBuffer> lock_buffer = std::make_unique<LockFreeBuffer>();
+    std::unique_ptr<LockFreeSearchBuffer> lock_search_buffer = std::make_unique<LockFreeSearchBuffer>();
 #endif
+
+
 
     // Initialize video capture for this camera
     cv::VideoCapture video_capture;
@@ -100,14 +109,17 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     struct stat sb;
     if (fstat(fd, &sb) == -1) {buffer
         std::cerr << "faied to get size" << std::endl;
+        close(fd);  // close fd before early return
         return 1;
     }
 
     char* shared_memory = static_cast<char*>(mmap(NULL, sb.st_size, PROT_READ, MAP_SHARED, fd, 0));
     if (shared_memory == MAP_FAILED) {
         std::cerr << "mmap failed" << std::endl;
+        close(fd);  // close fd before early return
         return 1;
     }
+    close(fd); // fd no longer needed after mmap
     // shared memory-file end
 
 
@@ -129,6 +141,7 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     
     //std::cout << "semaphore in Gulliview  " << sem_1 << std::endl;
     std::cout << opts.shared_semaphore.c_str() << std::endl;
+    const std::string memNameStr = opts.shared_memory;  // store as string for cleanup
     const char *memName = opts.shared_memory.c_str();
     std::cout << opts.shared_memory.c_str() << std::endl;
     const size_t SIZE = sizeof(SharedData);
@@ -140,14 +153,22 @@ int process_camera(int camera_id, GulliViewOptions opts) {
 
     if(ftruncate(shm_fd, SIZE) != 0) {
         std::cerr << "size set fail" << std::endl;
+        close(shm_fd);      // close fd before early return
+    	shm_unlink(memName); // unlink shared memory before early return
         return 1;
     }
+    
+ 
 
     SharedData *ptr = (SharedData *)mmap(0, SIZE, PROT_WRITE, MAP_SHARED, shm_fd, 0);
     if (ptr == MAP_FAILED) {
         std::cerr << "mmap failed" << std::endl;
+        close(shm_fd);
+        shm_unlink(memName);
         return 1;
     }
+    
+    close(shm_fd); // fd no longer needed after mmap
 
 #endif
 
@@ -206,5 +227,13 @@ int process_camera(int camera_id, GulliViewOptions opts) {
     
     producer.join();
     std::cout << "All threads joined camera " << camera_id << std::endl;
+#if USE_MEMORY_SHARING
+    munmap(shared_memory, sb.st_size);
+#else
+    munmap(ptr, SIZE);//(shared_memory, sb.st_size);
+    shm_unlink(memName);
+    boost::interprocess::named_semaphore::remove(opts.shared_semaphore.c_str());
+
+#endif
     return 0;
 }

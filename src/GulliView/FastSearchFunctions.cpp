@@ -102,9 +102,13 @@ void partial_search(const image_u8_t& im,
 #if ENABLE_FAST_LOGS
     timer.stop_ms("get_partial_image", file_output);
 #endif
- 
-    if (parent_timer->stop_us() > 17000)
+    
+    // Early-out guard. Must free im_part before returning, otherwise every
+    // slow frame (i.e. whenever tags are present) leaks one image buffer.
+    if (parent_timer->stop_us() > 17000){
+        image_u8_destroy(im_part);
         return;
+    }
 
     LogTime apriltag_detector_detect_timer;
 
@@ -113,17 +117,39 @@ void partial_search(const image_u8_t& im,
 #if ENABLE_FAST_LOGS
     apriltag_detector_detect_timer.stop_ms("apriltag_detector_detect", file_output);
 #endif
+
+    // im_part is no longer needed once detection has run.
+    image_u8_destroy(im_part);
+
  
-    if (parent_timer->stop_us() > 17000)
+    if (parent_timer->stop_us() > 17000){
+        apriltag_detections_destroy(detection);
         return;
+    }
+        
 
     LogTime zarray_timer;
 
-    if(zarray_size(detection) != 0){
+    int n = zarray_size(detection);
+    if (n != 0) {
         apriltag_detection_t *temp;
         zarray_get(detection, 0, &temp);
         zarray_add(detections, &temp);
+
+        for (int i = 1; i < n; i++) {
+            apriltag_detection_t *extra;
+            zarray_get(detection, i, &extra);
+            apriltag_detection_destroy(extra);
+        }
+        zarray_destroy(detection);   // wrapper only; element 0 now lives in detections
+    } else {
+        apriltag_detections_destroy(detection);  // empty zarray, free wrapper
     }
+    // if(zarray_size(detection) != 0){
+    //     apriltag_detection_t *temp;
+    //     zarray_get(detection, 0, &temp);
+    //     zarray_add(detections, &temp);
+    // }
 #if ENABLE_FAST_LOGS
     zarray_timer.stop_ms("Zarray time", file_output);
     timer.stop_ms("partial_search", file_output);

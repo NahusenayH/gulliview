@@ -5,6 +5,10 @@ cmake_policy(SET CMP0079 NEW)
 
 project(GulliView)
 
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
@@ -82,6 +86,11 @@ configure_file(${CMAKE_SOURCE_DIR}/scripts/startCamerasMerging.sh ${CMAKE_BINARY
 configure_file(${CMAKE_SOURCE_DIR}/scripts/startGulliViewMembership.sh ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/scripts/startGulliViewMultithread.sh ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/scripts/membership_service.py ${CMAKE_BINARY_DIR} COPYONLY)
+
+find_package(X11 REQUIRED)
+target_link_libraries(GulliView ${X11_LIBRARIES})
+
+target_compile_definitions(GulliView PRIVATE HAVE_X11)
 
 target_link_libraries(GulliView ${APRILTAGS_LIBRARIES} rt) # modified 2025
 target_link_libraries(Transmitter rt)

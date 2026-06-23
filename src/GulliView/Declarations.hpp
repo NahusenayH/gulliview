@@ -39,7 +39,7 @@
 #define ENABLE_PRODUCER_LOGS    false                   // Enables producer thread log output files
 #define ENABLE_ANY_LOGS         ENABLE_FAST_LOGS || ENABLE_NICE_LOGS || ENABLE_PRODUCER_LOGS
 
-#define LIVE_FEED               false                    // If the cameras live feed or recordings from RECORDING_FOLDER are used
+#define LIVE_FEED               true                    // If the cameras live feed or recordings from RECORDING_FOLDER are used
 #define LOOP_RECORDING          true
 #define RECORDING_FOLDER        "recordings_1bot_0.7"   // Folder to get recordings from
 
@@ -48,11 +48,11 @@
 #define RUN_ONLY_PRODUCER       false    // Only starts producer thread, used for debugging camera stability
 
 // Old values
-#define FAST_THREAD_NUM         0//4    // Start at here
+#define FAST_THREAD_NUM         4//4    // Start at here
 #define FAST_THREAD_COUNT       4    // Count this many
-#define NICE_THREAD_NUM         2//0    // Start at here
+#define NICE_THREAD_NUM         0//2//0    // Start at here
 #define NICE_THREAD_COUNT       4    // Count this many
-#define PRODUCER_THREAD_NUM     4//8    // Start at here
+#define PRODUCER_THREAD_NUM     8//4//8    // Start at here
 #define PRODUCER_THREAD_COUNT   4    // Count this many
 
 // New values
@@ -71,7 +71,7 @@
 
 #define USE_MEMORY_SHARING      false
 #define USE_EWMA                true
-#define BINDING_CPU_CORES       true
+#define BINDING_CPU_CORES       true //false
 
 #define PRODUCE_FRAME_MODE      1
 
@@ -87,8 +87,8 @@
 #define DEFAULT_ACCELERATION_MAX 8
 #define DEFAULT_LIMIT_MAX 17000
 
-#define FPS 30
-#define BUFFER_SIZE 4
+#define FPS 60
+#define BUFFER_SIZE 128
 #define PARALLELL_FRAME_COUNT 2
 #define GLOBAL_SEARCH_MIN 16
 
@@ -108,6 +108,9 @@ struct FrameData {
 };
 
 extern FrameData buffer[4][BUFFER_SIZE]; // modified 2025
+
+
+extern std::atomic<int> used_flag[4][BUFFER_SIZE];
 
 typedef struct __attribute__ ((packed)) DetectionArea {
     int32_t x_start;

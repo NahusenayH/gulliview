@@ -40,7 +40,7 @@ PID_MEMBERSHIP=$!
 
 sleep 1
 # ./GulliView -d 4 -f tag36h11 -W 1920 -H 1080 -V 192.168.50.255 -B -N my_semaphore -T shared_memory &   # 4 cameras
-./GulliView -d 4 -f tag36h11 -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore -T shared_memory &   # 4 cameras
+./GulliView -d 4 -f tag36h11 -W 3840 -H 2160 -V 192.168.50.255 -B -N my_semaphore -T shared_memory -n &   # 4 cameras
 PID_GULLIVIEW=$!
 
 sleep 2

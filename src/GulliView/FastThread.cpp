@@ -135,7 +135,7 @@ int fast_consume_frame(int camera_id,
     apriltag_detector_add_family(detector, family.at_family);
 
     detector->nthreads = 16;
-    detector->quad_decimate = 1.0f;
+    detector->quad_decimate = 1.0f;//2.0f;
     detector->quad_sigma = 0.6f; // Low-pass blur, negative values sharpen
     detector->refine_edges = 1; 
 
@@ -189,9 +189,12 @@ int fast_consume_frame(int camera_id,
         consume_buffers[0] = &buffer_23;
     }
 
+        int buf_index = 0;
     for (int trial = 1; trial <= 1; trial++) {
 
     int total_loop_count = 0;
+    
+
 
     while (true) {
 
@@ -301,7 +304,7 @@ int fast_consume_frame(int camera_id,
         
         // Wait for the producer to produce a frame
         while (fast_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
 
 #if ENABLE_FAST_LOGS
@@ -309,18 +312,22 @@ int fast_consume_frame(int camera_id,
 #endif
 
         // Atomically load the published index with memory synchronization
-        int index = producer_counter[camera_id].load(std::memory_order_acquire);
+        buf_index = producer_counter[camera_id].load(std::memory_order_acquire);
 
-        fast_consumer_counter[camera_id] = index;
+        fast_consumer_counter[camera_id] = buf_index;
+        
 
-        FrameData& frame_data = buffer[camera_id][index];
+        FrameData& frame_data = buffer[camera_id][buf_index];
         cv::Mat frame = frame_data.frame;
         LogTime frametime = frame_data.frametime;
 
         // Check if the frame is empty
         if (frame.empty()) {
-            std::cout << "No frame recieved in fast thread, camera " << camera_id << std::endl;
-            break;
+             std::this_thread::sleep_for(std::chrono::milliseconds(5));
+             continue;
+        
+            //std::cout << "No frame recieved in fast thread, camera " << camera_id << std::endl;
+            //break;
         }
 
         LogTime transform_frame_timer;
@@ -773,6 +780,9 @@ int fast_consume_frame(int camera_id,
             break;
         }
         apriltag_detections_destroy(detections);
+        
+        
+        used_flag[camera_id][buf_index].fetch_add(1, std::memory_order_release);
 
         loop_count++;
 
@@ -805,6 +815,7 @@ int fast_consume_frame(int camera_id,
         }
     }
     apriltag_detector_destroy(detector);
+    
     file_output.close();
 
     std::cout << "Camera " << camera_id << " fast exiting" << std::endl;

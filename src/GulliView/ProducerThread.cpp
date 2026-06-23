@@ -17,6 +17,16 @@
 #include <opencv2/imgproc.hpp>
 #include "ProducerThread.hpp"
 
+#include <csignal>
+static volatile bool pause_clone = false;
+
+std::atomic<int> used_flag[4][BUFFER_SIZE];
+
+void toggle_clone(int) {
+    pause_clone = !pause_clone;
+    std::cout << "[BENCHMARK] Clone " << (pause_clone ? "PAUSED" : "RESUMED") << std::endl;
+}
+
 // void produce_frame(int camera_id, cv::VideoCapture *cap) {
 void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int frame_height) {
     #if BINDING_CPU_CORES
@@ -63,6 +73,9 @@ void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int fr
         filename << "output/camera_" << camera_id << "_output-producer.log";
         std::ofstream file_output(filename.str(), std::ios::out);
     
+        // Register SIGUSR1 to toggle cloning
+        signal(SIGUSR1, toggle_clone);
+        
         while (true)
         {
             LogTime producer_timer;
@@ -94,7 +107,7 @@ void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int fr
             unsigned int next = (producer_counter[camera_id].load() + 1) % BUFFER_SIZE;
     
             while(next == fast_consumer_counter[camera_id].load() && next == nice_consumer_counter[camera_id].load()) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
             
             // Init frame
@@ -104,7 +117,13 @@ void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int fr
             LogTime get_frame_timer;
             
             // Capture the frame from the camera and get timestamp
-            *cap >> raw_frame;
+            try {
+                *cap >> raw_frame;
+            } catch (const cv::Exception& e) {
+                std::cerr << "Camera " << camera_id << " grab threw: " << e.what()
+                          << " — treating as empty frame" << std::endl;
+                raw_frame.release();   // ensure empty so the recovery path below handles it
+            }
 
 
 
@@ -179,8 +198,12 @@ void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int fr
             if (!open_camera_device(camera_id, frame_width, frame_height, *cap)) {
                 if (reopen_failures >= kMaxReopenAttempts) {
                     std::cerr << "Camera " << camera_id << " failed to recover after "
-                              << kMaxReopenAttempts << " reopen attempts" << std::endl;
-                    break;
+                              << kMaxReopenAttempts << " attempts, retrying..." << std::endl;
+                    reopen_failures = 0;  // reset and keep trying instead of exiting
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                              
+                    //          " reopen attempts" << std::endl;
+                  //  break;
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(200));
                 continue;
@@ -202,10 +225,6 @@ LogTime frametime;
                 continue;
             }
 # endif
-# if RUN_ONLY_PRODUCER
-            continue;
-# endif
-
 
 
 // Print RSS every 30 seconds
@@ -225,6 +244,16 @@ if (camera_id == 0 && std::chrono::duration_cast<std::chrono::seconds>(now_time 
 
 
 
+# if RUN_ONLY_PRODUCER
+            continue;
+# endif
+
+
+
+
+
+
+
 
 #if ENABLE_PRODUCER_LOGS
             get_frame_timer.stop_ms("Get frame", file_output);
@@ -233,13 +262,32 @@ if (camera_id == 0 && std::chrono::duration_cast<std::chrono::seconds>(now_time 
             // Create struct saving timestamp when frame was capured, used for latency evaluation
             FrameData frame_data;
             frame_data.frametime = frametime;
-            frame_data.frame = raw_frame.clone();
+
+
+            // frame_data.frame = raw_frame.clone();
+            if (!pause_clone) {
+                frame_data.frame = raw_frame.clone();
+            } else {
+                frame_data.frame = cv::Mat();  // empty mat, no allocation
+            }
 
             // frame_data.frame = cv::Mat();
 
+            //attem
+	    if (used_flag[camera_id][next].load(std::memory_order_acquire) >= 2){ //||
+            //!buffer[camera_id][next].frame.empty()) 
+            
+                buffer[camera_id][next].frame.release();
+            }
+            used_flag[camera_id][next].store(0, std::memory_order_release);
             // Store the frame data in the buffer
             buffer[camera_id][next] = frame_data;
 
+
+
+            
+            
+            
             // Atomically publish the index, ensuring memory is fully visible
             producer_counter[camera_id].store(next, std::memory_order_release);
     

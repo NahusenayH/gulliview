@@ -92,7 +92,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     // apriltag_detector_add_family(detector, tf);
 
     detector->nthreads = 16;
-    detector->quad_decimate = 1.0f; // 
+    detector->quad_decimate = 1.0f; // 2.0f;
     detector->quad_sigma = 0.6f; // Low-pass blur, negative values sharpen
     detector->refine_edges = 1; 
 
@@ -103,6 +103,9 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     uint32_t seq = 0;
     int loop_count = 0;
 
+
+    int buf_index = 0;
+    
     while (true) {
 
         // Get the scheduling policy and priority of the current thread
@@ -147,7 +150,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         
         // Wait for the producer to produce a frame
         while (nice_consumer_counter[camera_id].load() == producer_counter[camera_id].load()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
 
 #if ENABLE_NICE_LOGS
@@ -155,11 +158,12 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
 #endif
 
         // Atomically load the published index with memory synchronization
-        int index = producer_counter[camera_id].load(std::memory_order_acquire);
+        buf_index = producer_counter[camera_id].load(std::memory_order_acquire);
 
-        nice_consumer_counter[camera_id] = index;
+        nice_consumer_counter[camera_id] = buf_index;
+         
 
-        FrameData& frame_data = buffer[camera_id][index];
+        FrameData& frame_data = buffer[camera_id][buf_index];
         cv::Mat frame = frame_data.frame;
         LogTime frametime = frame_data.frametime;
 
@@ -431,6 +435,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
         }
         apriltag_detections_destroy(detections);
 
+        used_flag[camera_id][buf_index].fetch_add(1, std::memory_order_release);
         loop_count++;
 
             // End measurement
@@ -452,6 +457,7 @@ int nice_consume_frame(int camera_id, boost::interprocess::named_semaphore& sem,
     }
 
     apriltag_detector_destroy(detector);
+    
     file_output.close();
 
     std::cout << "Camera " << camera_id << " nice exiting" << std::endl;
