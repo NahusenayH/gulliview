@@ -142,6 +142,12 @@ void partial_search(const image_u8_t& im,
             apriltag_detection_destroy(extra);
         }
         zarray_destroy(detection);   // wrapper only; element 0 now lives in detections
+
+        // With the minimal-cleanup version (accepts small leak):
+        // free(detection->data);
+        // free(detection);
+    
+    
     } else {
         apriltag_detections_destroy(detection);  // empty zarray, free wrapper
     }

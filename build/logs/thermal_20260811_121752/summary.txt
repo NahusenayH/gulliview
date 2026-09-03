@@ -1,0 +1,87 @@
+GulliView thermal test starting at Tue Aug 11 12:17:52 UTC 2026
+Output directory: logs/thermal_20260811_121752
+Runs: 1 2 3 4 cameras, 30 min each
+Cooldown: 10 min between runs
+
+Baseline idle: pkg=41°C  fan=1600 RPM
+
+===================================================================
+TEST: 1 camera(s) — starting at Tue Aug 11 12:17:53 UTC 2026
+===================================================================
+----- Results for 1 camera(s) --------------------------------
+Actual duration: 30 min 5 sec
+Package temp:  min=41°C  max=46°C  avg=45°C  samples=181
+Fan speed:     min=1600 RPM  max=1600 RPM  avg=1600 RPM
+select() timeouts in log: 0
+0
+Corrupt JPEG warnings:    0
+0
+Recent dmesg throttle events (approx): 113
+Recent dmesg USB -71 errors (approx):  124
+Recent dmesg GulliView segfaults:      17
+
+Cooling down for 10 minutes...
+End of cooldown: pkg=41°C
+
+===================================================================
+TEST: 2 camera(s) — starting at Tue Aug 11 12:58:10 UTC 2026
+===================================================================
+----- Results for 2 camera(s) --------------------------------
+Actual duration: 30 min 6 sec
+Package temp:  min=41°C  max=45°C  avg=44°C  samples=181
+Fan speed:     min=1600 RPM  max=1600 RPM  avg=1600 RPM
+select() timeouts in log: 0
+0
+Corrupt JPEG warnings:    0
+0
+Recent dmesg throttle events (approx): 112
+Recent dmesg USB -71 errors (approx):  125
+Recent dmesg GulliView segfaults:      17
+
+Cooling down for 10 minutes...
+End of cooldown: pkg=41°C
+
+===================================================================
+TEST: 3 camera(s) — starting at Tue Aug 11 13:38:27 UTC 2026
+===================================================================
+----- Results for 3 camera(s) --------------------------------
+Actual duration: 30 min 6 sec
+Package temp:  min=41°C  max=45°C  avg=44°C  samples=181
+Fan speed:     min=1600 RPM  max=1600 RPM  avg=1600 RPM
+select() timeouts in log: 0
+0
+Corrupt JPEG warnings:    0
+0
+Recent dmesg throttle events (approx): 109
+Recent dmesg USB -71 errors (approx):  126
+Recent dmesg GulliView segfaults:      18
+
+Cooling down for 10 minutes...
+End of cooldown: pkg=41°C
+
+===================================================================
+TEST: 4 camera(s) — starting at Tue Aug 11 14:18:44 UTC 2026
+===================================================================
+WARNING: GulliView exited early after 15 sec
+----- Results for 4 camera(s) --------------------------------
+Actual duration: 0 min 15 sec
+Package temp:  min=41°C  max=77°C  avg=59°C  samples=2
+Fan speed:     min=1600 RPM  max=3500 RPM  avg=2550 RPM
+select() timeouts in log: 0
+0
+Corrupt JPEG warnings:    0
+0
+Recent dmesg throttle events (approx): 108
+Recent dmesg USB -71 errors (approx):  129
+Recent dmesg GulliView segfaults:      18
+
+===================================================================
+All tests complete at Tue Aug 11 14:19:05 UTC 2026
+===================================================================
+
+Per-test files in logs/thermal_20260811_121752:
+  gulliview_Ncam.log     - full GulliView stdout/stderr
+  sensors_Ncam.csv       - temperature samples during the run
+  cooldown_after_Ncam.csv - temperature samples during cooldown
+
+Read summary.txt first — it has the comparative numbers.

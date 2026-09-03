@@ -402,6 +402,8 @@ int main(int argc, char **argv) {
             camera_opts[i].shared_memory = "shared_memory" + std::to_string(i+1);   // Create different shared memory for each camera
 
             threads.push_back(std::thread(process_camera, i, std::cref(camera_opts[i])));
+            // Give each camera time to fully initialize before starting the next
+            std::this_thread::sleep_for(std::chrono::milliseconds(2000));   // 2 seconds
         }
         
         

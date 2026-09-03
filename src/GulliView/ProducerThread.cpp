@@ -117,6 +117,26 @@ void produce_frame(int camera_id, cv::VideoCapture *cap, int frame_width, int fr
             LogTime get_frame_timer;
             
             // Capture the frame from the camera and get timestamp
+            bool cap_valid = false;
+            try {
+                cap_valid = (cap && cap->isOpened());
+            } catch (const std::exception& e) {
+                std::cerr << "Camera " << camera_id 
+                        << " isOpened() threw: " << e.what() << std::endl;
+                cap_valid = false;
+            } catch (...) {
+                cap_valid = false;
+            }
+            if (!cap_valid) {
+                std::cerr << "Camera " << camera_id 
+                        << " VideoCapture invalid, attempting reopen" << std::endl;
+                try {
+                    cap->release();
+                } catch (...) {}
+                open_camera_device(camera_id, frame_width, frame_height, *cap);
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                continue;
+            }
             try {
                 *cap >> raw_frame;
             } catch (const cv::Exception& e) {

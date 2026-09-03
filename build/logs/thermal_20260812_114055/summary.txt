@@ -1,0 +1,24 @@
+GulliView thermal test starting at Wed Aug 12 11:40:55 UTC 2026
+Output directory: logs/thermal_20260812_114055
+Runs: 1 2 3 4 cameras, 30 min each
+Cooldown: 10 min between runs
+
+Baseline idle: pkg=51°C  fan=2200 RPM
+
+===================================================================
+TEST: 1 camera(s) — starting at Wed Aug 12 11:40:55 UTC 2026
+===================================================================
+WARNING: GulliView exited early after 5 sec
+----- Results for 1 camera(s) --------------------------------
+Actual duration: 0 min 5 sec
+Package temp:  min=51°C  max=51°C  avg=51°C  samples=1
+Fan speed:     min=2200 RPM  max=2200 RPM  avg=2200 RPM
+select() timeouts in log: 0
+0
+Corrupt JPEG warnings:    0
+0
+Recent dmesg throttle events (approx): 106
+Recent dmesg USB -71 errors (approx):  121
+Recent dmesg GulliView segfaults:      16
+
+Cooling down for 10 minutes...
